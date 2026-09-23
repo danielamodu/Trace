@@ -1,0 +1,48 @@
+{
+  "probe": "tgm-flow-intelligence",
+  "path": "/api/v1/tgm/flow-intelligence",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "timeframe": "1d"
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "4750412f4f7cb420edcf167923d1ed51",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "97",
+    "rateLimitRemaining": "13",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "public_figure_net_flow_usd": 3280585.3649807605,
+        "public_figure_avg_flow_usd": 3972025.1549512465,
+        "public_figure_wallet_count": 35,
+        "top_pnl_net_flow_usd": -39680427.39186651,
+        "top_pnl_avg_flow_usd": 4041310.504744771,
+        "top_pnl_wallet_count": 190,
+        "whale_net_flow_usd": -745625.6477525446,
+        "whale_avg_flow_usd": 123474.76641103512,
+        "whale_wallet_count": 3,
+        "smart_trader_net_flow_usd": 2373642.7459946875,
+        "smart_trader_avg_flow_usd": 259790.80898195202,
+        "smart_trader_wallet_count": 26,
+        "exchange_net_flow_usd": -4079935.96483266,
+        "exchange_avg_flow_usd": 54596161.81525237,
+        "exchange_wallet_count": 0,
+        "fresh_wallets_net_flow_usd": 606107561.4257425,
+        "fresh_wallets_avg_flow_usd": 490185481.71668875,
+        "fresh_wallets_wallet_count": 0
+      }
+    ],
+    "warnings": [
+      "exchange_wallet_count is always 0 (not tracked), even when exchange net flow is non-zero.",
+      "fresh_wallets_wallet_count is always 0 (not tracked), even when fresh-wallet net flow is non-zero."
+    ],
+    "_note": "truncated to 3 of 1 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:48:58.607Z"
+}

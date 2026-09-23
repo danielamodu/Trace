@@ -1,0 +1,274 @@
+{
+  "probe": "search-general",
+  "path": "/api/v1/search/general",
+  "request_body": {
+    "search_query": "USDC",
+    "result_type": "any"
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "0e79d7459b224d0c810706094ca37573",
+    "creditsCost": "0",
+    "creditsUsed": null,
+    "creditsRemaining": null,
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "tokens": [
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "arc",
+        "address": "0x3600000000000000000000000000000000000000",
+        "price": 0.99993225209413,
+        "volume_24h": 35246975.9401261,
+        "market_cap": 74668727595,
+        "rank": 21
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "ethereum",
+        "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "price": 0.999369524097653,
+        "volume_24h": 788276561.6620846,
+        "market_cap": 73985320336.8266,
+        "rank": 599
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "solana",
+        "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "price": 0.9991222231601496,
+        "volume_24h": 1716209965.2558556,
+        "market_cap": 74608161274.437,
+        "rank": 612
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "base",
+        "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "price": 1.00287819559809,
+        "volume_24h": 706667300.994602,
+        "market_cap": 73971239005.0723,
+        "rank": 614
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "arbitrum",
+        "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+        "price": 0.997248994674644,
+        "volume_24h": 187553338.67986542,
+        "market_cap": 74505678472.3242,
+        "rank": 616
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "near",
+        "address": "17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+        "price": 0.999267826859813,
+        "volume_24h": 18187737.21022318,
+        "market_cap": 74619064574.1877,
+        "rank": 623
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "hyperevm",
+        "address": "0xb88339cb7199b77e23db6e890353e22632ba630f",
+        "price": 0.998566618675079,
+        "volume_24h": 85727414.20789585,
+        "market_cap": 74123786148.2433,
+        "rank": 628
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "bnb",
+        "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+        "price": 1.00037897866991,
+        "volume_24h": 93362373.07785743,
+        "market_cap": 1588374697.1128,
+        "rank": 631
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "monad",
+        "address": "0x754704bc059f8c67012fed69bc8a327a5aafb603",
+        "price": 0.999292169898421,
+        "volume_24h": 26854017.95129172,
+        "market_cap": 74235541785.4349,
+        "rank": 633
+      },
+      {
+        "name": "USD Coin (PoS)",
+        "symbol": "USDC",
+        "chain": "polygon",
+        "address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        "price": 0.999233365643225,
+        "volume_24h": 57601009.17150028,
+        "market_cap": 1011007082.70722,
+        "rank": 635
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "sui",
+        "address": "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC",
+        "price": 1.00369293084714,
+        "volume_24h": 14461447.5534996,
+        "market_cap": 73789759576.491,
+        "rank": 645
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "polygon",
+        "address": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+        "price": 0.999230848295652,
+        "volume_24h": 65877873.65327659,
+        "market_cap": 74336697259.2283,
+        "rank": 647
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "optimism",
+        "address": "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+        "price": 0.996749459330474,
+        "volume_24h": 22037571.42460466,
+        "market_cap": 73969533924.8647,
+        "rank": 656
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "avalanche",
+        "address": "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e",
+        "price": 1.00049766778704,
+        "volume_24h": 116644337.19340064,
+        "market_cap": 74290102482.0822,
+        "rank": 659
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "arc",
+        "address": "0xc2caf92179b474ae59d9fea3433db1858eb5372a",
+        "price": 0.895527133228176,
+        "volume_24h": 605776.811384272,
+        "market_cap": 329905737.339575,
+        "rank": 698
+      },
+      {
+        "name": "NEAR Intents Bridged USDC",
+        "symbol": "USDC",
+        "chain": "near",
+        "address": "eth-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.omft.near",
+        "price": 0.997829667319251,
+        "volume_24h": 0,
+        "market_cap": 7947637.46514312,
+        "rank": 732
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "sei",
+        "address": "0xe15fc38f6d8c56af07bbcbe3baf5708a2bf42392",
+        "price": 0.996470726361918,
+        "volume_24h": 13926360.489238309,
+        "market_cap": 73947795658.9955,
+        "rank": 739
+      },
+      {
+        "name": "Bridged USDC (Sonic Labs)",
+        "symbol": "USDC.E",
+        "chain": "sonic",
+        "address": "0x29219dd400f2bf60e5a23d13be72b486d4038894",
+        "price": 0.996618907730009,
+        "volume_24h": 1430932.862060131,
+        "market_cap": 73958792154.164,
+        "rank": 762
+      },
+      {
+        "name": "Rainbow Bridged USDC (Near)",
+        "symbol": "USDC.E",
+        "chain": "near",
+        "address": "a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.factory.bridge.near",
+        "price": 0.99993225209413,
+        "volume_24h": 6347823.735737972,
+        "market_cap": 18455273,
+        "rank": 786
+      },
+      {
+        "name": "Syrup USDC",
+        "symbol": "SYRUPUSDC",
+        "chain": "monad",
+        "address": "0xab6e5a0c3799d020c790d34f7b2c02639e238af7",
+        "price": 1.1841252951732806,
+        "volume_24h": 179924.8388699456,
+        "market_cap": 1011291305,
+        "rank": 803
+      },
+      {
+        "name": "USD Coin (Arb1)",
+        "symbol": "USDC",
+        "chain": "arbitrum",
+        "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+        "price": 0.998254052600226,
+        "volume_24h": 2506404.6537843007,
+        "market_cap": 48408480.6125473,
+        "rank": 835
+      },
+      {
+        "name": "USDC",
+        "symbol": "USDC",
+        "chain": "linea",
+        "address": "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+        "price": 0.999129410932745,
+        "volume_24h": 459730.96795420686,
+        "market_cap": 22332370.2860524,
+        "rank": 942
+      },
+      {
+        "name": "Syrup USDC",
+        "symbol": "SYRUPUSDC",
+        "chain": "solana",
+        "address": "AvZZF1YaZDziPY2RCK4oJrRVrbN3mTD9NL24hPeaZeUj",
+        "price": 1.1814927310996315,
+        "volume_24h": 3295598.745172547,
+        "market_cap": 1009046015.74896,
+        "rank": 968
+      },
+      {
+        "name": "Syrup USDC",
+        "symbol": "SYRUPUSDC",
+        "chain": "ethereum",
+        "address": "0x80ac24aa929eaf5013f6436cda2a7ba190f5cc0b",
+        "price": 1.18353772805244,
+        "volume_24h": 319318.49608921143,
+        "market_cap": 1010792531.80711,
+        "rank": 1008
+      },
+      {
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "chain": "mantle",
+        "address": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+        "price": 0.999780925585434,
+        "volume_24h": 68898.57586964048,
+        "market_cap": 16662058,
+        "rank": 1054
+      }
+    ],
+    "entities": [],
+    "total_results": 25
+  },
+  "captured_at": "2026-09-21T19:48:50.440Z"
+}

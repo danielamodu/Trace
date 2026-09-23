@@ -1,0 +1,32 @@
+{
+  "phase": "3G",
+  "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "address_source": "src/investigations/euler.ts EULER_ATTACKER (programmatic, not retyped)",
+  "window": {
+    "from": "2023-03-13",
+    "to": "2023-03-14"
+  },
+  "endpoint": "/api/v1/profiler/address/transactions",
+  "maxCalls": 5,
+  "callsMade": 1,
+  "stopReason": "is_last_page=true on page 1; window covered",
+  "pages": [
+    {
+      "page": 1,
+      "status": 200,
+      "requestId": "f4ad99050a3fc8062923f77249e10457",
+      "creditsCost": "1",
+      "creditsUsed": "1",
+      "creditsRemaining": "60",
+      "rowsReturned": 17,
+      "earliestTimestamp": "2023-03-13T09:12:23",
+      "latestTimestamp": "2023-03-14T10:41:35",
+      "isLastPage": true,
+      "fixtureFile": "fixtures/live/euler/profiler-transactions-2023-03-13-p1.json"
+    }
+  ],
+  "totalRows": 17,
+  "creditsUsedTotal": 1,
+  "creditsRemainingAfter": "60",
+  "captured_at": "2026-09-22T13:49:26.081Z"
+}

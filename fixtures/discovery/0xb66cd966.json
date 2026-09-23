@@ -1,0 +1,192 @@
+{
+  "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+  "window": {
+    "from": "2023-03-13",
+    "to": "2023-03-31"
+  },
+  "captured_at": "2026-09-21T20:01:55.676Z",
+  "probes": {
+    "transactions": {
+      "meta": {
+        "status": 200,
+        "requestId": "c8d38a540d431a625b7fee54d15f4632",
+        "creditsCost": "1",
+        "creditsUsed": "1",
+        "creditsRemaining": "62",
+        "rateLimitRemaining": "14",
+        "retryAfter": null
+      },
+      "row_count": 25,
+      "labels": [
+        "capitalismisgay.eth* [0x60dc5b]",
+        "jaydoteth.eth* [0xb66cd9]",
+        "hausemaster.eth* [0x9962ff]",
+        "[0x253fdc]",
+        "\"ExclusiveToken\" on OpenSea [0x442b8b]",
+        "HL Perps Flat [0x3866ee]",
+        "[0xa1bcfa]",
+        "[0xc4e9c5]",
+        "[0x46e9e7]",
+        "[0x46e223]",
+        "[0xc4e08a]",
+        "[0xa1b8c4]",
+        "[0xc4ef97]",
+        "[0x8765b5]",
+        "[0xa1bb45]",
+        "[0x46eee7]",
+        "[0x8765a3]",
+        "[0x46e0be]",
+        "[0xc4e04a]",
+        "[0xa1b44d]",
+        "[0xee009f]",
+        "[0x8c4e5f]",
+        "[0xd4b4bd]",
+        "Token Contract [0xe962c6]"
+      ],
+      "counterparty_count": 23,
+      "sample": [
+        {
+          "chain": "ethereum",
+          "method": "received",
+          "tokens_sent": [],
+          "tokens_received": [
+            {
+              "token_symbol": "ETH",
+              "token_amount": 0.00001,
+              "price_usd": null,
+              "value_usd": null,
+              "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "chain": "ethereum",
+              "from_address": "0x60dc5bb048310224b8732d732f4a32d16690e470",
+              "to_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+              "from_address_label": "capitalismisgay.eth* [0x60dc5b]",
+              "to_address_label": "jaydoteth.eth* [0xb66cd9]"
+            }
+          ],
+          "volume_usd": 0.01807079919277811,
+          "block_timestamp": "2023-03-31T18:02:35",
+          "transaction_hash": "0xc49d8b0de9d8be309a4593f2cf01c34cc393f7a1ca11829102904fc20863acc7",
+          "source_type": "transfer"
+        },
+        {
+          "chain": "ethereum",
+          "method": "received",
+          "tokens_sent": [],
+          "tokens_received": [
+            {
+              "token_symbol": "ETH",
+              "token_amount": 0.001,
+              "price_usd": null,
+              "value_usd": null,
+              "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "chain": "ethereum",
+              "from_address": "0x9962ff925e83e8d235fa87d2ecd8785e7cf8c3ee",
+              "to_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+              "from_address_label": "hausemaster.eth* [0x9962ff]",
+              "to_address_label": "jaydoteth.eth* [0xb66cd9]"
+            }
+          ],
+          "volume_usd": 1.7361616820659556,
+          "block_timestamp": "2023-03-28T21:08:23",
+          "transaction_hash": "0xf221e0818d5d3176eee4ff5a74bc7788dbd640cbdc8967b4b70a802762877dff",
+          "source_type": "transfer"
+        },
+        {
+          "chain": "ethereum",
+          "method": "received",
+          "tokens_sent": [],
+          "tokens_received": [
+            {
+              "token_symbol": "ETH",
+              "token_amount": 0.000566822731858838,
+              "price_usd": null,
+              "value_usd": null,
+              "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "chain": "ethereum",
+              "from_address": "0x253fdc94c1265d6e71c73a82a6e00429a6a1f663",
+              "to_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+              "from_address_label": "[0x253fdc]",
+              "to_address_label": "jaydoteth.eth* [0xb66cd9]"
+            }
+          ],
+          "volume_usd": 0.9840959075772603,
+          "block_timestamp": "2023-03-28T07:42:59",
+          "transaction_hash": "0xe683d3c8236ab9ca19a05795340abef9804fad5c2ea1c14e9cb05a008cd52a4e",
+          "source_type": "transfer"
+        },
+        {
+          "chain": "ethereum",
+          "method": "received",
+          "tokens_sent": [],
+          "tokens_received": [
+            {
+              "token_symbol": "ETH",
+              "token_amount": 0.000569365840327044,
+              "price_usd": null,
+              "value_usd": null,
+              "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "chain": "ethereum",
+              "from_address": "0x253fdc94c1265d6e71c73a82a6e00429a6a1f663",
+              "to_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+              "from_address_label": "[0x253fdc]",
+              "to_address_label": "jaydoteth.eth* [0xb66cd9]"
+            }
+          ],
+          "volume_usd": 0.9885111550530971,
+          "block_timestamp": "2023-03-28T07:17:35",
+          "transaction_hash": "0x30ba2416a19a838b11be61a0e3290f5fc05e3786e9fcf4470b36de084a617f3f",
+          "source_type": "transfer"
+        },
+        {
+          "chain": "ethereum",
+          "method": "received",
+          "tokens_sent": [],
+          "tokens_received": [
+            {
+              "token_symbol": "ETH",
+              "token_amount": 0.000569365840327044,
+              "price_usd": null,
+              "value_usd": null,
+              "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "chain": "ethereum",
+              "from_address": "0x253fdc94c1265d6e71c73a82a6e00429a6a1f663",
+              "to_address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+              "from_address_label": "[0x253fdc]",
+              "to_address_label": "jaydoteth.eth* [0xb66cd9]"
+            }
+          ],
+          "volume_usd": 0.9885111550530971,
+          "block_timestamp": "2023-03-28T05:43:11",
+          "transaction_hash": "0x5edfb0c6f1c973aa201eb952db8318e5357320662fbd8b6b0c37209c6bd7f5c1",
+          "source_type": "transfer"
+        }
+      ]
+    },
+    "related_wallets": {
+      "meta": {
+        "status": 200,
+        "requestId": "df27a85045823355c6ef882a8b43497b",
+        "creditsCost": "1",
+        "creditsUsed": "1",
+        "creditsRemaining": "61",
+        "rateLimitRemaining": "14",
+        "retryAfter": null
+      },
+      "row_count": 1,
+      "relations": [
+        "First Funder"
+      ],
+      "sample": [
+        {
+          "address": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+          "address_label": "",
+          "relation": "First Funder",
+          "transaction_hash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+          "block_timestamp": "2023-03-13T09:12:23Z",
+          "order": 1,
+          "chain": "ethereum"
+        }
+      ]
+    }
+  }
+}

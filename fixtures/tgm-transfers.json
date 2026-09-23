@@ -1,0 +1,69 @@
+{
+  "probe": "tgm-transfers",
+  "path": "/api/v1/tgm/transfers",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "9dd949593efc4a41deb05537a0b41e06",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "99",
+    "rateLimitRemaining": "13",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "block_timestamp": "2025-01-06T02:41:35Z",
+        "transaction_hash": "0x34b7cdaaafc1790796706bf2594d98faedfe23a774f62b67db0706b948d42909",
+        "from_address": "0x28c6c06298d514db089934071355e5743bf21d60",
+        "to_address": "0xf977814e90da44bfa03b6295a0616a897441acec",
+        "from_address_label": "Token Billionaire",
+        "to_address_label": "Token Millionaire",
+        "transaction_type": "transfer",
+        "transfer_amount": 722089988.429,
+        "transfer_value_usd": 722146184.4998494
+      },
+      {
+        "block_timestamp": "2025-01-07T12:49:47Z",
+        "transaction_hash": "0x3c568bcf2effcf973572f10d94e73d58637d9090888f494223f266ce0479bede",
+        "from_address": "0xcde51b16717139891d40a872215d96a5ef38eee0",
+        "to_address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+        "from_address_label": "High Activity",
+        "to_address_label": "Token Billionaire",
+        "transaction_type": "",
+        "transfer_amount": 135925648.728894,
+        "transfer_value_usd": 135898559.29244938
+      },
+      {
+        "block_timestamp": "2025-01-07T12:49:47Z",
+        "transaction_hash": "0x3c568bcf2effcf973572f10d94e73d58637d9090888f494223f266ce0479bede",
+        "from_address": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+        "to_address": "0xcde51b16717139891d40a872215d96a5ef38eee0",
+        "from_address_label": "Token Billionaire",
+        "to_address_label": "High Activity",
+        "transaction_type": "",
+        "transfer_amount": 135925648.728894,
+        "transfer_value_usd": 135898559.29244938
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:48:54.301Z"
+}

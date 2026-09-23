@@ -1,0 +1,81 @@
+{
+  "probe": "tgm-dex-trades",
+  "path": "/api/v1/tgm/dex-trades",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "348a394c07b8f35b0b046e614a66fa1a",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "98",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "block_timestamp": "2025-01-07T23:59:59Z",
+        "transaction_hash": "0x4946b457e7cfcab816da5b23373c37752849045a7aed7b6941c51228a6ed5a28",
+        "trader_address": "0x5de0e1e1ec3ec2e116d6d7f0561e8e699b4b69bc",
+        "trader_address_label": "",
+        "action": "BUY",
+        "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "token_name": "USDC",
+        "token_amount": 4302.946986,
+        "traded_token_address": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4",
+        "traded_token_name": "PIN",
+        "traded_token_amount": 2003,
+        "estimated_swap_price_usd": 0.979566502148044,
+        "estimated_value_usd": 4215.022728004488
+      },
+      {
+        "block_timestamp": "2025-01-07T23:59:59Z",
+        "transaction_hash": "0x4aed238a493c9b4c35e42befc4ae1e06b16a4bef33333696e5e56e924a1de3ac",
+        "trader_address": "0xc6aa1ca4bc05f6b85ab65218998782d0c77e9765",
+        "trader_address_label": "",
+        "action": "SELL",
+        "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "token_name": "USDC",
+        "token_amount": 899.026918,
+        "traded_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "traded_token_name": "ETH",
+        "traded_token_amount": 0.26516248190779035,
+        "estimated_swap_price_usd": 1.0740046035513895,
+        "estimated_value_usd": 965.5590486486176
+      },
+      {
+        "block_timestamp": "2025-01-07T23:59:59Z",
+        "transaction_hash": "0x500db1e56a2263af462798db29fcf8dd8466ad457150d7b02072e243cb7cf003",
+        "trader_address": "0x38ea91adfbf0738042414a25951419cd4a907b9d",
+        "trader_address_label": "",
+        "action": "SELL",
+        "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "token_name": "USDC",
+        "token_amount": 195.191779,
+        "traded_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "traded_token_name": "ETH",
+        "traded_token_amount": 0.057649894303518814,
+        "estimated_swap_price_usd": 1.0754835100325264,
+        "estimated_value_usd": 209.92553960841317
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:48:56.418Z"
+}

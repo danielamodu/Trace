@@ -1,0 +1,67 @@
+{
+  "probe": "tgm-who-bought-sold",
+  "path": "/api/v1/tgm/who-bought-sold",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "buy_or_sell": "BUY",
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "c7195f669677261b2705b75036d14d74",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "96",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "address": "0x37ac09e1640577e1d71e3787297a56b58f88f0f2",
+        "address_label": "yonseiuniversity.eth",
+        "bought_token_volume": 11389426.574679999,
+        "sold_token_volume": 0,
+        "token_trade_volume": 11389426.574679999,
+        "bought_volume_usd": 11387309.082207726,
+        "sold_volume_usd": 0,
+        "trade_volume_usd": 11387309.082207726
+      },
+      {
+        "address": "0xb81a0e6c38c3fec8a171cfe9631f60127a0c5bfd",
+        "address_label": "gnomelabs.eth",
+        "bought_token_volume": 10606103.898541,
+        "sold_token_volume": 6024.61959,
+        "token_trade_volume": 10600079.278951,
+        "bought_volume_usd": 10608867.287425982,
+        "sold_volume_usd": 6020.268781925162,
+        "trade_volume_usd": 10602847.018644057
+      },
+      {
+        "address": "0x5de1b7f14de50ed6e430ea144eed8bc9d0bbb30c",
+        "address_label": "Uses \"TRADEXYZ1\" HL Referral Code",
+        "bought_token_volume": 10288011.805615002,
+        "sold_token_volume": 1000,
+        "token_trade_volume": 10287011.805615002,
+        "bought_volume_usd": 10285729.686878383,
+        "sold_volume_usd": 1000.699352230962,
+        "trade_volume_usd": 10284728.987526152
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:49:00.640Z"
+}

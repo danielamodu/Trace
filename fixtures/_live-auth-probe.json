@@ -1,0 +1,34 @@
+{
+  "note": "Real live responses from api.nansen.ai captured during Phase 1 recon. No API key was used or present; these document the exact auth-failure behavior and confirm endpoint reachability. Nothing here is fabricated.",
+  "captured_at_utc": "2026-09-21",
+  "probes": [
+    {
+      "request": "POST https://api.nansen.ai/api/v1/search/general (no apikey header)",
+      "http_status": 401,
+      "response_headers_observed": {
+        "ratelimit-limit": "5",
+        "ratelimit-remaining": "4",
+        "ratelimit-reset": "1",
+        "x-request-id": "<present>",
+        "cf-cache-status": "DYNAMIC"
+      },
+      "response_body": {
+        "error": "Unauthorized",
+        "message": "API key required. This endpoint does not support paid access.",
+        "code": "unauthenticated",
+        "status": 401,
+        "request_id": "<present>",
+        "doc_url": "https://docs.nansen.ai/getting-started/error-handling#unauthenticated",
+        "detail": "API key required. This endpoint does not support paid access."
+      }
+    },
+    {
+      "request": "POST https://api.nansen.ai/api/v1/search/general (apikey: bogus)",
+      "http_status": 401,
+      "response_body": {
+        "message": "Invalid API key. Manage your keys at https://app.nansen.ai/api?tab=api"
+      },
+      "finding": "Invalid-key rejections use a minimal {message} body, NOT the full structured error envelope. Missing-key rejections DO use the full envelope. Client error handling must tolerate both shapes."
+    }
+  ]
+}

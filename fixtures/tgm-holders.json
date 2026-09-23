@@ -1,0 +1,70 @@
+{
+  "probe": "tgm-holders",
+  "path": "/api/v1/tgm/holders",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "label_type": "all_holders",
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "b86cce37561ad640e97b475d74c11812",
+    "creditsCost": "5",
+    "creditsUsed": "5",
+    "creditsRemaining": "91",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "address": "0x37305b1cd40574e4c5ce33f8e8306be057fd7341",
+        "address_label": "Token Billionaire",
+        "token_amount": 3958758373.378824,
+        "total_outflow": 268261390401.84476,
+        "total_inflow": 272220148775.22357,
+        "balance_change_24h": -116868009.660417,
+        "balance_change_7d": 316732338.993428,
+        "balance_change_30d": 252913347.454967,
+        "ownership_percentage": 0,
+        "value_usd": 3955497124.7581806
+      },
+      {
+        "address": "0xe1940f578743367f38d3f25c2d2d32d6636929b6",
+        "address_label": "Token Billionaire",
+        "token_amount": 1699999999.039577,
+        "total_outflow": 1,
+        "total_inflow": 1700000000.039577,
+        "balance_change_24h": 0,
+        "balance_change_7d": 0,
+        "balance_change_30d": 0,
+        "ownership_percentage": 0,
+        "value_usd": 1698599528.9605634
+      },
+      {
+        "address": "0xffa69c0080582098af595156240214b742735a5e",
+        "address_label": "Token Billionaire",
+        "token_amount": 1582999999.8601,
+        "total_outflow": 0.129099,
+        "total_inflow": 1582999999.989199,
+        "balance_change_24h": 0,
+        "balance_change_7d": 0,
+        "balance_change_30d": 0,
+        "ownership_percentage": 0,
+        "value_usd": 1581695915.0741382
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "warnings": null,
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:49:04.317Z"
+}

@@ -1,0 +1,43 @@
+{
+  "endpoint": "/api/v1/profiler/address/transactions",
+  "request_body": {
+    "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+    "chain": "ethereum",
+    "date": {
+      "from": "2023-03-13",
+      "to": "2023-03-14"
+    },
+    "hide_spam_token": false,
+    "pagination": {
+      "page": 1,
+      "per_page": 1000
+    }
+  },
+  "status": 422,
+  "error_body": {
+    "error": "Invalid value",
+    "message": "Value for 'body -> pagination -> per_page' is out of the allowed range (must be at most 100)",
+    "code": "value_out_of_range",
+    "status": 422,
+    "request_id": "58a66c329d397e70bf22644cee0e9172",
+    "doc_url": "https://docs.nansen.ai/getting-started/error-handling#value_out_of_range",
+    "param": "pagination.per_page",
+    "errors": [
+      {
+        "field": "body.pagination.per_page",
+        "message": "Value for 'body -> pagination -> per_page' is out of the allowed range (must be at most 100)",
+        "code": "value_out_of_range"
+      }
+    ]
+  },
+  "meta": {
+    "status": 422,
+    "requestId": "58a66c329d397e70bf22644cee0e9172",
+    "creditsCost": "1",
+    "creditsUsed": null,
+    "creditsRemaining": null,
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "captured_at": "2026-09-22T13:48:48.619Z"
+}

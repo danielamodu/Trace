@@ -1,0 +1,105 @@
+{
+  "probe": "profiler-transactions",
+  "path": "/api/v1/profiler/address/transactions",
+  "request_body": {
+    "address": "0x28c6c06298d514db089934071355e5743bf21d60",
+    "chain": "ethereum",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "a7fe8b1f7a82820de52f5d1022e4d33e",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "79",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "data": [
+      {
+        "chain": "ethereum",
+        "method": "sent",
+        "tokens_sent": [
+          {
+            "token_symbol": "ETH",
+            "token_amount": -0.02922312,
+            "price_usd": null,
+            "value_usd": null,
+            "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "chain": "ethereum",
+            "from_address": "0x28c6c06298d514db089934071355e5743bf21d60",
+            "to_address": "0xec6858607a4067aad24f39d24fbe6b360376584e",
+            "from_address_label": "Token Billionaire [0x28c6c0]",
+            "to_address_label": "[0xec6858]"
+          }
+        ],
+        "tokens_received": [],
+        "volume_usd": 106.41267098848722,
+        "block_timestamp": "2025-01-07T23:59:47",
+        "transaction_hash": "0x45ad81485cab8b25535b3a43a57e40f663495f2537008d7b029c892e012a513b",
+        "source_type": "transfer"
+      },
+      {
+        "chain": "ethereum",
+        "method": "transfer(address,uint256)",
+        "tokens_sent": [
+          {
+            "token_symbol": "USUAL",
+            "token_amount": -245.40689999999998,
+            "price_usd": null,
+            "value_usd": null,
+            "token_address": "0xc4441c2be5d8fa8126822b9929ca0b81ea0de38e",
+            "chain": "ethereum",
+            "from_address": "0x28c6c06298d514db089934071355e5743bf21d60",
+            "to_address": "0xb4c64258311e6d280e7884e839f27e76ac2eb0c3",
+            "from_address_label": "Token Billionaire [0x28c6c0]",
+            "to_address_label": "[0xb4c642]"
+          }
+        ],
+        "tokens_received": [],
+        "volume_usd": 227.44862348809824,
+        "block_timestamp": "2025-01-07T23:59:47",
+        "transaction_hash": "0x8e2a0234180cf12d05ab52f7e1adcc579eb428330ff08b96c418d80352b8aad6",
+        "source_type": "transfer"
+      },
+      {
+        "chain": "ethereum",
+        "method": "transfer(address,uint256)",
+        "tokens_sent": [
+          {
+            "token_symbol": "LINK",
+            "token_amount": -247.16337,
+            "price_usd": null,
+            "value_usd": null,
+            "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+            "chain": "ethereum",
+            "from_address": "0x28c6c06298d514db089934071355e5743bf21d60",
+            "to_address": "0x8d77c8a035d2e83c607a75530148bd0ec7583dec",
+            "from_address_label": "Token Billionaire [0x28c6c0]",
+            "to_address_label": "[0x8d77c8]"
+          }
+        ],
+        "tokens_received": [],
+        "volume_usd": 5764.980809100198,
+        "block_timestamp": "2025-01-07T23:59:35",
+        "transaction_hash": "0x0282befeca313fcaa410e8b56ecad9f0af7f61d20067f651849a4b040a1332cf",
+        "source_type": "transfer"
+      }
+    ],
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:49:11.362Z"
+}

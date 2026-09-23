@@ -1,0 +1,72 @@
+{
+  "_note": "Sanitized reproduction data for the TRACE Phase-1B hero incident. All values are public on-chain data or Nansen-returned labels captured during discovery on 2026-09-21. No secrets. Addresses are public. This file is enough to reproduce the reconstruction locally; it does NOT assert intent or causation.",
+  "incident": {
+    "name": "Euler Finance exploit and fund return",
+    "chain": "ethereum",
+    "exploit_date_utc": "2023-03-13",
+    "investigation_window": { "from": "2023-03-13", "to": "2023-03-31" },
+    "one_line": "A flash-loan-funded exploit drained Euler Finance, followed by an unusual multi-day on-chain return of most funds."
+  },
+  "entities": {
+    "attacker_eoa": {
+      "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+      "nansen_label": "jaydoteth.eth",
+      "evidence_type": "FACT",
+      "note": "Top counterparty of the Nansen 'Euler Exploiter' entity; volume in=out=$378.4M, interaction_count 108."
+    },
+    "first_funder": {
+      "address": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+      "relation": "First Funder",
+      "funding_tx_timestamp_utc": "2023-03-13T09:12:23Z",
+      "evidence_type": "RELATION",
+      "note": "Returned by profiler/address/related-wallets for the attacker EOA. Funding occurred immediately before exploit activity."
+    },
+    "balancer_vault": {
+      "address": "0xba12222222228d8ba445958a75a0704d566bf2c8",
+      "nansen_label": "balancervault.eth",
+      "evidence_type": "FACT",
+      "role_hypothesis": "flash-loan liquidity source",
+      "volume_usd": 354997693
+    },
+    "euler_entity_name": "Euler Exploiter"
+  },
+  "key_counterparties_fact": [
+    { "address": "0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656", "label": "aWBTC_v2", "volume_in_usd": 373529763, "volume_out_usd": 373865940, "interaction_count": 10 },
+    { "address": "0xba12222222228d8ba445958a75a0704d566bf2c8", "label": "balancervault.eth", "volume_in_usd": 354997693, "volume_out_usd": 354997693, "interaction_count": 4 },
+    { "address": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0", "label": "wstETH", "volume_in_usd": 118875057, "volume_out_usd": 0, "interaction_count": 1 },
+    { "address": "0x0000000000000000000000000000000000000000", "label": null, "volume_in_usd": 0, "volume_out_usd": 150483761, "interaction_count": 6 },
+    { "address": "0xee009faf00cf54c1b4387829af7a8dc5f0c8c8c5", "label": null, "volume_in_usd": 46746713, "volume_out_usd": 179978637, "interaction_count": 21 }
+  ],
+  "reproduce": {
+    "base_url": "https://api.nansen.ai",
+    "auth": "header apikey (server-side only)",
+    "queries": [
+      {
+        "step": "entity fund-flow map",
+        "endpoint": "POST /api/v1/profiler/address/counterparties",
+        "credits": 5,
+        "body": { "entity_name": "Euler Exploiter", "chain": "ethereum", "date": { "from": "2023-03-13", "to": "2023-03-31" }, "group_by": "entity", "pagination": { "page": 1, "per_page": 25 } }
+      },
+      {
+        "step": "attacker sequential transactions",
+        "endpoint": "POST /api/v1/profiler/address/transactions",
+        "credits": 1,
+        "note": "paginate to reach 2023-03-13 exploit-day rows; default ordering returned latest first",
+        "body": { "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db", "chain": "ethereum", "date": { "from": "2023-03-13", "to": "2023-03-31" }, "hide_spam_token": true, "pagination": { "page": 1, "per_page": 100 } }
+      },
+      {
+        "step": "funding evidence",
+        "endpoint": "POST /api/v1/profiler/address/related-wallets",
+        "credits": 1,
+        "body": { "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db", "chain": "ethereum", "pagination": { "page": 1, "per_page": 25 } }
+      }
+    ],
+    "estimated_credits_full_reconstruction": 9
+  },
+  "evidence_model": {
+    "FACT": "counterparty addresses, Nansen labels, interaction_count, volumes, tx timestamps, tx methods returned directly by Nansen",
+    "DERIVED": "chronological ordering, cumulative/net volume, step count computed by TRACE",
+    "RELATION": "'First Funder' link (attacker EOA <- 0x036cec...) and counterparty edges returned by Nansen",
+    "HYPOTHESIS": "that the flash loan was taken 'for' the attack, or any claim of intent/causation. TRACE must render this as hypothesis, never fact."
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "probe": "tgm-flows",
+  "path": "/api/v1/tgm/flows",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "373ff93ddc8f495c5b4f8c62f1c62a37",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "78",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "date": "2025-01-07T23:00:00Z",
+        "bucket_end": "2025-01-08T00:00:00Z",
+        "is_complete": true,
+        "price_usd": 3386.0053131101213,
+        "token_amount": 1669388.9079982499,
+        "value_usd": 5652559712.129173,
+        "holders_count": 100,
+        "total_inflows_count": 2658.4452889073946,
+        "total_outflows_count": -723.156085257197,
+        "total_inflows_dex": null,
+        "total_outflows_dex": null,
+        "total_inflows_cex": null,
+        "total_outflows_cex": null
+      },
+      {
+        "date": "2025-01-07T22:00:00Z",
+        "bucket_end": "2025-01-07T23:00:00Z",
+        "is_complete": true,
+        "price_usd": 3379.815963098548,
+        "token_amount": 1667453.6187945993,
+        "value_usd": 5635686358.528427,
+        "holders_count": 100,
+        "total_inflows_count": 1108.7024460144005,
+        "total_outflows_count": -1844.388181690975,
+        "total_inflows_dex": null,
+        "total_outflows_dex": null,
+        "total_inflows_cex": null,
+        "total_outflows_cex": null
+      },
+      {
+        "date": "2025-01-07T21:00:00Z",
+        "bucket_end": "2025-01-07T22:00:00Z",
+        "is_complete": true,
+        "price_usd": 3396.016342070571,
+        "token_amount": 1668189.3045302762,
+        "value_usd": 5665198139.852157,
+        "holders_count": 100,
+        "total_inflows_count": 1973.0047712763085,
+        "total_outflows_count": -1236.9108273634135,
+        "total_inflows_dex": null,
+        "total_outflows_dex": null,
+        "total_inflows_cex": null,
+        "total_outflows_cex": null
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "warnings": [
+      "total_inflows_dex, total_outflows_dex, total_inflows_cex and total_outflows_cex are only populated when label=exchange and are null for all other labels. For net flow per holder segment (e.g. smart money), use POST /api/v1/tgm/flow-intelligence."
+    ],
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:50:32.332Z"
+}

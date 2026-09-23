@@ -1,0 +1,59 @@
+{
+  "probe": "profiler-related-wallets",
+  "path": "/api/v1/profiler/address/related-wallets",
+  "request_body": {
+    "address": "0x28c6c06298d514db089934071355e5743bf21d60",
+    "chain": "ethereum",
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "7207df0e162f7c4269e03473cd0b3230",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "85",
+    "rateLimitRemaining": "13",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "data": [
+      {
+        "address": "0x00799bbc833d5b168f0410312d2a8fd9e0e3079c",
+        "address_label": "High Activity",
+        "relation": "First Funder",
+        "transaction_hash": "0x7671e86accfb3cd75a9000e2d7eabced7fedab72aadeb93a4232cf1729b4e219",
+        "block_timestamp": "2021-04-22T06:34:00Z",
+        "order": 1,
+        "chain": "ethereum"
+      },
+      {
+        "address": "0xe2572ce62688019a99d00a613d63e8f411410fc7",
+        "address_label": "Proxy",
+        "relation": "Previous Multisig Signer of",
+        "transaction_hash": "0x54951af9124751e9e1e985cf6e90193ba22ea52584041856d9261781aaeb4ff0",
+        "block_timestamp": "2024-04-05T13:08:23Z",
+        "order": 3,
+        "chain": "ethereum"
+      },
+      {
+        "address": "0x2b959bca871b51de6cdf306daa2048728fe97a01",
+        "address_label": "",
+        "relation": "Deployed Contract",
+        "transaction_hash": "0xa84c5fc6cf57ab42397116e3d6aa4359fd8e6ecdd1039fe9e4346d5bcaf99510",
+        "block_timestamp": "2023-05-04T21:51:47Z",
+        "order": 5,
+        "chain": "ethereum"
+      }
+    ],
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:49:08.496Z"
+}

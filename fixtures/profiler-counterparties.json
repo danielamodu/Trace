@@ -1,0 +1,612 @@
+{
+  "probe": "profiler-counterparties",
+  "path": "/api/v1/profiler/address/counterparties",
+  "request_body": {
+    "address": "0x28c6c06298d514db089934071355e5743bf21d60",
+    "chain": "ethereum",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "a0d3f408dd306666bc112d7b0e31a723",
+    "creditsCost": "5",
+    "creditsUsed": "5",
+    "creditsRemaining": "80",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "data": [
+      {
+        "counterparty_address": "0xeae7380dd4cef6fbd1144f49e4d1e6964258a4f4",
+        "counterparty_address_label": [
+          "High Balance"
+        ],
+        "interaction_count": 720,
+        "total_volume_usd": 1276162587.6820312,
+        "volume_in_usd": 1276162587.6820312,
+        "volume_out_usd": 0,
+        "tokens_info": [
+          {
+            "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "token_symbol": "ETH",
+            "token_name": "Ethereum",
+            "num_transfer": "106",
+            "total_token_amount": 95612.29827473294,
+            "token_in_amount": 95612.29827473294,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "token_symbol": "USDC",
+            "token_name": "USD Coin",
+            "num_transfer": "102",
+            "total_token_amount": 421340107.803,
+            "token_in_amount": 421340107.803,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+            "token_symbol": "USDT",
+            "token_name": "Tether USD",
+            "num_transfer": "97",
+            "total_token_amount": 325782486.931355,
+            "token_in_amount": 325782486.931355,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x4e15361fd6b4bb609fa63c81a2be19d873717870",
+            "token_symbol": "FTM",
+            "token_name": "Fantom Token",
+            "num_transfer": "57",
+            "total_token_amount": 12414778,
+            "token_in_amount": 12414778,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+            "token_symbol": "AAVE",
+            "token_name": "AAVE",
+            "num_transfer": "42",
+            "total_token_amount": 21496.703392019997,
+            "token_in_amount": 21496.703392019997,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+            "token_symbol": "PEPE",
+            "token_name": "Pepe",
+            "num_transfer": "37",
+            "total_token_amount": 917132407932.3967,
+            "token_in_amount": 917132407932.3967,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "token_symbol": "WBTC",
+            "token_name": "Wrapped BTC",
+            "num_transfer": "32",
+            "total_token_amount": 747.19939999,
+            "token_in_amount": 747.19939999,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x57e114b691db790c35207b2e685d4a43181e6061",
+            "token_symbol": "ENA",
+            "token_name": "ENA",
+            "num_transfer": "32",
+            "total_token_amount": 4048335.45,
+            "token_in_amount": 4048335.45,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xaea46a60368a7bd060eec7df8cba43b7ef41ad85",
+            "token_symbol": "FET",
+            "token_name": "ASI Alliance",
+            "num_transfer": "24",
+            "total_token_amount": 1460284.97214888,
+            "token_in_amount": 1460284.97214888,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+            "token_symbol": "UNI",
+            "token_name": "Uniswap",
+            "num_transfer": "23",
+            "total_token_amount": 304669.67056965,
+            "token_in_amount": 304669.67056965,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x163f8c2467924be0ae7b5347228cabf260318753",
+            "token_symbol": "WLD",
+            "token_name": "Worldcoin",
+            "num_transfer": "20",
+            "total_token_amount": 1851186,
+            "token_in_amount": 1851186,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+            "token_symbol": "LINK",
+            "token_name": "ChainLink Token",
+            "num_transfer": "17",
+            "total_token_amount": 216345.70150846,
+            "token_in_amount": 216345.70150846,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+            "token_symbol": "CRV",
+            "token_name": "Curve DAO Token",
+            "num_transfer": "13",
+            "total_token_amount": 1637079.28842,
+            "token_in_amount": 1637079.28842,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+            "token_symbol": "MKR",
+            "token_name": "Maker",
+            "num_transfer": "9",
+            "total_token_amount": 1336.8941329299998,
+            "token_in_amount": 1336.8941329299998,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
+            "token_symbol": "SHIB",
+            "token_name": "SHIBA INU",
+            "num_transfer": "8",
+            "total_token_amount": 120730287974,
+            "token_in_amount": 120730287974,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+            "token_symbol": "LDO",
+            "token_name": "Lido DAO Token",
+            "num_transfer": "8",
+            "total_token_amount": 834406,
+            "token_in_amount": 834406,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xec53bf9167f50cdeb3ae105f56099aaab9061f83",
+            "token_symbol": "EIGEN",
+            "token_name": "Eigen",
+            "num_transfer": "7",
+            "total_token_amount": 351312,
+            "token_in_amount": 351312,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0x4d224452801aced8b2f0aebe155379bb5d594381",
+            "token_symbol": "APE",
+            "token_name": "ApeCoin",
+            "num_transfer": "6",
+            "total_token_amount": 580397.95276087,
+            "token_in_amount": 580397.95276087,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xc4441c2be5d8fa8126822b9929ca0b81ea0de38e",
+            "token_symbol": "USUAL",
+            "token_name": "USUAL",
+            "num_transfer": "6",
+            "total_token_amount": 1053876,
+            "token_in_amount": 1053876,
+            "token_out_amount": 0
+          },
+          {
+            "token_address": "0xf57e7e7c23978c3caec3c3548e3d615c346e79ff",
+            "token_symbol": "IMX",
+            "token_name": "Immutable X",
+            "num_transfer": "6",
+            "total_token_amount": 368957,
+            "token_in_amount": 368957,
+            "token_out_amount": 0
+          }
+        ]
+      },
+      {
+        "counterparty_address": "0x21a31ee1afc51d94c2efccaa2092ad1028285549",
+        "counterparty_address_label": [
+          "High Activity"
+        ],
+        "interaction_count": 109,
+        "total_volume_usd": 1197505903.0957491,
+        "volume_in_usd": 1214.6660410044815,
+        "volume_out_usd": 1197504688.4297082,
+        "tokens_info": [
+          {
+            "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "token_symbol": "USDC",
+            "token_name": "USD Coin",
+            "num_transfer": "4",
+            "total_token_amount": 377499736.886952,
+            "token_in_amount": 0,
+            "token_out_amount": 377499736.886952
+          },
+          {
+            "token_address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+            "token_symbol": "USDT",
+            "token_name": "Tether USD",
+            "num_transfer": "4",
+            "total_token_amount": 495048247.900792,
+            "token_in_amount": 0,
+            "token_out_amount": 495048247.900792
+          },
+          {
+            "token_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "token_symbol": "WBTC",
+            "token_name": "Wrapped BTC",
+            "num_transfer": "4",
+            "total_token_amount": 554.17129598,
+            "token_in_amount": 0,
+            "token_out_amount": 554.17129598
+          },
+          {
+            "token_address": "0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac",
+            "token_symbol": "STORJ",
+            "token_name": "Storj",
+            "num_transfer": "3",
+            "total_token_amount": 2560933.3006097,
+            "token_in_amount": 0,
+            "token_out_amount": 2560933.3006097
+          },
+          {
+            "token_address": "0xb62132e35a6c13ee1ee0f84dc5d40bad8d815206",
+            "token_symbol": "NEXO",
+            "token_name": "Nexo",
+            "num_transfer": "3",
+            "total_token_amount": 367323.88637712,
+            "token_in_amount": 0,
+            "token_out_amount": 367323.88637712
+          },
+          {
+            "token_address": "0x4c19596f5aaff459fa38b0f7ed92f11ae6543784",
+            "token_symbol": "TRU-TRUEFI",
+            "token_name": "TrueFi",
+            "num_transfer": "2",
+            "total_token_amount": 2635036.5265957,
+            "token_in_amount": 0,
+            "token_out_amount": 2635036.5265957
+          },
+          {
+            "token_address": "0xbbc2ae13b23d715c30720f079fcd9b4a74093505",
+            "token_symbol": "ERN",
+            "token_name": "EthernityChain",
+            "num_transfer": "2",
+            "total_token_amount": 139319.03552,
+            "token_in_amount": 0,
+            "token_out_amount": 139319.03552
+          },
+          {
+            "token_address": "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+            "token_symbol": "LDO",
+            "token_name": "Lido DAO Token",
+            "num_transfer": "2",
+            "total_token_amount": 1168769.49244275,
+            "token_in_amount": 0,
+            "token_out_amount": 1168769.49244275
+          },
+          {
+            "token_address": "0x090185f2135308bad17527004364ebcc2d37e5f6",
+            "token_symbol": "SPELL",
+            "token_name": "Spell Token",
+            "num_transfer": "2",
+            "total_token_amount": 457949885.63691723,
+            "token_in_amount": 0,
+            "token_out_amount": 457949885.63691723
+          },
+          {
+            "token_address": "0xa1faa113cbe53436df28ff0aee54275c13b40975",
+            "token_symbol": "ALPHA",
+            "token_name": "AlphaToken",
+            "num_transfer": "2",
+            "total_token_amount": 1988761.64425935,
+            "token_in_amount": 0,
+            "token_out_amount": 1988761.64425935
+          },
+          {
+            "token_address": "0xe3c408bd53c31c085a1746af401a4042954ff740",
+            "token_symbol": "GMT",
+            "token_name": "GreenMetaverseToken",
+            "num_transfer": "2",
+            "total_token_amount": 528501.18078295,
+            "token_in_amount": 0,
+            "token_out_amount": 528501.18078295
+          },
+          {
+            "token_address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+            "token_symbol": "PEPE",
+            "token_name": "Pepe",
+            "num_transfer": "2",
+            "total_token_amount": 971290508429.36,
+            "token_in_amount": 58503218,
+            "token_out_amount": 971232005211.36
+          },
+          {
+            "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+            "token_symbol": "LINK",
+            "token_name": "ChainLink Token",
+            "num_transfer": "2",
+            "total_token_amount": 918580.5484963399,
+            "token_in_amount": 0,
+            "token_out_amount": 918580.5484963399
+          },
+          {
+            "token_address": "0x4b9278b94a1112cad404048903b8d343a810b07e",
+            "token_symbol": "HIFI",
+            "token_name": "Hifi Finance",
+            "num_transfer": "2",
+            "total_token_amount": 764416.3812608699,
+            "token_in_amount": 0,
+            "token_out_amount": 764416.3812608699
+          },
+          {
+            "token_address": "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6",
+            "token_symbol": "STG",
+            "token_name": "StargateToken",
+            "num_transfer": "2",
+            "total_token_amount": 4614196.238679591,
+            "token_in_amount": 0,
+            "token_out_amount": 4614196.238679591
+          },
+          {
+            "token_address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+            "token_symbol": "SAND",
+            "token_name": "SAND",
+            "num_transfer": "2",
+            "total_token_amount": 10103347.455969289,
+            "token_in_amount": 0,
+            "token_out_amount": 10103347.455969289
+          },
+          {
+            "token_address": "0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9",
+            "token_symbol": "FTT",
+            "token_name": "FTX Token",
+            "num_transfer": "2",
+            "total_token_amount": 327130.04982962005,
+            "token_in_amount": 0,
+            "token_out_amount": 327130.04982962005
+          },
+          {
+            "token_address": "0xc00e94cb662c3520282e6f5717214004a7f26888",
+            "token_symbol": "COMP",
+            "token_name": "Compound",
+            "num_transfer": "2",
+            "total_token_amount": 22282.18936145,
+            "token_in_amount": 0,
+            "token_out_amount": 22282.18936145
+          },
+          {
+            "token_address": "0x58b6a8a3302369daec383334672404ee733ab239",
+            "token_symbol": "LPT",
+            "token_name": "Livepeer Token",
+            "num_transfer": "2",
+            "total_token_amount": 43298.2075721,
+            "token_in_amount": 0,
+            "token_out_amount": 43298.2075721
+          },
+          {
+            "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "token_symbol": "ETH",
+            "token_name": "Ethereum",
+            "num_transfer": "2",
+            "total_token_amount": 28643.974912960002,
+            "token_in_amount": 0,
+            "token_out_amount": 28643.974912960002
+          }
+        ]
+      },
+      {
+        "counterparty_address": "0xdfd5293d8e347dfe59e90efd55b2956a1343963d",
+        "counterparty_address_label": [
+          "High Activity"
+        ],
+        "interaction_count": 112,
+        "total_volume_usd": 1015717737.1589309,
+        "volume_in_usd": 0,
+        "volume_out_usd": 1015717737.1589309,
+        "tokens_info": [
+          {
+            "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "token_symbol": "USDC",
+            "token_name": "USD Coin",
+            "num_transfer": "4",
+            "total_token_amount": 381953033.68523,
+            "token_in_amount": 0,
+            "token_out_amount": 381953033.68523
+          },
+          {
+            "token_address": "0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac",
+            "token_symbol": "STORJ",
+            "token_name": "Storj",
+            "num_transfer": "3",
+            "total_token_amount": 2640329.37478212,
+            "token_in_amount": 0,
+            "token_out_amount": 2640329.37478212
+          },
+          {
+            "token_address": "0x4b9278b94a1112cad404048903b8d343a810b07e",
+            "token_symbol": "HIFI",
+            "token_name": "Hifi Finance",
+            "num_transfer": "3",
+            "total_token_amount": 1339791.44225235,
+            "token_in_amount": 0,
+            "token_out_amount": 1339791.44225235
+          },
+          {
+            "token_address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "token_symbol": "WBTC",
+            "token_name": "Wrapped BTC",
+            "num_transfer": "3",
+            "total_token_amount": 367.52904405,
+            "token_in_amount": 0,
+            "token_out_amount": 367.52904405
+          },
+          {
+            "token_address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+            "token_symbol": "USDT",
+            "token_name": "Tether USD",
+            "num_transfer": "3",
+            "total_token_amount": 323455670.573283,
+            "token_in_amount": 0,
+            "token_out_amount": 323455670.573283
+          },
+          {
+            "token_address": "0xdef1ca1fb7fbcdc777520aa7f396b4e015f497ab",
+            "token_symbol": "COW",
+            "token_name": "CoW Protocol Token",
+            "num_transfer": "2",
+            "total_token_amount": 716603.3884784,
+            "token_in_amount": 0,
+            "token_out_amount": 716603.3884784
+          },
+          {
+            "token_address": "0x9be89d2a4cd102d8fecc6bf9da793be995c22541",
+            "token_symbol": "BBTC",
+            "token_name": "Binance Wrapped BTC",
+            "num_transfer": "2",
+            "total_token_amount": 23.32188341,
+            "token_in_amount": 0,
+            "token_out_amount": 23.32188341
+          },
+          {
+            "token_address": "0x4c19596f5aaff459fa38b0f7ed92f11ae6543784",
+            "token_symbol": "TRU-TRUEFI",
+            "token_name": "TrueFi",
+            "num_transfer": "2",
+            "total_token_amount": 2413566.52402332,
+            "token_in_amount": 0,
+            "token_out_amount": 2413566.52402332
+          },
+          {
+            "token_address": "0xdc9ac3c20d1ed0b540df9b1fedc10039df13f99c",
+            "token_symbol": "UTK",
+            "token_name": "UTRUST",
+            "num_transfer": "2",
+            "total_token_amount": 2134785.3681518,
+            "token_in_amount": 0,
+            "token_out_amount": 2134785.3681518
+          },
+          {
+            "token_address": "0x430ef9263e76dae63c84292c3409d61c598e9682",
+            "token_symbol": "PYR",
+            "token_name": "PYR Token",
+            "num_transfer": "2",
+            "total_token_amount": 119540.04941836,
+            "token_in_amount": 0,
+            "token_out_amount": 119540.04941836
+          },
+          {
+            "token_address": "0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9",
+            "token_symbol": "FTT",
+            "token_name": "FTX Token",
+            "num_transfer": "2",
+            "total_token_amount": 325417.96773979,
+            "token_in_amount": 0,
+            "token_out_amount": 325417.96773979
+          },
+          {
+            "token_address": "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050",
+            "token_symbol": "ARKM",
+            "token_name": "Arkham",
+            "num_transfer": "2",
+            "total_token_amount": 1607284.3081688099,
+            "token_in_amount": 0,
+            "token_out_amount": 1607284.3081688099
+          },
+          {
+            "token_address": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
+            "token_symbol": "MANA",
+            "token_name": "Decentraland MANA",
+            "num_transfer": "2",
+            "total_token_amount": 2681308.8214498702,
+            "token_in_amount": 0,
+            "token_out_amount": 2681308.8214498702
+          },
+          {
+            "token_address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+            "token_symbol": "LINK",
+            "token_name": "ChainLink Token",
+            "num_transfer": "2",
+            "total_token_amount": 898395.3804922301,
+            "token_in_amount": 0,
+            "token_out_amount": 898395.3804922301
+          },
+          {
+            "token_address": "0x419d0d8bdd9af5e606ae2232ed285aff190e711b",
+            "token_symbol": "FUN",
+            "token_name": "FunFair",
+            "num_transfer": "2",
+            "total_token_amount": 31775657.08165224,
+            "token_in_amount": 0,
+            "token_out_amount": 31775657.08165224
+          },
+          {
+            "token_address": "0x090185f2135308bad17527004364ebcc2d37e5f6",
+            "token_symbol": "SPELL",
+            "token_name": "Spell Token",
+            "num_transfer": "2",
+            "total_token_amount": 487913648.87430894,
+            "token_in_amount": 0,
+            "token_out_amount": 487913648.87430894
+          },
+          {
+            "token_address": "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409",
+            "token_symbol": "FDUSD",
+            "token_name": "First Digital USD",
+            "num_transfer": "2",
+            "total_token_amount": 54773663.739552,
+            "token_in_amount": 0,
+            "token_out_amount": 54773663.739552
+          },
+          {
+            "token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "token_symbol": "ETH",
+            "token_name": "Ethereum",
+            "num_transfer": "2",
+            "total_token_amount": 28006.574843950002,
+            "token_in_amount": 0,
+            "token_out_amount": 28006.574843950002
+          },
+          {
+            "token_address": "0xb0ffa8000886e57f86dd5264b9582b2ad87b2b91",
+            "token_symbol": "W",
+            "token_name": "Wormhole Token",
+            "num_transfer": "2",
+            "total_token_amount": 65901.71712794,
+            "token_in_amount": 0,
+            "token_out_amount": 65901.71712794
+          },
+          {
+            "token_address": "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6",
+            "token_symbol": "STG",
+            "token_name": "StargateToken",
+            "num_transfer": "2",
+            "total_token_amount": 4137520.46840253,
+            "token_in_amount": 0,
+            "token_out_amount": 4137520.46840253
+          }
+        ]
+      }
+    ],
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:49:09.801Z"
+}

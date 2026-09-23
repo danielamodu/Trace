@@ -1,0 +1,77 @@
+{
+  "probe": "smart-money-netflow",
+  "path": "/api/v1/smart-money/netflow",
+  "request_body": {
+    "chains": [
+      "ethereum"
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "response_meta": {
+    "status": 200,
+    "requestId": "9a998e5d7b79d01f4b88ad10a8e77f7a",
+    "creditsCost": "5",
+    "creditsUsed": "5",
+    "creditsRemaining": "86",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "response_sample": {
+    "data": [
+      {
+        "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "token_symbol": "UNI",
+        "net_flow_1h_usd": 0,
+        "net_flow_24h_usd": 98910.48134913587,
+        "net_flow_7d_usd": -62934.1016687399,
+        "net_flow_30d_usd": -43524.46212126657,
+        "chain": "ethereum",
+        "token_sectors": [
+          "Decentralised Exchanges"
+        ],
+        "trader_count": 18,
+        "token_age_days": 2198,
+        "market_cap_usd": 5446144823.37244
+      },
+      {
+        "token_address": "0x643c4e15d7d62ad0abec4a9bd4b001aa3ef52d66",
+        "token_symbol": "SYRUP",
+        "net_flow_1h_usd": 0,
+        "net_flow_24h_usd": 18694.773663243956,
+        "net_flow_7d_usd": 6989.349844077431,
+        "net_flow_30d_usd": 6989.349844077431,
+        "chain": "ethereum",
+        "token_sectors": [
+          "DeFi Lending (Money Markets)",
+          "Yield Bearing"
+        ],
+        "trader_count": 2,
+        "token_age_days": 739,
+        "market_cap_usd": 268628114.044823
+      },
+      {
+        "token_address": "0xc50673edb3a7b94e8cad8a7d4e0cd68864e33edf",
+        "token_symbol": "PNKSTR",
+        "net_flow_1h_usd": 0,
+        "net_flow_24h_usd": 11070.007946545791,
+        "net_flow_7d_usd": 11070.007946545791,
+        "net_flow_30d_usd": 10974.268118532853,
+        "chain": "ethereum",
+        "token_sectors": [],
+        "trader_count": 2,
+        "token_age_days": 380,
+        "market_cap_usd": 9565688.08536539
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 3,
+      "is_last_page": false
+    },
+    "_note": "truncated to 3 of 3 rows for fixture"
+  },
+  "captured_at": "2026-09-21T19:49:05.035Z"
+}

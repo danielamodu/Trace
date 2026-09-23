@@ -1,0 +1,35 @@
+{
+  "probe": "tgm-flows",
+  "path": "/api/v1/tgm/flows",
+  "request_body": {
+    "chain": "ethereum",
+    "token_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "date": {
+      "from": "2025-01-06",
+      "to": "2025-01-07"
+    },
+    "pagination": {
+      "page": 1,
+      "per_page": 3
+    }
+  },
+  "status": 422,
+  "error_body": {
+    "error": "Unprocessable Entity",
+    "message": "Token 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48 on ethereum is a stablecoin. The TGM flows endpoint does not support stablecoins.",
+    "code": "invalid_field_value",
+    "status": 422,
+    "request_id": "d9ec736419011329f548a3274c0d2c7d",
+    "doc_url": "https://docs.nansen.ai/getting-started/error-handling#invalid_field_value"
+  },
+  "meta": {
+    "status": 422,
+    "requestId": "d9ec736419011329f548a3274c0d2c7d",
+    "creditsCost": "1",
+    "creditsUsed": null,
+    "creditsRemaining": null,
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "captured_at": "2026-09-21T19:48:57.229Z"
+}
