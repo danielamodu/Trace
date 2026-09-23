@@ -16,6 +16,12 @@ next-env.d.ts
 # Recon output that may contain unsanitized data
 fixtures/raw/
 
+# Playwright e2e artifacts
+test-results/
+playwright-report/
+blob-report/
+/playwright/.cache/
+
 # OS
 .DS_Store
 Thumbs.db
