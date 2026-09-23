@@ -37,6 +37,9 @@ export function ReconstructForm() {
   const [state, setState] = useState<RunState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RunResult | null>(null);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [savedUrl, setSavedUrl] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   function validate(): string | null {
     if (!ADDRESS_RE.test(address.trim())) return 'Address must be 0x followed by 40 hex characters.';
@@ -57,6 +60,9 @@ export function ReconstructForm() {
     setState('running');
     setError(null);
     setResult(null);
+    setSaveState('idle');
+    setSavedUrl(null);
+    setSaveError(null);
     try {
       const budget: Record<string, number> = {};
       const mp = Number(maxPages);
@@ -99,6 +105,32 @@ export function ReconstructForm() {
     a.download = `${result.contract.caseId}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function saveToLibrary() {
+    if (!result) return;
+    setSaveState('saving');
+    setSaveError(null);
+    try {
+      const res = await fetch('/api/cases', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ contract: result.contract }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const detail = Array.isArray(data?.detail) ? data.detail.join('; ') : data?.detail;
+        const msg = [data?.error, detail].filter(Boolean).join(' — ');
+        setSaveError(msg || `Save failed (${res.status}).`);
+        setSaveState('error');
+        return;
+      }
+      setSavedUrl(typeof data?.url === 'string' ? data.url : `/cases/${result.contract.caseId}`);
+      setSaveState('saved');
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Network error saving the case.');
+      setSaveState('error');
+    }
   }
 
   const running = state === 'running';
@@ -170,8 +202,9 @@ export function ReconstructForm() {
       <p className="enter enter-3 max-w-[70ch] text-[12.5px] leading-relaxed text-muted-foreground/85">
         Your key is sent to this TRACE server only, used once to call Nansen on your behalf, and never
         stored, logged, or returned. If the server has its own key enabled, it is used when you leave the
-        field blank. This endpoint has no authentication or rate limiting — run it locally or behind your
-        own access controls.
+        field blank. Saving a run writes its contract to this server&rsquo;s local library
+        (<span className="font-mono">data/cases/</span>, gitignored) — never committed or sent anywhere else.
+        This endpoint has no authentication or rate limiting — run it locally or behind your own access controls.
       </p>
 
       {state === 'error' && error ? (
@@ -196,7 +229,15 @@ export function ReconstructForm() {
 
       {result ? (
         <div className="grid gap-5">
-          <RunSummary meta={result.meta} contract={result.contract} onDownload={downloadContract} />
+          <RunSummary
+            meta={result.meta}
+            contract={result.contract}
+            onDownload={downloadContract}
+            onSave={saveToLibrary}
+            saveState={saveState}
+            savedUrl={savedUrl}
+            saveError={saveError}
+          />
           <InvestigationView contract={result.contract} />
         </div>
       ) : null}
@@ -209,10 +250,18 @@ function RunSummary({
   meta,
   contract,
   onDownload,
+  onSave,
+  saveState,
+  savedUrl,
+  saveError,
 }: {
   meta: LiveRunMeta;
   contract: InvestigationContract;
   onDownload: () => void;
+  onSave: () => void;
+  saveState: 'idle' | 'saving' | 'saved' | 'error';
+  savedUrl: string | null;
+  saveError: string | null;
 }) {
   const cleared =
     meta.sanitization.labelsCleared + meta.sanitization.symbolsCleared + meta.sanitization.namesCleared;
@@ -238,9 +287,20 @@ function RunSummary({
         <span className="inline-flex items-center rounded border px-2 py-0.5 font-mono text-[11.5px] text-muted-foreground">
           {contract.dataSource}
         </span>
-        <Button type="button" variant="outline" size="sm" className="ml-auto" onClick={onDownload}>
-          Download contract JSON
-        </Button>
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={onSave}
+            disabled={saveState === 'saving' || saveState === 'saved'}
+          >
+            {saveState === 'saving' ? 'Saving…' : saveState === 'saved' ? 'Saved ✓' : 'Save to library'}
+          </Button>
+          <Button type="button" variant="outline" size="sm" onClick={onDownload}>
+            Download contract JSON
+          </Button>
+        </div>
       </div>
       <ul className="grid grid-cols-2 gap-2 p-0 sm:grid-cols-3 lg:grid-cols-6">
         {stats.map(([label, value]) => (
@@ -251,6 +311,19 @@ function RunSummary({
         ))}
       </ul>
       <p className="mt-3 font-mono text-[12px] text-muted-foreground/80">{meta.stopReason}</p>
+      {saveState === 'saved' && savedUrl ? (
+        <p className="mt-3 text-[13px]" aria-live="polite">
+          Saved to your local library —{' '}
+          <a className="font-medium underline underline-offset-2" href={savedUrl}>
+            open the case →
+          </a>
+        </p>
+      ) : null}
+      {saveState === 'error' && saveError ? (
+        <p className="mt-3 text-[13px]" role="alert" style={{ color: 'var(--relation)' }}>
+          {saveError}
+        </p>
+      ) : null}
     </section>
   );
 }
