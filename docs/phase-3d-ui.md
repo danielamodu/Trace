@@ -91,6 +91,6 @@ Not verifiable headlessly in this environment (no browser automation available; 
 - Explorer links point at etherscan.io mainnet (static anchors, no fetching, no Nansen use).
 - `next dev` was not exercised end-to-end here (install + build + `start` were); `dev` uses the same routes/adapter and is covered by M-1.
 - Disk pressure during install (drive filled to 0 free mid-phase; recovered via npm-cache clean) — environment note, not a code issue.
-- TypeScript 7 requires its `@typescript/typescript-win32-x64` optional package explicitly (installed as dev dep; an artifact of `--omit=optional`).
+- TypeScript 7 ships its per-platform native binaries as `optionalDependencies`, so npm installs the correct one automatically. (An earlier explicit `@typescript/typescript-win32-x64` dev dep was removed — pinning the win32 binary broke `npm ci` on Linux/macOS CI runners.)
 
 **STOP.** Phase 3E not started.
