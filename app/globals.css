@@ -1,0 +1,261 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────────────────────
+   TRACE design tokens. Light is default; `.dark` overrides.
+   Forensic palette, elevated: Manrope type, glass depth, dual theme.
+   Provenance hues are SEMANTIC (fact / relation / derived) — never
+   decorative. Source-origin chips stay neutral by design: live Nansen
+   evidence is not automatically "complete", so no pool gets a nicer hue.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --radius: 0.625rem;
+
+  --background: oklch(0.985 0.003 250);
+  --foreground: oklch(0.23 0.02 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.23 0.02 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.23 0.02 255);
+  --primary: oklch(0.52 0.13 236);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --secondary: oklch(0.965 0.005 250);
+  --secondary-foreground: oklch(0.28 0.02 255);
+  --muted: oklch(0.965 0.005 250);
+  --muted-foreground: oklch(0.5 0.02 255);
+  --accent: oklch(0.95 0.012 236);
+  --accent-foreground: oklch(0.28 0.02 255);
+  --destructive: oklch(0.58 0.21 27);
+  --destructive-foreground: oklch(0.99 0.005 240);
+  --border: oklch(0.9 0.006 255);
+  --input: oklch(0.9 0.006 255);
+  --ring: oklch(0.52 0.13 236);
+
+  /* provenance — semantic, load-bearing */
+  --fact: oklch(0.44 0.02 255);
+  --fact-border: oklch(0.86 0.008 255);
+  --fact-bg: oklch(0.97 0.004 255);
+  --relation: oklch(0.52 0.13 66);
+  --relation-border: oklch(0.82 0.09 74);
+  --relation-bg: oklch(0.96 0.05 82);
+  --derived: oklch(0.5 0.11 232);
+  --derived-border: oklch(0.82 0.07 232);
+  --derived-bg: oklch(0.96 0.04 232);
+
+  /* craft surfaces */
+  --glass-bg: oklch(1 0 0 / 0.72);
+  --glass-border: oklch(0.5 0.01 255 / 0.12);
+  --hatch: oklch(0.5 0.01 255 / 0.06);
+  --graph-edge: oklch(0.8 0.008 255);
+  --graph-node: oklch(0.995 0 0);
+}
+.dark {
+  --background: oklch(0.17 0.012 256);
+  --foreground: oklch(0.95 0.006 250);
+  --card: oklch(0.205 0.014 256);
+  --card-foreground: oklch(0.95 0.006 250);
+  --popover: oklch(0.205 0.014 256);
+  --popover-foreground: oklch(0.95 0.006 250);
+  --primary: oklch(0.8 0.11 224);
+  --primary-foreground: oklch(0.18 0.012 256);
+  --secondary: oklch(0.26 0.015 256);
+  --secondary-foreground: oklch(0.95 0.006 250);
+  --muted: oklch(0.26 0.015 256);
+  --muted-foreground: oklch(0.7 0.02 256);
+  --accent: oklch(0.3 0.03 224);
+  --accent-foreground: oklch(0.95 0.006 250);
+  --destructive: oklch(0.62 0.2 25);
+  --destructive-foreground: oklch(0.98 0.005 240);
+  --border: oklch(0.3 0.015 256);
+  --input: oklch(0.32 0.015 256);
+  --ring: oklch(0.8 0.11 224);
+
+  --fact: oklch(0.82 0.015 255);
+  --fact-border: oklch(0.42 0.015 255);
+  --fact-bg: oklch(0.26 0.012 256);
+  --relation: oklch(0.83 0.12 82);
+  --relation-border: oklch(0.5 0.08 74);
+  --relation-bg: oklch(0.34 0.06 74 / 0.55);
+  --derived: oklch(0.82 0.1 224);
+  --derived-border: oklch(0.5 0.07 224);
+  --derived-bg: oklch(0.34 0.06 224 / 0.55);
+
+  --glass-bg: oklch(0.24 0.014 256 / 0.6);
+  --glass-border: oklch(0.9 0.01 255 / 0.08);
+  --hatch: oklch(0.9 0.01 255 / 0.05);
+  --graph-edge: oklch(0.36 0.015 256);
+  --graph-node: oklch(0.24 0.014 256);
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-fact: var(--fact);
+  --color-relation: var(--relation);
+  --color-derived: var(--derived);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 28%, transparent);
+  }
+}
+/* Theme crossfade — applied to surfaces only, so hover/focus stay snappy. */
+.theme-surface {
+  transition:
+    background-color 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 440ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Glass depth — subtle, restrained; used on the sticky chrome only. */
+.glass {
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+}
+
+/* Hatch — evidence-board framing texture. */
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--hatch) 0,
+    var(--hatch) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+/* Mount entrance — plays once on load (CSS-only); reduced-motion safe. */
+@keyframes trace-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.enter { animation: trace-enter 620ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.enter-1 { animation-delay: 60ms; }
+.enter-2 { animation-delay: 130ms; }
+.enter-3 { animation-delay: 210ms; }
+.enter-4 { animation-delay: 300ms; }
+.enter-5 { animation-delay: 400ms; }
+@media (prefers-reduced-motion: reduce) {
+  .theme-surface { transition: none; }
+  .enter { animation: none; }
+  * { scroll-behavior: auto; }
+}
+
+/* Quiet, themed scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background-color: var(--muted-foreground); }
+
+/* Replay scrubber — native range input, themed to match. */
+.replay-scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--border);
+  cursor: pointer;
+}
+.replay-scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--primary);
+  border: 2px solid var(--card);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.3);
+}
+.replay-scrub::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--card);
+  border-radius: 9999px;
+  background: var(--primary);
+}
+/* Provenance badges — semantic vocabulary, rendered by <ProvBadge>.
+   Dot + label; one hue per kind, consistent across the app and both themes. */
+.prov {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.12rem 0.46rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.prov::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: currentColor;
+  flex: none;
+}
+.prov-fact { color: var(--fact); border-color: var(--fact-border); background: var(--fact-bg); }
+.prov-relation { color: var(--relation); border-color: var(--relation-border); background: var(--relation-bg); }
+.prov-derived { color: var(--derived); border-color: var(--derived-border); background: var(--derived-bg); }
