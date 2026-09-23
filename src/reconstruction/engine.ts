@@ -425,10 +425,14 @@ function sourceRefFor(source: SourceMeta, txHash?: string): SourceRef {
   if (txHash !== undefined && txHash !== '') {
     ref.txHash = txHash;
   }
-  // Phase 3H: machine-readable evidence-pool origin. Fixture-file convention
-  // only (live-capture namespace vs everything else); absent when unrecorded
-  // — never defaulted. Additive metadata; admission/ordering/grouping untouched.
-  if (source.fixtureFile !== null && source.fixtureFile !== undefined && source.fixtureFile !== '') {
+  // Phase 3H/3J: machine-readable evidence-pool origin. An explicit origin
+  // (set by the live path, which writes no fixture) wins; otherwise fall back
+  // to the fixture-file convention (live-capture namespace vs everything else).
+  // Absent when neither is recorded — never defaulted. Additive metadata;
+  // admission/ordering/grouping untouched.
+  if (source.origin === 'live-nansen' || source.origin === 'fixture-cache') {
+    ref.origin = source.origin;
+  } else if (source.fixtureFile !== null && source.fixtureFile !== undefined && source.fixtureFile !== '') {
     const f = source.fixtureFile;
     ref.origin = f.startsWith('live/') || f.includes('fixtures/live/') ? 'live-nansen' : 'fixture-cache';
   }
@@ -436,7 +440,9 @@ function sourceRefFor(source: SourceMeta, txHash?: string): SourceRef {
 }
 
 function fixtureNote(source: SourceMeta): string {
-  // SourceRef has no fixtureFile slot, so the fixture is cited in the statement.
+  // SourceRef has no fixtureFile slot, so the source is cited in the statement.
+  // Live reconstructions read no file — cite the live call rather than a name.
+  if (source.origin === 'live-nansen') return 'live Nansen capture';
   return source.fixtureFile ?? 'fixture file not recorded';
 }
 

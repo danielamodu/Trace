@@ -136,12 +136,20 @@ export interface FixtureMeta {
   [k: string]: unknown;
 }
 
-/** Build a SourceMeta from a fixture's meta block. No secrets are read. */
+/**
+ * Build a SourceMeta from a fixture's meta block. No secrets are read.
+ *
+ * `origin` (Phase 3J) is passed explicitly by the live reconstruction path,
+ * which reads no fixture file (so `fixtureFile` stays null) but must still mark
+ * its data as `live-nansen`. Fixture callers omit it and are unaffected — the
+ * engine falls back to the `live/`-path convention when origin is absent.
+ */
 export function sourceMeta(
   source: NansenSource,
   meta: FixtureMeta | null | undefined,
   capturedAt: string,
   fixtureFile: string | null = null,
+  origin?: 'fixture-cache' | 'live-nansen',
 ): SourceMeta {
   return {
     source,
@@ -149,6 +157,7 @@ export function sourceMeta(
     capturedAt,
     fixtureFile,
     creditsCost: meta?.creditsCost ?? null,
+    ...(origin !== undefined ? { origin } : {}),
   };
 }
 

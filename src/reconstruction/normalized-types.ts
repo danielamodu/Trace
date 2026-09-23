@@ -51,6 +51,14 @@ export interface SourceMeta {
   fixtureFile: string | null;
   /** Credit cost recorded for the originating call, when known. */
   creditsCost: string | null;
+  /**
+   * Evidence-pool origin (Phase 3J): set explicitly for live reconstructions,
+   * where no fixture file is written and the `live/`-path convention cannot
+   * apply. Optional + defaulted-absent so every fixture caller is unaffected;
+   * when present it takes precedence over the fixture-file convention in the
+   * engine's SourceRef stamping.
+   */
+  origin?: 'fixture-cache' | 'live-nansen';
 }
 
 /**
