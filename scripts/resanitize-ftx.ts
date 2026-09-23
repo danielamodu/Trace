@@ -11,7 +11,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { sanitizeRows, DEFAULT_CAPS, type ClearedCounts } from './sanitize-tokens.ts';
+import { sanitizeRows, DEFAULT_CAPS, type ClearedCounts } from '../src/nansen/sanitize.ts';
 
 const DIR = 'fixtures/live/ftx';
 const MANIFEST = `${DIR}/manifest.json`;

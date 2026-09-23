@@ -1,5 +1,5 @@
 /**
- * TRACE — token-metadata sanitizer (shared by capture + re-sanitize steps).
+ * TRACE — token-metadata sanitizer (shared: live orchestrator + capture scripts).
  *
  * Scam airdrops inject megabyte-scale strings into token display fields —
  * observed here as a 200 KB `to_address_label` on a zero-value "FOLLOWME"
@@ -7,6 +7,10 @@
  * oversized display string (symbol / name / address label) in place, leaving
  * every real transfer anchor — addresses, amounts, USD, hash, timestamp —
  * untouched. Cleared strings normalize to null downstream (tracked, not guessed).
+ *
+ * This lives under src/ (not scripts/) because it is a production concern: the
+ * live reconstruction path (src/investigations/live.ts) sanitizes transaction
+ * rows at request time, before they ever reach the normalizer or the contract.
  */
 
 export interface SanitizeCaps {

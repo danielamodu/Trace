@@ -23,7 +23,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { NansenClient, NansenApiError, redact } from '../src/nansen/client.ts';
 import { FTX_SUBJECT, FTX_CHAIN, FTX_CAPTURE_WINDOW } from '../src/investigations/ftx.ts';
-import { sanitizeRows, DEFAULT_CAPS } from './sanitize-tokens.ts';
+import { sanitizeRows, DEFAULT_CAPS } from '../src/nansen/sanitize.ts';
 
 const PATH = '/api/v1/profiler/address/transactions';
 const WINDOW = { from: FTX_CAPTURE_WINDOW.from, to: FTX_CAPTURE_WINDOW.to };
