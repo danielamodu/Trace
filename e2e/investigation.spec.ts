@@ -26,6 +26,20 @@ test('Command Center opens the Euler investigation', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 });
 
+test('Command Center lists and opens the second (FTX) investigation', async ({ page }) => {
+  await page.goto('/');
+  const links = page.getByRole('link', { name: /^Open investigation:/ });
+  await expect(links).toHaveCount(2); // Euler + FTX are both served
+  const ftx = page.getByRole('link', { name: /Open investigation:.*FTX/ });
+  await expect(ftx).toBeVisible();
+  await ftx.click();
+  await expect(page).toHaveURL(/\/cases\/case_ftx_2022$/);
+  await expect(page.getByText('INCIDENT · case_ftx_2022 · ethereum')).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Timeline', exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Evidence replay', exact: true })).toBeVisible();
+  await expect(currentEvents(page)).toHaveCount(1); // a default selection exists on load
+});
+
 test.describe('case page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(CASE_PATH);
