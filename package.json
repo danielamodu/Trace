@@ -10,7 +10,7 @@
   "scripts": {
     "smoke": "node --env-file-if-exists=.env scripts/smoke.ts",
     "recon": "node --env-file-if-exists=.env scripts/recon.ts",
-    "test": "node --test \"test/**/*.test.ts\"",
+    "test": "node --import ./test/env-setup.ts --test \"test/**/*.test.ts\"",
     "e2e": "playwright test",
     "dev": "next dev",
     "build": "next build",
