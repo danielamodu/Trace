@@ -1,0 +1,21 @@
+# Secrets — never commit
+.env
+.env.local
+*.key
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Next.js / TypeScript build output
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Recon output that may contain unsanitized data
+fixtures/raw/
+
+# OS
+.DS_Store
+Thumbs.db
