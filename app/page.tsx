@@ -51,8 +51,8 @@ export default function Home() {
         ))}
       </ul>
       <p className="mt-4 text-[13px] text-muted-foreground/80">
-        One case available in this build. Reconstructions are served from the cached investigation
-        contract — no live queries.
+        {cases.length === 1 ? 'One case' : `${cases.length} cases`} available in this build.
+        Reconstructions are served from the cached investigation contract — no live queries.
       </p>
     </div>
   );
