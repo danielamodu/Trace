@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { listCaseSummaries } from '../lib/cases.ts';
 import { PendingLink } from '../components/PendingLink.tsx';
 
@@ -18,6 +19,17 @@ export default function Home() {
         <p className="max-w-[58ch] text-lg text-muted-foreground">
           TRACE reconstructs how it happened — from observed onchain evidence.
         </p>
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          <Link
+            href="/reconstruct"
+            className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          >
+            Reconstruct a live address →
+          </Link>
+          <span className="text-[13px] text-muted-foreground/80">
+            Bring your own Nansen key. The library below is served from cached contracts.
+          </span>
+        </div>
       </section>
 
       <h2 className="enter enter-2 mb-3 font-mono text-xs uppercase tracking-wider text-muted-foreground/80">
