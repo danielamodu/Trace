@@ -14,6 +14,7 @@
 
 import { EULER_CASE_ID, buildEulerContract } from './euler.ts';
 import { FTX_CASE_ID, buildFtxContract } from './ftx.ts';
+import { loadSavedContracts } from './saved-cases.ts';
 import { createContractService } from '../contract/service.ts';
 import type { ContractService } from '../contract/service.ts';
 import type { InvestigationContract } from '../contract/types.ts';
@@ -41,13 +42,49 @@ export const CASE_REGISTRY: readonly CaseRegistration[] = [
 ];
 
 /**
- * Build the read-only service over every registered case. Contracts are built
- * once (fixture reads happen here); the availability flags control which ids
- * are listed as available. This replaces the Euler-only builder at the lib
- * seam and now serves every registered case.
+ * Ids owned by code (fixture-backed builders above). A saved live case may
+ * never shadow these, so the save route rejects them.
  */
-export function buildTraceService(reconstructedAt?: string): ContractService {
-  const contracts = CASE_REGISTRY.map((c) => c.buildContract(reconstructedAt));
-  const availableIds = CASE_REGISTRY.filter((c) => c.available).map((c) => c.id);
+export const BUILT_IN_CASE_IDS: readonly string[] = CASE_REGISTRY.map((c) => c.id);
+
+/**
+ * Built-in contracts, memoized by reconstructedAt so the fixture reads and
+ * engine runs happen once per process even when the service is rebuilt to pick
+ * up a newly saved case. The returned arrays are treated as immutable — callers
+ * copy before appending saved cases.
+ */
+let builtInMemo: { key: string | undefined; contracts: InvestigationContract[]; availableIds: string[] } | null = null;
+
+function builtInContracts(reconstructedAt?: string): { contracts: InvestigationContract[]; availableIds: string[] } {
+  if (builtInMemo !== null && builtInMemo.key === reconstructedAt) return builtInMemo;
+  const built = CASE_REGISTRY.map((c) => ({ contract: c.buildContract(reconstructedAt), available: c.available }));
+  builtInMemo = {
+    key: reconstructedAt,
+    contracts: built.map((b) => b.contract),
+    availableIds: built.filter((b) => b.available).map((b) => b.contract.caseId),
+  };
+  return builtInMemo;
+}
+
+/**
+ * Build the read-only service over every registered case. Built-in contracts
+ * come from the memo above (fixture reads happen once); saved live contracts are
+ * then merged in from the local store (data/cases/) so a saved run joins the
+ * library. Built-in ids are authoritative: a saved file can never shadow
+ * Euler/FTX, and duplicate saved ids collapse to the first seen, so the service
+ * never sees a caseId collision. `savedDir` overrides the store (tests only).
+ */
+export function buildTraceService(reconstructedAt?: string, savedDir?: string): ContractService {
+  const base = builtInContracts(reconstructedAt);
+  const contracts: InvestigationContract[] = [...base.contracts];
+  const availableIds: string[] = [...base.availableIds];
+
+  const seen = new Set(contracts.map((c) => c.caseId));
+  for (const saved of loadSavedContracts(savedDir)) {
+    if (seen.has(saved.caseId)) continue;
+    seen.add(saved.caseId);
+    contracts.push(saved);
+    availableIds.push(saved.caseId); // saved cases are real runs → always available
+  }
   return createContractService(contracts, availableIds);
 }
