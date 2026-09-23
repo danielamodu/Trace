@@ -2,14 +2,15 @@
  * TRACE — Read-only application adapter (Phase 3D).
  *
  * The single seam between the UI/API routes and the contract layer. Wraps the
- * Phase 3C service: builds it once per server process from the fixture cache
- * and exposes list/get over the authoritative InvestigationContract objects.
+ * Phase 3C service: builds every registered case once per server process from
+ * the fixture cache and exposes list/get over the authoritative
+ * InvestigationContract objects.
  * Framework-free (zero next/* imports) so the existing node:test suite can
  * exercise it directly. Never bypasses the contract, never mutates, never
  * calls the network.
  */
 
-import { buildEulerService } from '../src/investigations/euler.ts';
+import { buildTraceService } from '../src/investigations/registry.ts';
 import type { ContractService } from '../src/contract/service.ts';
 import type { CaseSummary, InvestigationContract } from '../src/contract/types.ts';
 
@@ -17,7 +18,7 @@ let service: ContractService | null = null;
 
 /** Process-wide singleton; built once from fixtures on first use. */
 export function getService(): ContractService {
-  if (service === null) service = buildEulerService();
+  if (service === null) service = buildTraceService();
   return service;
 }
 
