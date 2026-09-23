@@ -1,0 +1,79 @@
+{
+  "phase": "3J",
+  "address": "0x59abf3837fa962d6853b4cc0a19513aa031fd32b",
+  "address_source": "src/investigations/ftx.ts FTX_SUBJECT (programmatic, not retyped)",
+  "window": {
+    "from": "2022-11-11",
+    "to": "2022-11-13"
+  },
+  "endpoint": "/api/v1/profiler/address/transactions",
+  "hideSpamToken": true,
+  "sanitization": {
+    "symbolMax": 40,
+    "nameMax": 80
+  },
+  "maxCalls": 3,
+  "callsMade": 3,
+  "stopReason": "reached MAX_CALLS=3; stopping per budget",
+  "pages": [
+    {
+      "page": 1,
+      "status": 200,
+      "requestId": "40ceed41148f3f4b2c833f0d38c7a42c",
+      "creditsCost": "1",
+      "creditsUsed": "1",
+      "creditsRemaining": "57",
+      "rowsReturned": 100,
+      "symbolsCleared": 0,
+      "namesCleared": 0,
+      "earliestTimestamp": "2022-11-12T14:09:23",
+      "latestTimestamp": "2022-11-13T18:50:47",
+      "isLastPage": false,
+      "fixtureFile": "fixtures/live/ftx/profiler-transactions-2022-11-11-p1.json",
+      "rel": "live/ftx/profiler-transactions-2022-11-11-p1.json",
+      "labelsCleared": 4
+    },
+    {
+      "page": 2,
+      "status": 200,
+      "requestId": "5f9868793e0796704145a6524450bd4f",
+      "creditsCost": "1",
+      "creditsUsed": "1",
+      "creditsRemaining": "56",
+      "rowsReturned": 100,
+      "symbolsCleared": 0,
+      "namesCleared": 0,
+      "earliestTimestamp": "2022-11-12T12:36:11",
+      "latestTimestamp": "2022-11-12T14:05:59",
+      "isLastPage": false,
+      "fixtureFile": "fixtures/live/ftx/profiler-transactions-2022-11-11-p2.json",
+      "rel": "live/ftx/profiler-transactions-2022-11-11-p2.json",
+      "labelsCleared": 0
+    },
+    {
+      "page": 3,
+      "status": 200,
+      "requestId": "6150ee5829d8a80dcefeed4200514e21",
+      "creditsCost": "1",
+      "creditsUsed": "1",
+      "creditsRemaining": "55",
+      "rowsReturned": 100,
+      "symbolsCleared": 0,
+      "namesCleared": 0,
+      "earliestTimestamp": "2022-11-12T08:13:47",
+      "latestTimestamp": "2022-11-12T12:17:47",
+      "isLastPage": false,
+      "fixtureFile": "fixtures/live/ftx/profiler-transactions-2022-11-11-p3.json",
+      "rel": "live/ftx/profiler-transactions-2022-11-11-p3.json",
+      "labelsCleared": 0
+    }
+  ],
+  "totalRows": 300,
+  "symbolsClearedTotal": 0,
+  "namesClearedTotal": 0,
+  "creditsUsedTotal": 3,
+  "creditsRemainingAfter": "55",
+  "captured_at": "2026-09-23T12:58:11.512Z",
+  "labelsClearedTotal": 4,
+  "resanitized_at": "2026-09-23T13:03:55.119Z"
+}

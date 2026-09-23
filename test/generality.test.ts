@@ -36,6 +36,7 @@ import type { CoverageReport } from '../src/contract/types.ts';
 import {
   CASE_REGISTRY,
   EULER_CASE_ID,
+  FTX_CASE_ID,
   buildEulerContract,
   buildTraceService,
 } from '../src/investigations/index.ts';
@@ -148,6 +149,7 @@ test('GEN4: buildTraceService serves exactly the registered cases, Euler byte-fo
   }
   // The registry seam did not alter the served Euler contract.
   assert.equal(JSON.stringify(svc.getContract(EULER_CASE_ID)), JSON.stringify(buildEulerContract(FIXED_AT)));
-  // Euler is the only *available* case today — the honesty guard against a shipped fake.
-  assert.deepEqual(availableIds, [EULER_CASE_ID]);
+  // Euler and FTX are the available cases today — both real, fixture-backed
+  // reconstructions; the guard is that only registered real cases are served.
+  assert.deepEqual(availableIds, [EULER_CASE_ID, FTX_CASE_ID]);
 });

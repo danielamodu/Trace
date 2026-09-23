@@ -1,0 +1,45 @@
+{
+  "address": "0x59abf3837fa962d6853b4cc0a19513aa031fd32b",
+  "endpoint": "profiler/address/related-wallets",
+  "note": "Extracted verbatim from the 2026-09-23 discovery probe of the FTX subject; related-wallets rows carry no token metadata, so no sanitization was needed.",
+  "meta": {
+    "status": 200,
+    "requestId": "15bd3b6ca9ab4237ee5e1e1000818266",
+    "creditsCost": "1",
+    "creditsUsed": "1",
+    "creditsRemaining": "58",
+    "rateLimitRemaining": "14",
+    "retryAfter": null
+  },
+  "row_count": 3,
+  "sample": [
+    {
+      "address": "0x2faf487a4414fe77e2327f0bf4ae2a264a776ad2",
+      "address_label": "Token Millionaire",
+      "relation": "First Funder",
+      "transaction_hash": "0x6580bf69c1ee28a1d8a4dec9b949272a449b1c58d91e6692ef34d9ea40fd9653",
+      "block_timestamp": "2022-11-12T02:22:23Z",
+      "order": 1,
+      "chain": "ethereum"
+    },
+    {
+      "address": "0xf127c108edb6043b59265ff29bc49ab8957630c8",
+      "address_label": "",
+      "relation": "Deployed Contract",
+      "transaction_hash": "0x285be6046890dc9a7c72017520bfb1200a18953786a7bcfb6fb23a46a5272133",
+      "block_timestamp": "2022-11-12T13:39:47Z",
+      "order": 5,
+      "chain": "ethereum"
+    },
+    {
+      "address": "0xa26e15c895efc0616177b7c1e7270a4c7d51c997",
+      "address_label": "High Activity",
+      "relation": "Deployed via",
+      "transaction_hash": "0x285be6046890dc9a7c72017520bfb1200a18953786a7bcfb6fb23a46a5272133",
+      "block_timestamp": "2022-11-12T13:39:47Z",
+      "order": 7,
+      "chain": "ethereum"
+    }
+  ],
+  "captured_at": "2026-09-23T12:41:25.052Z"
+}
