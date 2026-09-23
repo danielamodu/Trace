@@ -1,0 +1,58 @@
+name: CI
+
+# Verify every push to main and every pull request: types, tests, and a
+# production build. No secrets required — the served case reads committed
+# fixtures, never the live Nansen API, so CI never spends credits.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          # >=22.6 is required for native TypeScript type stripping in the
+          # node:test suite; 24 is the dev baseline.
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        # Playwright's webServer builds and serves a production build on :3100
+        # from committed fixtures — no secrets, no Nansen credits.
+        run: npm run e2e
+
