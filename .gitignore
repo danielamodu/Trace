@@ -16,6 +16,9 @@ next-env.d.ts
 # Recon output that may contain unsanitized data
 fixtures/raw/
 
+# Saved live cases (local library, per-install; not part of the shipped set)
+data/cases/
+
 # Playwright e2e artifacts
 test-results/
 playwright-report/
