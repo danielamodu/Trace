@@ -6,14 +6,14 @@ import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 /**
- * Light/dark switch. The server sets the initial `.dark` class from the
+ * Light/dark switch. The server sets the initial theme class from the
  * `trace-theme` cookie (app/layout.tsx), so SSR renders the true theme with no
  * flash. Toggling flips the class live and writes the cookie for the next load.
  */
 export function ThemeToggle() {
-  // Matches the SSR default (dark) so the first client render is identical;
-  // corrected from the real class on mount for cookie=light returning visitors.
-  const [isDark, setIsDark] = useState(true);
+  // Matches the SSR default (light) so the first client render is identical;
+  // corrected from the real class on mount for cookie=dark returning visitors.
+  const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

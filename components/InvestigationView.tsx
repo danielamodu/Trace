@@ -186,45 +186,66 @@ export function InvestigationView({ contract }: { contract: InvestigationContrac
     setExpandedGroups((prev) => ({ ...prev, [id]: prev[id] !== true }));
 
   const coverage = contract.coverage.flags;
-  const coverageLine = [
-    `Funding evidence: ${coverage.fundingEvidence ? 'observed' : 'not observed'}`,
-    `Counterparty aggregates: ${coverage.counterpartyAggregates ? 'observed' : 'not observed'}`,
-    `Transaction window: ${coverage.transactionWindowCovered ? 'covered' : 'not covered'}`,
-  ].join(' · ');
+  const coverageItems = [
+    { label: 'Funding evidence', ok: coverage.fundingEvidence, yes: 'observed', no: 'not observed' },
+    {
+      label: 'Counterparty aggregates',
+      ok: coverage.counterpartyAggregates,
+      yes: 'observed',
+      no: 'not observed',
+    },
+    { label: 'Transaction window', ok: coverage.transactionWindowCovered, yes: 'covered', no: 'not covered' },
+  ];
+  const coverageLine = coverageItems.map((it) => `${it.label}: ${it.ok ? it.yes : it.no}`).join(' · ');
 
   return (
     <div>
       <ContextStrip contract={contract} />
 
-      <section className="enter enter-3 pt-6 pb-2" aria-label="Incident summary">
-        <p className="mb-1.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground/80">
+      <section className="enter enter-3 pt-8 pb-2" aria-label="Incident summary">
+        <p className="mb-2 font-mono text-[11.5px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
           INCIDENT · {contract.caseId} · {inv.chain}
         </p>
-        <h1 className="mb-2 text-[30px] font-bold leading-tight tracking-tight">{inv.name}</h1>
-        <p className="mb-3 max-w-[70ch] text-muted-foreground">{inv.headline}</p>
-        <p className="mb-4 font-mono text-[13px] text-muted-foreground">
-          window: {inv.window.from} → {inv.window.to} · {inv.events.length} events ·{' '}
-          {inv.entities.length} entities
+        <h1 className="mb-2.5 text-[clamp(26px,3.2vw,34px)] font-bold leading-[1.12] tracking-tight">
+          {inv.name}
+        </h1>
+        <p className="max-w-[68ch] text-[15px] leading-relaxed text-muted-foreground">{inv.headline}</p>
+        <p className="mt-2 font-mono text-[12.5px] text-muted-foreground/80">
+          {inv.window.from} → {inv.window.to} · {inv.events.length} events · {inv.entities.length}{' '}
+          entities
         </p>
-        <ul className="mb-2 flex flex-wrap gap-3 p-0" aria-label="Summary metrics from the contract">
+        <ul
+          className="mt-5 grid list-none gap-3 p-0 [grid-template-columns:repeat(auto-fit,minmax(168px,1fr))]"
+          aria-label="Summary metrics from the contract"
+        >
           {inv.summary.map((m) => (
-            <li
-              key={m.key}
-              className="theme-surface min-w-[150px] list-none rounded-lg border bg-card px-3.5 py-2.5"
-            >
-              <div className="mb-0.5 text-xs text-muted-foreground/80">{m.label}</div>
-              <div className="font-mono text-[17px] tabular-nums">
+            <li key={m.key} className="theme-surface rounded-xl border bg-card px-4 py-3">
+              <div className="mb-1 text-[12px] text-muted-foreground">{m.label}</div>
+              <div className="font-mono text-[18px] font-medium tabular-nums">
                 {typeof m.value === 'number'
-                  ? m.value.toLocaleString('en-US', { maximumFractionDigits: 4 })
+                  ? m.value.toLocaleString('en-US', { maximumFractionDigits: 2 })
                   : m.value}
-                {m.unit ? ` ${m.unit}` : ''}
+                {m.unit ? <span className="text-[13px] text-muted-foreground"> {m.unit}</span> : null}
               </div>
             </li>
           ))}
         </ul>
-        <p className="font-mono text-[13px] text-muted-foreground" aria-label="Evidence coverage">
-          coverage: {coverageLine}
-        </p>
+        <dl
+          className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 font-mono text-[12.5px]"
+          aria-label={`Evidence coverage: ${coverageLine}`}
+        >
+          <dt className="text-muted-foreground/70">coverage</dt>
+          {coverageItems.map((it) => (
+            <div key={it.label} className="flex items-center gap-1.5" aria-hidden>
+              <span
+                className="size-1.5 rounded-full"
+                style={{ background: it.ok ? 'var(--primary)' : 'var(--relation)' }}
+              />
+              <span className="text-muted-foreground">{it.label}</span>
+              <span className="text-foreground">{it.ok ? it.yes : it.no}</span>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <StatusBanner

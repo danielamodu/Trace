@@ -1,14 +1,22 @@
 import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
+import { Manrope, Lora } from 'next/font/google';
 import { cookies } from 'next/headers';
 import './globals.css';
 
 import { SiteHeader } from '@/components/site-header';
 
+// UniversalSans substitute — humanist sans, carries all body/UI copy.
 const manrope = Manrope({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-manrope',
+});
+
+// Garnett substitute — humanist serif for editorial display headings.
+const lora = Lora({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-lora',
 });
 
 export const metadata: Metadata = {
@@ -18,8 +26,8 @@ export const metadata: Metadata = {
 };
 
 /**
- * Theme is resolved server-side from the `trace-theme` cookie (default: dark),
- * so the `.dark` class is present in the first byte of HTML — no flash, and no
+ * Theme is resolved server-side from the `trace-theme` cookie (default: light),
+ * so the theme class is present in the first byte of HTML — no flash, and no
  * client theme-init script (React 19 rejects component-rendered <script> tags,
  * which is what broke next-themes here). The toggle flips the class live and
  * writes the cookie so the next load stays consistent. suppressHydrationWarning
@@ -27,24 +35,15 @@ export const metadata: Metadata = {
  */
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const theme = (await cookies()).get('trace-theme')?.value;
-  const isDark = theme !== 'light';
+  const isDark = theme === 'dark';
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${manrope.variable}${isDark ? ' dark' : ''}`}
+      className={`${manrope.variable} ${lora.variable}${isDark ? ' dark' : ''}`}
       style={{ colorScheme: isDark ? 'dark' : 'light' }}
     >
       <body className="theme-surface min-h-screen bg-background text-foreground antialiased">
-        {/* Decorative evidence-board rails; hidden on narrow viewports. */}
-        <div
-          aria-hidden
-          className="hatch pointer-events-none fixed inset-y-0 left-0 z-0 hidden w-6 lg:block"
-        />
-        <div
-          aria-hidden
-          className="hatch pointer-events-none fixed inset-y-0 right-0 z-0 hidden w-6 lg:block"
-        />
         <div className="relative z-10 flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>

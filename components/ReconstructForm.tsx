@@ -139,7 +139,7 @@ export function ReconstructForm() {
     <div className="grid gap-5">
       <form
         onSubmit={onSubmit}
-        className="theme-surface enter enter-2 rounded-lg border bg-card p-5"
+        className="theme-surface enter enter-2 rounded-xl border bg-card p-5"
         aria-label="Live reconstruction inputs"
       >
         <div className="grid gap-4 sm:grid-cols-2">
@@ -210,7 +210,7 @@ export function ReconstructForm() {
       {state === 'error' && error ? (
         <div
           role="alert"
-          className="rounded-lg border bg-card p-4 text-[13.5px]"
+          className="rounded-xl border bg-card p-4 text-[13.5px]"
           style={{ borderColor: 'var(--relation-border)', color: 'var(--relation)' }}
         >
           {error}
@@ -219,7 +219,7 @@ export function ReconstructForm() {
 
       {running ? (
         <div
-          className="theme-surface flex items-center gap-3 rounded-lg border bg-card p-4 text-[13.5px] text-muted-foreground"
+          className="theme-surface flex items-center gap-3 rounded-xl border bg-card p-4 text-[13.5px] text-muted-foreground"
           aria-live="polite"
         >
           <span className="inline-block size-3 animate-pulse rounded-full bg-foreground/60" />
@@ -275,7 +275,7 @@ function RunSummary({
   ];
   const complete = contract.completeness === 'complete';
   return (
-    <section className="theme-surface enter enter-3 rounded-lg border bg-card p-4" aria-label="Run summary">
+    <section className="theme-surface enter enter-3 rounded-xl border bg-card p-4" aria-label="Run summary">
       <div className="mb-3 flex flex-wrap items-center gap-3">
         <h2 className="text-[15px] font-semibold">Live run</h2>
         <span

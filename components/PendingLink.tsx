@@ -22,7 +22,7 @@ export function PendingLink({
   const [pending, setPending] = useState(false);
   return (
     <Link
-      className="theme-surface group block rounded-xl border bg-card p-4 hover:border-primary hover:shadow-sm aria-[busy=true]:opacity-70"
+      className="theme-surface group block rounded-2xl border bg-card p-5 transition-shadow hover:border-primary/50 hover:[box-shadow:var(--shadow-product)] aria-[busy=true]:opacity-70"
       href={href}
       aria-label={label}
       aria-busy={pending || undefined}

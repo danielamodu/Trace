@@ -4,89 +4,102 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ─────────────────────────────────────────────────────────────
-   TRACE design tokens. Light is default; `.dark` overrides.
-   Forensic palette, elevated: Manrope type, glass depth, dual theme.
-   Provenance hues are SEMANTIC (fact / relation / derived) — never
-   decorative. Source-origin chips stay neutral by design: live Nansen
-   evidence is not automatically "complete", so no pool gets a nicer hue.
+   TRACE design tokens — warm-parchment register (Slite-inspired).
+   The whole page sits on a cream paper canvas (#fdf9f4), never cold
+   white; a SINGLE ember orange (#f67748) is the only saturated brand
+   color — reserved for the primary CTA, a selected border, and the
+   hand-drawn scribble on one headline word. Serif display (Lora) +
+   humanist sans (Manrope) give it the rhythm of an edited document.
+   Provenance hues stay SEMANTIC and separate from the ember: fact is
+   neutral ink, relation is violet, derived is deep blue — a reported
+   link is never the action you take, so it never wears the ember.
    ───────────────────────────────────────────────────────────── */
 :root {
-  --radius: 0.625rem;
+  --radius: 1rem;
 
-  --background: oklch(0.985 0.003 250);
-  --foreground: oklch(0.23 0.02 255);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.23 0.02 255);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.23 0.02 255);
-  --primary: oklch(0.52 0.13 236);
-  --primary-foreground: oklch(0.99 0.005 240);
-  --secondary: oklch(0.965 0.005 250);
-  --secondary-foreground: oklch(0.28 0.02 255);
-  --muted: oklch(0.965 0.005 250);
-  --muted-foreground: oklch(0.5 0.02 255);
-  --accent: oklch(0.95 0.012 236);
-  --accent-foreground: oklch(0.28 0.02 255);
-  --destructive: oklch(0.58 0.21 27);
-  --destructive-foreground: oklch(0.99 0.005 240);
-  --border: oklch(0.9 0.006 255);
-  --input: oklch(0.9 0.006 255);
-  --ring: oklch(0.52 0.13 236);
+  --background: #fdf9f4;          /* Parchment Cream — page canvas */
+  --foreground: #2d2f34;          /* Shade Ink — headings & body */
+  --card: #ffffff;                /* Star White — elevated product panels */
+  --card-foreground: #2d2f34;
+  --popover: #ffffff;
+  --popover-foreground: #2d2f34;
+  --primary: #f67748;             /* Ember — the single brand action color */
+  --primary-foreground: #ffffff;
+  --secondary: #f9efe4;           /* Dust Sand — secondary surface / chips */
+  --secondary-foreground: #3f434a;
+  --muted: #f4ede2;               /* dust, a hair lighter — muted fills */
+  --muted-foreground: #5e646e;    /* Shade Slate — tertiary text */
+  --accent: #f9efe4;              /* Dust — hover / accent surface */
+  --accent-foreground: #2d2f34;
+  --destructive: #c4442f;         /* warm red — errors only */
+  --destructive-foreground: #fff8f5;
+  --border: #e7e4de;              /* warm hairline border */
+  --input: #ddd8d0;               /* input border, a touch warmer */
+  --ring: #f67748;                /* focus ring — ember */
 
-  /* provenance — semantic, load-bearing */
-  --fact: oklch(0.44 0.02 255);
-  --fact-border: oklch(0.86 0.008 255);
-  --fact-bg: oklch(0.97 0.004 255);
-  --relation: oklch(0.52 0.13 66);
-  --relation-border: oklch(0.82 0.09 74);
-  --relation-bg: oklch(0.96 0.05 82);
-  --derived: oklch(0.5 0.11 232);
-  --derived-border: oklch(0.82 0.07 232);
-  --derived-bg: oklch(0.96 0.04 232);
+  /* provenance — semantic, load-bearing; its own vocabulary, NOT the ember */
+  --fact: #4a4f57;                /* neutral charcoal — returned unchanged */
+  --fact-border: #e2ddd4;
+  --fact-bg: #f6f1e9;
+  --relation: #4b51c3;            /* Tag Violet — a reported link */
+  --relation-border: #cdd0f0;
+  --relation-bg: #eeeffb;
+  --derived: #2f5fb0;             /* deep Neptune — computed by a named rule */
+  --derived-border: #c6d6f2;
+  --derived-bg: #e9f0fc;
 
   /* craft surfaces */
-  --glass-bg: oklch(1 0 0 / 0.72);
-  --glass-border: oklch(0.5 0.01 255 / 0.12);
-  --hatch: oklch(0.5 0.01 255 / 0.06);
-  --graph-edge: oklch(0.8 0.008 255);
-  --graph-node: oklch(0.995 0 0);
+  --glass-bg: #fdf9f4f2;          /* cream, near-opaque */
+  --glass-border: #0000000f;
+  --hatch: #2d2f340a;             /* faint ink hatch */
+  --graph-edge: #e3ddd2;
+  --graph-node: #ffffff;
+
+  /* Slite three-layer product shadow — the only depth on the page */
+  --shadow-product: 0 1px 3px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.01);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 .dark {
-  --background: oklch(0.17 0.012 256);
-  --foreground: oklch(0.95 0.006 250);
-  --card: oklch(0.205 0.014 256);
-  --card-foreground: oklch(0.95 0.006 250);
-  --popover: oklch(0.205 0.014 256);
-  --popover-foreground: oklch(0.95 0.006 250);
-  --primary: oklch(0.8 0.11 224);
-  --primary-foreground: oklch(0.18 0.012 256);
-  --secondary: oklch(0.26 0.015 256);
-  --secondary-foreground: oklch(0.95 0.006 250);
-  --muted: oklch(0.26 0.015 256);
-  --muted-foreground: oklch(0.7 0.02 256);
-  --accent: oklch(0.3 0.03 224);
-  --accent-foreground: oklch(0.95 0.006 250);
-  --destructive: oklch(0.62 0.2 25);
-  --destructive-foreground: oklch(0.98 0.005 240);
-  --border: oklch(0.3 0.015 256);
-  --input: oklch(0.32 0.015 256);
-  --ring: oklch(0.8 0.11 224);
+  --background: #1d1a16;          /* espresso paper */
+  --foreground: #f1ece3;          /* warm cream ink */
+  --card: #26221c;                /* lifted warm panel */
+  --card-foreground: #f1ece3;
+  --popover: #26221c;
+  --popover-foreground: #f1ece3;
+  --primary: #f67748;             /* ember holds across themes */
+  --primary-foreground: #ffffff;
+  --secondary: #2b2620;           /* warm secondary surface */
+  --secondary-foreground: #f1ece3;
+  --muted: #2b2620;
+  --muted-foreground: #b3a898;    /* warm gray */
+  --accent: #332d25;
+  --accent-foreground: #f1ece3;
+  --destructive: #e0644a;
+  --destructive-foreground: #1d1a16;
+  --border: #39322a;
+  --input: #443c32;
+  --ring: #f67748;
 
-  --fact: oklch(0.82 0.015 255);
-  --fact-border: oklch(0.42 0.015 255);
-  --fact-bg: oklch(0.26 0.012 256);
-  --relation: oklch(0.83 0.12 82);
-  --relation-border: oklch(0.5 0.08 74);
-  --relation-bg: oklch(0.34 0.06 74 / 0.55);
-  --derived: oklch(0.82 0.1 224);
-  --derived-border: oklch(0.5 0.07 224);
-  --derived-bg: oklch(0.34 0.06 224 / 0.55);
+  --fact: #c7bfb2;
+  --fact-border: #443c32;
+  --fact-bg: #2b2620;
+  --relation: #b3b6f2;
+  --relation-border: #4a4a86;
+  --relation-bg: #2c2a3d;
+  --derived: #9ec0f5;
+  --derived-border: #37507e;
+  --derived-bg: #22283a;
 
-  --glass-bg: oklch(0.24 0.014 256 / 0.6);
-  --glass-border: oklch(0.9 0.01 255 / 0.08);
-  --hatch: oklch(0.9 0.01 255 / 0.05);
-  --graph-edge: oklch(0.36 0.015 256);
-  --graph-node: oklch(0.24 0.014 256);
+  --glass-bg: #1d1a16d9;
+  --glass-border: #ffffff14;
+  --hatch: #ffffff0a;
+  --graph-edge: #3a332b;
+  --graph-node: #26221c;
+
+  --shadow-product: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 @theme inline {
   --color-background: var(--background);
@@ -118,6 +131,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-lora), ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
 @layer base {
@@ -173,6 +187,17 @@
   );
 }
 
+/* Faint structural grid — hero backdrop only. Blueprint, not decoration:
+   a ruled plane that fades out below the fold. */
+.grid-faint {
+  background-image:
+    linear-gradient(to right, var(--hatch) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hatch) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 0%, #000 42%, transparent 100%);
+  mask-image: radial-gradient(ellipse 78% 62% at 50% 0%, #000 42%, transparent 100%);
+}
+
 /* Mount entrance — plays once on load (CSS-only); reduced-motion safe. */
 @keyframes trace-enter {
   from { opacity: 0; transform: translateY(10px); }
@@ -184,10 +209,137 @@
 .enter-3 { animation-delay: 210ms; }
 .enter-4 { animation-delay: 300ms; }
 .enter-5 { animation-delay: 400ms; }
+.enter-6 { animation-delay: 500ms; }
 @media (prefers-reduced-motion: reduce) {
   .theme-surface { transition: none; }
   .enter { animation: none; }
   * { scroll-behavior: auto; }
+}
+
+/* Hero CTAs — Slite pill system. Primary is the single flat ember pill;
+   secondary is a 2px charcoal outline that inverts on hover; dark is the
+   charcoal fill used for the highest-intent nav action. Motion is 130ms. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  padding-inline: 1.5rem;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  transition:
+    transform 130ms ease,
+    background-color 130ms ease,
+    box-shadow 130ms ease,
+    color 130ms ease,
+    border-color 130ms ease;
+}
+.cta-primary {
+  color: var(--primary-foreground);
+  background: var(--primary);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+.cta-primary:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklch, var(--primary) 92%, black 8%);
+}
+.cta-primary:active {
+  transform: translateY(0);
+}
+.cta-secondary {
+  color: var(--foreground);
+  background: transparent;
+  border: 2px solid var(--foreground);
+}
+.cta-secondary:hover {
+  transform: translateY(-1px);
+  background: var(--foreground);
+  color: var(--background);
+}
+.cta-dark {
+  color: #fff;
+  background: var(--foreground);
+  border: 1px solid transparent;
+}
+.cta-dark:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklch, var(--foreground) 88%, white 12%);
+}
+
+/* Product shadow + dust panel helpers. */
+.product-shadow {
+  box-shadow: var(--shadow-product);
+}
+.font-display {
+  font-family: var(--font-serif);
+  font-feature-settings: "ss14", "ss15", "ss19";
+}
+
+/* Dust tag chip — the most-repeated component; warm pill, never gray. */
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border-radius: 9999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Scribble annotation — hand-drawn ember oval/underline around one word.
+   The <svg> is positioned by .scribble; the stroke inherits ember. */
+.scribble {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+.scribble > svg {
+  position: absolute;
+  inset: -22% -8% -26% -8%;
+  width: 116%;
+  height: 148%;
+  overflow: visible;
+  color: var(--primary);
+  pointer-events: none;
+}
+
+/* Hero product stage — warm dust panel the real contract card floats on. */
+.hero-stage {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-product);
+}
+
+/* Feature card — restrained Slite hover: soft lift, product shadow, no
+   color shift (the ember stays reserved for CTAs and selected borders). */
+.card-lift {
+  transition:
+    transform 130ms ease,
+    box-shadow 130ms ease,
+    border-color 130ms ease,
+    background-color 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 440ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--border);
+  box-shadow: var(--shadow-product);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+  .cta-primary:hover,
+  .cta-secondary:hover { transform: none; }
+  .card-lift { transition: none; }
+  .card-lift:hover { transform: none; }
 }
 
 /* Quiet, themed scrollbars. */

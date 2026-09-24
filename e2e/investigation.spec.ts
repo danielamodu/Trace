@@ -20,7 +20,9 @@ const replaySlider = (page: Page) => page.getByRole('slider', { name: /^Replay p
 
 test('Command Center opens the Euler investigation', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Something happened.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: /^Something happened onchain\./ }),
+  ).toBeVisible();
   await page.getByRole('link', { name: /^Open investigation:/ }).first().click();
   await expect(page).toHaveURL(new RegExp(`/cases/${CASE_ID}$`));
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
@@ -150,13 +152,13 @@ test.describe('case page', () => {
 
   test('theme toggle flips dark mode and persists the choice', async ({ page }) => {
     const html = page.locator('html');
-    await expect(html).toHaveClass(/dark/); // SSR default is dark
-    await page.getByRole('button', { name: 'Switch to light theme' }).click();
-    await expect(html).not.toHaveClass(/dark/);
-    await expect(page.getByRole('button', { name: 'Switch to dark theme' })).toBeVisible();
-    const cookie = (await page.context().cookies()).find((c) => c.name === 'trace-theme');
-    expect(cookie?.value).toBe('light');
+    await expect(html).not.toHaveClass(/dark/); // SSR default is light
     await page.getByRole('button', { name: 'Switch to dark theme' }).click();
     await expect(html).toHaveClass(/dark/);
+    await expect(page.getByRole('button', { name: 'Switch to light theme' })).toBeVisible();
+    const cookie = (await page.context().cookies()).find((c) => c.name === 'trace-theme');
+    expect(cookie?.value).toBe('dark');
+    await page.getByRole('button', { name: 'Switch to light theme' }).click();
+    await expect(html).not.toHaveClass(/dark/);
   });
 });
