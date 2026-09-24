@@ -216,6 +216,37 @@
   * { scroll-behavior: auto; }
 }
 
+/* Reconstruction stage — the active hop (event at the replay cursor) is the
+   only animated element: a marching-ants ember overlay on its edge plus a
+   radiating ring on each endpoint node. Everything else is static: past hops
+   are lit, future hops are faint ghosts. Reduced-motion drops all motion to a
+   steady emphasis so the same fact stays legible. */
+@keyframes trace-flow-dash { to { stroke-dashoffset: -24; } }
+.stage-flow-pulse {
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 10;
+  animation: trace-flow-dash 900ms linear infinite;
+}
+@keyframes trace-node-ring {
+  0% { opacity: 0.9; transform: scale(1); }
+  70% { opacity: 0; transform: scale(1.9); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+.stage-node-pulse {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: trace-node-ring 1500ms ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-flow-pulse { animation: none; stroke-dasharray: none; opacity: 0.85; }
+  .stage-node-pulse { animation: none; opacity: 0.5; }
+}
+
 /* Hero CTAs — Slite pill system. Primary is the single flat ember pill;
    secondary is a 2px charcoal outline that inverts on hover; dark is the
    charcoal fill used for the highest-intent nav action. Motion is 130ms. */

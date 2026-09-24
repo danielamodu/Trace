@@ -22,6 +22,7 @@ import { StatusBanner } from './StatusBanner.tsx';
 import { Timeline } from './Timeline.tsx';
 import { EvidenceInspector } from './EvidenceInspector.tsx';
 import { EvidenceGraph } from './EvidenceGraph.tsx';
+import { ReconstructionStage } from './ReconstructionStage.tsx';
 import { REPLAY_STEP_MS, ReplayBar } from './ReplayBar.tsx';
 
 /**
@@ -253,6 +254,15 @@ export function InvestigationView({ contract }: { contract: InvestigationContrac
         completeness={contract.completeness}
         dataSource={contract.dataSource}
         reasons={contract.completenessReasons}
+      />
+
+      <ReconstructionStage
+        contract={contract}
+        cursorIndex={replay.index}
+        selectedEntityId={selectedEntity?.id ?? null}
+        selectedEventId={selectedEvent?.id ?? null}
+        onSelectNode={(id) => select({ kind: 'entity', id })}
+        onSelectFlow={(id) => select({ kind: 'event', id })}
       />
 
       <div className="mt-4 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
