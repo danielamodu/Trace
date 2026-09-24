@@ -280,7 +280,11 @@ function RunSummary({
         <h2 className="text-[15px] font-semibold">Live run</h2>
         <span
           className="inline-flex items-center rounded border px-2 py-0.5 font-mono text-[11.5px] text-muted-foreground"
-          style={complete ? undefined : { borderColor: 'var(--relation-border)', color: 'var(--relation)' }}
+          style={
+            complete
+              ? { borderColor: 'var(--primary)', color: 'var(--primary)' }
+              : { borderColor: 'var(--relation-border)', color: 'var(--relation)' }
+          }
         >
           evidence: {contract.completeness}
         </span>
