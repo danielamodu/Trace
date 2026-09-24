@@ -21,6 +21,7 @@ import { ContextStrip } from './ContextStrip.tsx';
 import { StatusBanner } from './StatusBanner.tsx';
 import { Timeline } from './Timeline.tsx';
 import { EvidenceInspector } from './EvidenceInspector.tsx';
+import { EvidenceReceipt } from './EvidenceReceipt.tsx';
 import { EvidenceGraph } from './EvidenceGraph.tsx';
 import { ReconstructionStage } from './ReconstructionStage.tsx';
 import { REPLAY_STEP_MS, ReplayBar } from './ReplayBar.tsx';
@@ -296,6 +297,8 @@ export function InvestigationView({
         onSelectNode={(id) => select({ kind: 'entity', id })}
         onSelectFlow={(id) => select({ kind: 'event', id })}
       />
+
+      <EvidenceReceipt contract={contract} event={inv.events[replay.index] ?? null} />
 
       <div className="mt-4 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <section className="enter enter-4" aria-label="Timeline">
