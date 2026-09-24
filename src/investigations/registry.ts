@@ -14,7 +14,7 @@
 
 import { EULER_CASE_ID, buildEulerContract } from './euler.ts';
 import { FTX_CASE_ID, buildFtxContract } from './ftx.ts';
-import { loadSavedContracts } from './saved-cases.ts';
+import { defaultShippedDir, loadSavedContracts } from './saved-cases.ts';
 import { createContractService } from '../contract/service.ts';
 import type { ContractService } from '../contract/service.ts';
 import type { InvestigationContract } from '../contract/types.ts';
@@ -80,11 +80,14 @@ function builtInContracts(reconstructedAt?: string): { contracts: InvestigationC
 
 /**
  * Build the read-only service over every registered case. Built-in contracts
- * come from the memo above (fixture reads happen once); saved live contracts are
- * then merged in from the local store (data/cases/) so a saved run joins the
- * library. Built-in ids are authoritative: a saved file can never shadow
- * Euler/FTX, and duplicate saved ids collapse to the first seen, so the service
- * never sees a caseId collision. `savedDir` overrides the store (tests only).
+ * come from the memo above (fixture reads happen once). Then two runtime stores
+ * merge in: the bundled `data/shipped/` cases (tracked in git — a real finished
+ * live run that ships with the repo and shows on every deploy) and the local
+ * `data/cases/` store (per-install saved runs). Built-in ids are authoritative:
+ * a shipped or saved file can never shadow Euler/FTX, and duplicate ids collapse
+ * to the first seen, so the service never sees a caseId collision. `savedDir`
+ * overrides the local store (tests only); the shipped dir follows its own env
+ * override (`TRACE_SHIPPED_CASES_DIR`, pinned empty in tests).
  */
 export function buildTraceService(reconstructedAt?: string, savedDir?: string): ContractService {
   const base = builtInContracts(reconstructedAt);
@@ -92,11 +95,15 @@ export function buildTraceService(reconstructedAt?: string, savedDir?: string): 
   const availableIds: string[] = [...base.availableIds];
 
   const seen = new Set(contracts.map((c) => c.caseId));
-  for (const saved of loadSavedContracts(savedDir)) {
-    if (seen.has(saved.caseId)) continue;
-    seen.add(saved.caseId);
-    contracts.push(saved);
-    availableIds.push(saved.caseId); // saved cases are real runs → always available
-  }
+  const merge = (extra: InvestigationContract[]) => {
+    for (const c of extra) {
+      if (seen.has(c.caseId)) continue;
+      seen.add(c.caseId);
+      contracts.push(c);
+      availableIds.push(c.caseId); // shipped & saved cases are real runs → always available
+    }
+  };
+  merge(loadSavedContracts(defaultShippedDir()));
+  merge(loadSavedContracts(savedDir));
   return createContractService(contracts, availableIds);
 }

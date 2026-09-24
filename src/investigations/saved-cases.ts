@@ -53,6 +53,21 @@ function defaultSavedDir(): string {
 }
 
 /**
+ * Bundled ("shipped") cases directory — tracked in git, so a real finished run
+ * (e.g. the one live reconstruction that reaches `complete`) ships WITH the repo
+ * and shows on every deploy, independent of the per-install `data/cases/` store.
+ * `TRACE_SHIPPED_CASES_DIR` (absolute or cwd-relative) wins when set — the test
+ * suite pins it to an empty dir so the built-in-only assertions stay hermetic.
+ * Otherwise the store is <repo>/data/shipped/, built as a runtime path.
+ */
+export function defaultShippedDir(): string {
+  const override = process.env.TRACE_SHIPPED_CASES_DIR;
+  if (override && override.trim() !== '') return resolve(override);
+  const rel = ['..', '..', 'data', 'shipped', ''].join('/');
+  return fileURLToPath(new URL(rel, import.meta.url));
+}
+
+/**
  * A cheap fingerprint of the store's current contents: sorted filename + mtime +
  * size for every .json, joined. It changes whenever a case is added, removed, or
  * re-saved, so a reader can detect a new save by comparing signatures — without
