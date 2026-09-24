@@ -19,10 +19,11 @@
  * Or via npm:  npm run trace -- list
  */
 
-import { writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { buildTraceService } from '../src/investigations/registry.ts';
 import { reconstructFromAddress, DEFAULT_BUDGET } from '../src/investigations/live.ts';
 import { saveContract } from '../src/investigations/saved-cases.ts';
+import { verifyContract } from '../src/contract/verify.ts';
 import { NansenClient } from '../src/nansen/client.ts';
 import type { LiveBudget } from '../src/investigations/live.ts';
 import type { InvestigationContract } from '../src/contract/types.ts';
@@ -62,6 +63,7 @@ const USAGE = `TRACE CLI — onchain incident reconstruction
 
   list                    List every case in the library (built-in + saved). 0 credits.
   show <caseId>           Print one case's full reconstruction. 0 credits.
+  verify <caseId|file>    Re-derive an artifact's verdict + fingerprint. Offline, 0 credits.
   reconstruct <address>   Run a live reconstruction against Nansen. SPENDS CREDITS.
       --from <YYYY-MM-DD>       window start (required)
       --to   <YYYY-MM-DD>       window end   (required)
@@ -77,6 +79,7 @@ const USAGE = `TRACE CLI — onchain incident reconstruction
 Examples:
   node --env-file-if-exists=.env scripts/trace.ts list
   node --env-file-if-exists=.env scripts/trace.ts show case_ftx_2022
+  node --env-file-if-exists=.env scripts/trace.ts verify case_euler_2023
   npm run trace -- reconstruct 0xADDR --from 2022-11-06 --to 2022-11-12 --save
 `;
 
@@ -128,6 +131,42 @@ function cmdShow(caseId: string | undefined): number {
   if (!svc.hasCase(caseId)) { console.error(`show: unknown case "${caseId}". Run \`list\` to see ids.`); return 2; }
   printContract(svc.getContract(caseId));
   return 0;
+}
+
+// ---- verify (offline, 0 credits) -------------------------------------------
+async function cmdVerify(target: string | undefined): Promise<number> {
+  if (!target) { console.error('verify: missing <caseId|file>.'); return 2; }
+  let contract: unknown;
+  if (existsSync(target)) {
+    try {
+      contract = JSON.parse(readFileSync(target, 'utf8'));
+    } catch (e) {
+      console.error(`verify: ${target} is not valid JSON: ${e instanceof Error ? e.message : e}`);
+      return 2;
+    }
+  } else {
+    const svc = buildTraceService();
+    if (!svc.hasCase(target)) {
+      console.error(`verify: "${target}" is neither a file nor a known caseId. Run \`list\` to see ids.`);
+      return 2;
+    }
+    contract = svc.getContract(target);
+  }
+
+  const res = await verifyContract(contract);
+  console.log(`Verifying ${target}\n`);
+  for (const c of res.checks) {
+    console.log(`  ${c.ok ? '✓' : '✗'} ${c.label}`);
+    console.log(`      ${c.detail}`);
+  }
+  console.log(`\n  ${res.algorithm} fingerprint`);
+  console.log(`      ${res.fingerprint}`);
+  if (!res.ok && res.errors.length > 0) {
+    console.log('\n  Validation errors:');
+    for (const e of res.errors) console.log(`      - ${e}`);
+  }
+  console.log(`\n${res.ok ? 'PASS — artifact re-derives its own verdict.' : 'FAIL — artifact is not self-consistent.'}`);
+  return res.ok ? 0 : 1;
 }
 
 // ---- reconstruct (SPENDS CREDITS) ------------------------------------------
@@ -192,6 +231,7 @@ async function main(): Promise<void> {
   switch (cmd) {
     case 'list': cmdList(); return;
     case 'show': process.exitCode = cmdShow(rest.positionals[0]); return;
+    case 'verify': process.exitCode = await cmdVerify(rest.positionals[0]); return;
     case 'reconstruct': process.exitCode = await cmdReconstruct(rest); return;
     default:
       console.error(`Unknown command "${cmd}".\n`);

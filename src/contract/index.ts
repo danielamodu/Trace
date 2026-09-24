@@ -11,5 +11,6 @@ export type * from './types.ts';
 export { CONTRACT_VERSION } from './types.ts';
 export * from './completeness.ts';
 export * from './validate.ts';
+export * from './verify.ts';
 export * from './assemble.ts';
 export * from './service.ts';

@@ -25,6 +25,7 @@ import { EvidenceReceipt } from './EvidenceReceipt.tsx';
 import { EvidenceGraph } from './EvidenceGraph.tsx';
 import { ReconstructionStage } from './ReconstructionStage.tsx';
 import { REPLAY_STEP_MS, ReplayBar } from './ReplayBar.tsx';
+import { VerifyPanel } from './VerifyPanel.tsx';
 
 /**
  * Single interaction state model shared by timeline, inspector, and graph:
@@ -378,6 +379,8 @@ export function InvestigationView({
           ))}
         </ul>
       </section>
+
+      <VerifyPanel contract={contract} />
     </div>
   );
 }

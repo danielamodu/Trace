@@ -48,18 +48,30 @@ export const CASE_REGISTRY: readonly CaseRegistration[] = [
 export const BUILT_IN_CASE_IDS: readonly string[] = CASE_REGISTRY.map((c) => c.id);
 
 /**
+ * Pinned reconstruction clock for the bundled fixture-cache library. Built-in
+ * cases are point-in-time snapshots of captured Nansen data, so their
+ * `reconstructedAt` is a fixed capture date — NOT the server's boot clock. This
+ * makes every built-in contract byte-identical across processes and machines,
+ * so its content fingerprint (see contract/verify.ts) is stable and portable:
+ * the CLI, the /verify route and a case page all hash the same artifact. An
+ * explicit `reconstructedAt` (live runs, tests) still overrides it.
+ */
+export const BUILTIN_RECONSTRUCTED_AT = '2026-09-22T00:00:00.000Z';
+
+/**
  * Built-in contracts, memoized by reconstructedAt so the fixture reads and
  * engine runs happen once per process even when the service is rebuilt to pick
  * up a newly saved case. The returned arrays are treated as immutable — callers
  * copy before appending saved cases.
  */
-let builtInMemo: { key: string | undefined; contracts: InvestigationContract[]; availableIds: string[] } | null = null;
+let builtInMemo: { key: string; contracts: InvestigationContract[]; availableIds: string[] } | null = null;
 
 function builtInContracts(reconstructedAt?: string): { contracts: InvestigationContract[]; availableIds: string[] } {
-  if (builtInMemo !== null && builtInMemo.key === reconstructedAt) return builtInMemo;
-  const built = CASE_REGISTRY.map((c) => ({ contract: c.buildContract(reconstructedAt), available: c.available }));
+  const key = reconstructedAt ?? BUILTIN_RECONSTRUCTED_AT;
+  if (builtInMemo !== null && builtInMemo.key === key) return builtInMemo;
+  const built = CASE_REGISTRY.map((c) => ({ contract: c.buildContract(key), available: c.available }));
   builtInMemo = {
-    key: reconstructedAt,
+    key,
     contracts: built.map((b) => b.contract),
     availableIds: built.filter((b) => b.available).map((b) => b.contract.caseId),
   };
