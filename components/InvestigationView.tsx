@@ -41,7 +41,16 @@ export interface FollowTrail {
   entity: string;
 }
 
-export function InvestigationView({ contract }: { contract: InvestigationContract }) {
+/** Title-beat hold before cinematic auto-play; matches the .stage-beat keyframe. */
+const CINEMATIC_BEAT_MS = 1400;
+
+export function InvestigationView({
+  contract,
+  cinematic = false,
+}: {
+  contract: InvestigationContract;
+  cinematic?: boolean;
+}) {
   const inv = contract.investigation;
   const eventsById = useMemo(() => new Map(inv.events.map((e) => [e.id, e])), [inv.events]);
   const entitiesById = useMemo(
@@ -65,6 +74,7 @@ export function InvestigationView({ contract }: { contract: InvestigationContrac
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const [showCollapsed, setShowCollapsed] = useState(false);
   const [trail, setTrail] = useState<FollowTrail | null>(null);
+  const [beat, setBeat] = useState(false);
 
   // Replay cursor: indexes the contract's event order (never a second model).
   const defaultIndex = defaultEventId !== null
@@ -96,6 +106,27 @@ export function InvestigationView({ contract }: { contract: InvestigationContrac
     const t = setTimeout(() => stepReplay((evs, r) => replayNext(evs, r)), REPLAY_STEP_MS);
     return () => clearTimeout(t);
   }, [replay.playing, replay.index, inv.events]);
+
+  // Cinematic mode: on mount, hold a brief title beat, then auto-play the
+  // reconstruction from the first observed event. Opt-in (live runs and
+  // ?cinematic=1); curated pages default off, opening static on the primary event.
+  useEffect(() => {
+    if (!cinematic || inv.events.length === 0) return;
+    setBeat(true);
+    const start = { index: 0, playing: false };
+    replayRef.current = start;
+    setReplay(start);
+    setSelection({ kind: 'event', id: inv.events[0].id });
+    setTrail(null);
+    const t = setTimeout(() => {
+      setBeat(false);
+      const go = { index: 0, playing: true };
+      replayRef.current = go;
+      setReplay(go);
+    }, CINEMATIC_BEAT_MS);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Manual selection anywhere clears the follow trail, moves the replay
   // cursor to event selections, and pauses (predictable handoff).
@@ -261,6 +292,7 @@ export function InvestigationView({ contract }: { contract: InvestigationContrac
         cursorIndex={replay.index}
         selectedEntityId={selectedEntity?.id ?? null}
         selectedEventId={selectedEvent?.id ?? null}
+        titleBeat={beat}
         onSelectNode={(id) => select({ kind: 'entity', id })}
         onSelectFlow={(id) => select({ kind: 'event', id })}
       />

@@ -238,7 +238,7 @@ export function ReconstructForm() {
             savedUrl={savedUrl}
             saveError={saveError}
           />
-          <InvestigationView contract={result.contract} />
+          <InvestigationView contract={result.contract} cinematic key={result.contract.caseId} />
         </div>
       ) : null}
     </div>

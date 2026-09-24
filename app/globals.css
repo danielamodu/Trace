@@ -247,6 +247,18 @@
   .stage-node-pulse { animation: none; opacity: 0.5; }
 }
 
+/* Live cinematic title beat — a brief hold over the stage before it auto-plays
+   the reconstruction from the first observed event. Fades in, holds, fades out
+   across its own lifetime so the unmount lands while it is already invisible. */
+@keyframes trace-beat {
+  0% { opacity: 0; transform: scale(0.985); }
+  14% { opacity: 1; transform: scale(1); }
+  82% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.008); }
+}
+.stage-beat { animation: trace-beat 1400ms ease-in-out both; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .stage-beat { animation: none; } }
+
 /* Hero CTAs — Slite pill system. Primary is the single flat ember pill;
    secondary is a 2px charcoal outline that inverts on hover; dark is the
    charcoal fill used for the highest-intent nav action. Motion is 130ms. */

@@ -39,6 +39,7 @@ export function ReconstructionStage({
   selectedEventId,
   onSelectNode,
   onSelectFlow,
+  titleBeat = false,
 }: {
   contract: InvestigationContract;
   cursorIndex: number;
@@ -46,6 +47,7 @@ export function ReconstructionStage({
   selectedEventId: string | null;
   onSelectNode: (entityId: string) => void;
   onSelectFlow: (eventId: string) => void;
+  titleBeat?: boolean;
 }) {
   const model = useMemo(() => buildStageModel(contract), [contract]);
   const pos = useMemo(
@@ -86,6 +88,7 @@ export function ReconstructionStage({
   }
 
   const { width: W, height: H } = model;
+  const subjectName = model.nodes.find((n) => n.isSubject)?.displayName ?? contract.investigation.name;
 
   return (
     <section aria-label="Reconstruction stage" className="enter enter-3 mt-4">
@@ -96,7 +99,19 @@ export function ReconstructionStage({
         </p>
       </div>
 
-      <div className="theme-surface hatch overflow-hidden rounded-2xl border bg-card px-2 pt-2 pb-3">
+      <div className="theme-surface hatch relative overflow-hidden rounded-2xl border bg-card px-2 pt-2 pb-3">
+        {titleBeat && (
+          <div
+            className="stage-beat pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-1.5 rounded-2xl bg-card/85 backdrop-blur-[2px]"
+            role="status"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Reconstructing</p>
+            <p className="max-w-[80%] truncate text-center text-lg font-semibold">{subjectName}</p>
+            <p className="font-mono text-xs text-muted-foreground">
+              {model.flows.length} observed {model.flows.length === 1 ? 'movement' : 'movements'}
+            </p>
+          </div>
+        )}
         <svg
           viewBox={`0 0 ${W} ${H}`}
           width="100%"
