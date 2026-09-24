@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { InvestigationContract } from '../src/contract/types.ts';
 import {
   buildStageModel,
@@ -56,6 +56,20 @@ export function ReconstructionStage({
   const active = activeFlowAt(model, cursorIndex);
   const nameOf = (id: string) => pos.get(id)?.displayName ?? id;
   const activeNodeIds = new Set(active ? [active.fromEntityId, active.toEntityId] : []);
+
+  // During playback the active row can scroll out of the ledger's viewport;
+  // keep it visible by nudging only the ledger's own scroll (never the page).
+  const ledgerRef = useRef<HTMLOListElement>(null);
+  const activeRowRef = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    const ol = ledgerRef.current;
+    const li = activeRowRef.current;
+    if (!ol || !li) return;
+    const olRect = ol.getBoundingClientRect();
+    const liRect = li.getBoundingClientRect();
+    if (liRect.top < olRect.top) ol.scrollTop -= olRect.top - liRect.top;
+    else if (liRect.bottom > olRect.bottom) ol.scrollTop += liRect.bottom - olRect.bottom;
+  }, [active?.eventId]);
 
   if (model.flows.length === 0 || model.nodes.length === 0) {
     return (
@@ -181,14 +195,14 @@ export function ReconstructionStage({
             );
           })()}
         </svg>
-        <ol className="m-0 mt-1 max-h-44 list-none space-y-1 overflow-auto p-0 pr-1"
+        <ol ref={ledgerRef} className="m-0 mt-1 max-h-44 list-none space-y-1 overflow-auto p-0 pr-1"
           aria-label="Observed movements in order">
           {model.flows.map((f, i) => {
             const isActive = active?.eventId === f.eventId;
             const isRevealed = f.index <= cursorIndex;
             const value = fmtUsd(f.valueUsd);
             return (
-              <li key={f.eventId}>
+              <li key={f.eventId} ref={isActive ? activeRowRef : undefined}>
                 <button type="button"
                   aria-current={isActive ? 'step' : undefined}
                   className={`flex w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-left font-mono text-[11.5px] transition-colors ${
