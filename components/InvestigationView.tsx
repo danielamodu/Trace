@@ -25,6 +25,7 @@ import { EvidenceReceipt } from './EvidenceReceipt.tsx';
 import { EvidenceGraph } from './EvidenceGraph.tsx';
 import { ReconstructionStage } from './ReconstructionStage.tsx';
 import { REPLAY_STEP_MS, ReplayBar } from './ReplayBar.tsx';
+import { NansenAuthority } from './NansenAuthority.tsx';
 import { VerifyPanel } from './VerifyPanel.tsx';
 
 /**
@@ -361,6 +362,8 @@ export function InvestigationView({
           />
         </div>
       </div>
+
+      <NansenAuthority contract={contract} />
 
       <section
         className="theme-surface mt-7 rounded-lg border bg-card p-4"
