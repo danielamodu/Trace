@@ -1,25 +1,25 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
-export default function CaseError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function CaseError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => {
+    // Surface the failure in the console for debugging; never swallow it.
+    console.error(error);
+  }, [error]);
+
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-16">
-      <div
-        className="theme-surface enter enter-1 mt-12 rounded-xl border bg-card p-6"
-        role="alert"
-      >
-        <h1 className="mb-2 text-2xl font-bold tracking-tight">
-          Something failed while rendering this investigation
-        </h1>
-        <p className="mb-4 max-w-[60ch] text-muted-foreground">
-          No partial reconstruction is shown rather than a broken one. You can retry loading the
-          case.
-        </p>
-        <Button variant="outline" onClick={() => reset()}>
-          Retry
-        </Button>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
+      <div className="text-6xl">🧩</div>
+      <h1 className="text-2xl font-black text-ink">This reconstruction hit a snag</h1>
+      <p className="max-w-sm font-semibold text-wolf">
+        Something threw while assembling the evidence. The contract is fine — this is just the render.
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button type="button" onClick={reset} className="btn btn-green">Try again</button>
+        <Link href="/" className="btn btn-white">Back to cases</Link>
       </div>
-    </div>
+    </main>
   );
 }

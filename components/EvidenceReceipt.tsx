@@ -1,118 +1,193 @@
-import type { TraceEvent } from '../src/types/events.ts';
-import type { InvestigationContract } from '../src/contract/types.ts';
-import { eventOrigin, originLabel } from '../lib/sources.ts';
-import { eventTypeLabel, explorerTxUrl, fmtTime, fmtUsd, shortAddress } from './format.ts';
-import { ProvBadge } from './Provenance.tsx';
+import { ExternalLink } from 'lucide-react';
+import type { InvestigationContract } from '@/src/contract/types.ts';
+import type { TraceEvent } from '@/src/types/events.ts';
+import type { SourceRef } from '@/src/types/provenance.ts';
+import { eventOrigin, originLabel, type EventOrigin } from '@/lib/sources.ts';
+import { FOLLOW_DEAD_END } from '@/lib/follow.ts';
+import { EVENT_STYLE, DERIVED_EVENT_TYPES, ProvenanceTag, entityById, sideLabel } from './CaseVisuals.tsx';
+import { fmtUsd, fmtAmount, fmtTimestamp, shortAddr } from './format.ts';
 
-const COL_TITLE = 'font-mono text-xs uppercase tracking-wider text-muted-foreground/80';
+function originHue(origin: EventOrigin): string {
+  if (origin === 'live-nansen') return '#58cc02';
+  if (origin === 'mixed') return '#ff9600';
+  if (origin === 'fixture-cache') return '#1cb0f6';
+  return '#afafaf';
+}
 
-/**
- * The Proof — a compact evidence receipt bound to the stage's current step (the
- * replay cursor). For the step being shown it renders the exact Nansen origin,
- * the verbatim provenance statement, and the classification badge, so every
- * revealed movement is backed by a visible, auditable source. Derived summaries
- * say so and point at their member records — never a fabricated endpoint. Pure
- * presentation over the contract; nothing is inferred or interpolated.
- */
-export function EvidenceReceipt({
-  contract,
-  event,
-}: {
-  contract: InvestigationContract;
-  event: TraceEvent | null;
-}) {
+function OriginBadge({ origin }: { origin: EventOrigin }) {
+  const hue = originHue(origin);
   return (
-    <section aria-label="Evidence behind the current step" className="enter enter-3 mt-3">
-      <div className="mb-2.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 className={COL_TITLE}>THE PROOF — EVIDENCE BEHIND THIS STEP</h2>
-        <span className="prov prov-fact" title="TRACE never runs a model over evidence">
-          deterministic · no LLM
-        </span>
-      </div>
-      <div className="theme-surface rounded-2xl border bg-card p-4">
-        {event ? (
-          <Receipt contract={contract} event={event} />
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            No step at the current position. Press play, or pick a movement, to see its evidence.
-          </p>
-        )}
-      </div>
-    </section>
+    <span className="pill" style={{ borderColor: hue, color: hue }}>
+      <span style={{ width: 7, height: 7, borderRadius: 999, background: hue, display: 'inline-block' }} />
+      {originLabel(origin)}
+    </span>
   );
 }
 
-/** The receipt body for one event — mirrors the inspector's provenance discipline. */
-function Receipt({ contract, event }: { contract: InvestigationContract; event: TraceEvent }) {
-  const origin = eventOrigin(contract, event.id);
-  const value =
-    'value' in event && event.value && typeof event.value.valueUsd === 'number'
-      ? fmtUsd(event.value.valueUsd)
-      : null;
+function SourceRow({ src }: { src: SourceRef }) {
   return (
-    <div className="grid gap-3">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <ProvBadge kind={event.provenance.kind} />
-        <span className="text-sm font-semibold">{eventTypeLabel(event.type)}</span>
-        {value && (
-          <span className="font-mono text-sm tabular-nums text-muted-foreground">{value}</span>
-        )}
-        <time dateTime={event.timestamp} className="font-mono text-[11.5px] text-muted-foreground/80">
-          {fmtTime(event.timestamp)}
-        </time>
-        <span className="ml-auto inline-flex items-center rounded border px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
-          source: {origin}
+    <li className="rounded-xl border-2 border-swan bg-polar px-3 py-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[12px] font-extrabold text-eel">{src.source}</span>
+        {src.origin ? (
+          <span className="text-[11px] font-extrabold uppercase" style={{ color: originHue(src.origin) }}>
+            {src.origin === 'live-nansen' ? 'live' : 'fixture'}
+          </span>
+        ) : null}
+      </div>
+      <div className="mt-1 space-y-0.5 font-mono text-[11px] text-wolf">
+        {src.fieldPath ? <div>field · {src.fieldPath}</div> : null}
+        {src.requestId ? <div>req · {src.requestId}</div> : null}
+        {src.txHash ? <div>tx · {shortAddr(src.txHash)}</div> : null}
+        <div>captured · {fmtTimestamp(src.capturedAt)}</div>
+      </div>
+    </li>
+  );
+}
+export interface EvidenceReceiptProps {
+  contract: InvestigationContract;
+  event: TraceEvent;
+  followable: boolean;
+  onFollow: () => void;
+  onJumpToEvent: (eventId: string) => void;
+}
+
+export function EvidenceReceipt({ contract, event, followable, onFollow, onJumpToEvent }: EvidenceReceiptProps) {
+  const style = EVENT_STYLE[event.type];
+  const Icon = style.Icon;
+  const origin = eventOrigin(contract, event.id);
+  const prov = event.provenance;
+  const value = event.value;
+  const isDerived = DERIVED_EVENT_TYPES.has(event.type);
+
+  return (
+    <div className="card card-drop p-5">
+      <div className="flex items-start gap-3">
+        <span
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 bg-white"
+          style={{ borderColor: style.hue, color: style.hue }}
+        >
+          <Icon size={24} strokeWidth={2.75} />
         </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[12px] font-extrabold uppercase tracking-wide" style={{ color: style.hue }}>
+              {style.noun}
+            </span>
+            <ProvenanceTag provenance={prov} />
+          </div>
+          <h3 className="mt-1 text-lg font-extrabold leading-snug text-ink">{event.title}</h3>
+          <p className="mt-0.5 text-[13px] font-semibold text-wolf">{fmtTimestamp(event.timestamp)}</p>
+        </div>
       </div>
 
-      <p className="border-l-2 pl-2.5 text-[13.5px] leading-relaxed text-muted-foreground">
-        {(event.provenance.kind === 'FACT' || event.provenance.kind === 'RELATION') &&
-          event.provenance.statement}
-        {event.provenance.kind === 'DERIVED' && (
-          <>
-            Computed {event.provenance.calculation} over {event.provenance.sourceEventIds.length}{' '}
-            observed records (engine {String(event.provenance.inputs?.engine ?? 'unknown')}) — a
-            derived summary, not an observed transaction.
-          </>
-        )}
-      </p>
+      <div className="mt-3"><OriginBadge origin={origin} /></div>
 
-      {event.provenance.kind === 'FACT' || event.provenance.kind === 'RELATION' ? (
-        <ul className="grid list-none gap-1.5 p-0 sm:grid-cols-2">
-          {event.provenance.sources.map((s, i) => (
-            <li
-              key={i}
-              className="rounded-md border border-border/70 bg-background px-2.5 py-2 font-mono text-[11.5px] text-muted-foreground"
-            >
-              <div className="text-foreground">Nansen · {s.source}</div>
-              <div>captured {s.capturedAt}</div>
-              {s.requestId && <div className="truncate">request {s.requestId}</div>}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="font-mono text-[11.5px] text-muted-foreground/80">
-          No direct endpoint — this row is derived from its member records, each independently sourced.
-        </p>
-      )}
-
-      {event.txHash && (
-        <div className="font-mono text-[11.5px]">
-          <span className="text-muted-foreground">tx </span>
-          <a
-            className="text-primary underline underline-offset-2"
-            href={explorerTxUrl(event.txHash)}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {shortAddress(event.txHash)}
-          </a>
+      {value ? (
+        <div className="mt-4 rounded-2xl border-2 border-swan bg-polar px-4 py-3">
+          <div className="text-2xl font-extrabold text-ink">{fmtAmount(value.amount, value.tokenSymbol)}</div>
+          <div className="text-sm font-bold text-wolf">
+            {value.valueUsd === null || value.valueUsd === undefined ? 'USD value not captured' : fmtUsd(value.valueUsd)}
+          </div>
         </div>
-      )}
+      ) : null}
 
-      <p className="text-[11px] text-muted-foreground/70">
-        {originLabel(origin)}. Values render verbatim from the contract; missing values stay missing.
-      </p>
+      {event.participants.length > 0 ? (
+        <div className="mt-4">
+          <h4 className="mb-2 text-[12px] font-extrabold uppercase tracking-wide text-wolf">Who</h4>
+          <ul className="space-y-1.5">
+            {event.participants.map((p, i) => {
+              const ent = entityById(contract, p.entityId);
+              return (
+                <li key={`${p.entityId}-${i}`} className="flex flex-wrap items-center gap-2 text-sm">
+                  <span className="pill">{sideLabel(p.side)}</span>
+                  <span className="font-extrabold text-eel">{ent?.displayName ?? p.entityId}</span>
+                  {ent?.role ? <span className="text-[12px] font-bold text-wolf">· {ent.role}</span> : null}
+                  {ent?.address ? <span className="font-mono text-[11px] text-hare">{shortAddr(ent.address)}</span> : null}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
+      <div className="mt-4 rounded-2xl border-2 border-dashed border-swan p-4">
+        <h4 className="mb-2 text-[12px] font-extrabold uppercase tracking-wide text-wolf">The receipt</h4>
+        {prov.kind === 'FACT' || prov.kind === 'RELATION' ? (
+          <>
+            <p className="text-sm font-semibold text-eel">“{prov.statement}”</p>
+            <ul className="mt-3 space-y-2">
+              {prov.sources.map((src, i) => <SourceRow key={i} src={src} />)}
+            </ul>
+          </>
+        ) : prov.kind === 'DERIVED' ? (
+          <>
+            <p className="text-sm font-semibold text-eel">
+              Computed value — rule <span className="font-mono font-extrabold text-ink">{prov.calculation}</span>
+            </p>
+            {prov.inputs ? (
+              <dl className="mt-2 font-mono text-[12px]">
+                {Object.entries(prov.inputs).map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-3 border-b border-swan py-1">
+                    <dt className="text-wolf">{k}</dt>
+                    <dd className="font-bold text-eel">{String(v)}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+            {prov.sourceEventIds.length > 0 ? (
+              <div className="mt-3">
+                <div className="mb-1.5 text-[11px] font-extrabold uppercase tracking-wide text-wolf">Derived from</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {prov.sourceEventIds.map((eid) => {
+                    const src = contract.investigation.events.find((e) => e.id === eid);
+                    return (
+                      <button key={eid} type="button" onClick={() => onJumpToEvent(eid)}
+                        className="pill cursor-pointer transition hover:bg-polar">
+                        {src ? src.title : eid}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </>
+        ) : prov.kind === 'HYPOTHESIS' ? (
+          <p className="text-sm font-semibold text-eel">“{prov.statement}” · confidence {prov.confidence}</p>
+        ) : null}
+      </div>
+      {event.annotations && event.annotations.length > 0 ? (
+        <div className="mt-4 space-y-2">
+          {event.annotations.map((a, i) => (
+            <div key={i} className="flex items-start gap-2 rounded-xl bg-polar px-3 py-2">
+              <ProvenanceTag provenance={a.provenance} />
+              <p className="text-[13px] font-semibold text-eel">{a.text}</p>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold text-hare">
+        {event.method ? <span>method · <span className="font-mono">{event.method}</span></span> : null}
+        <span>admitted · {event.admissionRule}</span>
+        {event.txHash ? (
+          <a href={`https://etherscan.io/tx/${event.txHash}`} target="_blank" rel="noreferrer"
+            className="inline-flex items-center gap-1 font-bold text-macaw hover:underline">
+            <ExternalLink size={12} strokeWidth={3} /> tx {shortAddr(event.txHash)}
+          </a>
+        ) : null}
+      </div>
+
+      {!isDerived ? (
+        <div className="mt-5">
+          {followable ? (
+            <button type="button" onClick={onFollow} className="btn btn-green w-full">Follow the money →</button>
+          ) : (
+            <p className="rounded-xl border-2 border-dashed border-swan px-3 py-2 text-center text-[13px] font-bold text-hare">
+              {FOLLOW_DEAD_END}
+            </p>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
