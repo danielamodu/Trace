@@ -3,9 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * TRACE — Playwright e2e config.
  *
- * Locks in the hand-verified UI interactions (selection sync, evidence replay,
- * follow-the-money, the noise filter, and the theme switch) against the real
- * served Euler contract. The app reads committed fixtures only — no Nansen key,
+ * Locks in the rebuilt case surface — the walkable reconstruction path, its
+ * replay controls, and the docked evidence receipt — against the real served
+ * fixture contracts. The app reads committed fixtures only — no Nansen key,
  * no network, no credits — so this runs anywhere `npm ci` runs.
  *
  * The dev port 3000 is deliberately avoided (another local app owns it); the
