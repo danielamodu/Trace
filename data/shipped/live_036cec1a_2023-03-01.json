@@ -1,0 +1,2764 @@
+{
+  "contractVersion": "trace-3c/1.0.0",
+  "engineVersion": "trace-3b/1.0.0",
+  "caseId": "live_036cec1a_2023-03-01",
+  "dataSource": "live-nansen",
+  "dataSources": [
+    "live-nansen"
+  ],
+  "completeness": "complete",
+  "completenessReasons": [],
+  "coverage": {
+    "flags": {
+      "fundingEvidence": true,
+      "counterpartyAggregates": true,
+      "transactionWindowCovered": true
+    },
+    "reasons": [
+      "flags.fundingEvidence: related-wallets returned a funding relation among 8 row(s).",
+      "flags.counterpartyAggregates: 8 window-level counterparty aggregate(s) observed.",
+      "flags.transactionWindowCovered: pagination reached is_last_page within budget (1 page(s), 9 tx)."
+    ]
+  },
+  "evidence": {
+    "observedFacts": 42,
+    "observedRelations": 23,
+    "derivedValues": 4,
+    "derivedGroupings": 2,
+    "derivedFlowEdges": 2,
+    "primaryEvents": 19,
+    "collapsedEvents": 0,
+    "eventsMissingUsd": 8,
+    "duplicatesSkipped": 0,
+    "flowsSkipped": 0,
+    "unavailableFields": [
+      "address_label",
+      "counterparty_address_label",
+      "tokens_received"
+    ],
+    "limitations": [
+      "Nansen rows carry no txIndex/logIndex; intra-block ordering is at txHash granularity (no invented indexes).",
+      "Counterparty rows are window-level aggregates; per-hop causal links between aggregates are not evidenced and are never inferred.",
+      "Flow dex/cex splits are null for non-exchange labels; cohort splits require flow-intelligence.",
+      "Fixture snapshots are point-in-time and revisable; re-capture may shift labels and prices.",
+      "Transaction rows carry no per-token USD; row-level volume_usd is used and never estimated when absent.",
+      "DERIVED groupings are computed summaries, not observed facts; members remain listed individually.",
+      "No HYPOTHESIS records are produced; intent, attribution, and causation questions are out of scope for this contract."
+    ]
+  },
+  "investigation": {
+    "id": "live_036cec1a_2023-03-01",
+    "name": "Euler attacker — first funder",
+    "chain": "ethereum",
+    "window": {
+      "from": "2023-03-01",
+      "to": "2023-03-31"
+    },
+    "status": "reconstructed",
+    "headline": "The wallet that first funded the Euler Finance attacker (0xb66c…95db), reconstructed live from Nansen.",
+    "summary": [
+      {
+        "key": "steps_reconstructed",
+        "label": "Steps reconstructed",
+        "value": 19,
+        "unit": "events",
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [
+            "event_001",
+            "event_002",
+            "event_003",
+            "event_004",
+            "event_005",
+            "event_006",
+            "event_007",
+            "event_008",
+            "event_009",
+            "event_010",
+            "event_011",
+            "event_012",
+            "event_013",
+            "event_014",
+            "event_015",
+            "event_016",
+            "event_017",
+            "event_018",
+            "event_019"
+          ],
+          "calculation": "primary_event_count",
+          "inputs": {
+            "engine": "trace-3b/1.0.0"
+          }
+        }
+      },
+      {
+        "key": "entities_involved",
+        "label": "Entities involved",
+        "value": 26,
+        "unit": "entities",
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [],
+          "calculation": "entity_count",
+          "inputs": {
+            "engine": "trace-3b/1.0.0"
+          }
+        }
+      },
+      {
+        "key": "peak_value_moved_usd",
+        "label": "Peak value moved (single observed event)",
+        "value": 1065946188.4014055,
+        "unit": "USD",
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [
+            "event_012"
+          ],
+          "calculation": "max_observed_value_usd",
+          "inputs": {
+            "engine": "trace-3b/1.0.0"
+          }
+        }
+      }
+    ],
+    "events": [
+      {
+        "id": "event_001",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0xb269...edd4 (\"Deployed by\")",
+        "timestamp": "2023-03-13T08:50:23.000Z",
+        "order": 1,
+        "participants": [
+          {
+            "entityId": "entity_0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x50dc9c9126519a70319cc312418488145bed4e2ef6e110eb864a97f5beaeca05",
+        "significance": 35,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_007"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x50dc9c9126519a70319cc312418488145bed4e2ef6e110eb864a97f5beaeca05",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4 (label unavailable) as \"Deployed by\" with evidence tx 0x50dc9c9126519a70319cc312418488145bed4e2ef6e110eb864a97f5beaeca05 at 2023-03-13T08:50:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_002",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0x0b81...7aba (\"Created Contract\")",
+        "timestamp": "2023-03-13T08:56:35.000Z",
+        "order": 2,
+        "participants": [
+          {
+            "entityId": "entity_0x0b812c74729b6abc723f22986c61d95344ff7aba",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_002"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x0b812c74729b6abc723f22986c61d95344ff7aba (label unavailable) as \"Created Contract\" with evidence tx 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f at 2023-03-13T08:56:35.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_003",
+        "type": "transfer",
+        "title": "Transfer observed in 0x47ac3527...088f (method \"0xa91864d4\") ($80435143.2987628 USD)",
+        "timestamp": "2023-03-13T08:56:35.000Z",
+        "order": 3,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x0b812c74729b6abc723f22986c61d95344ff7aba",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x030ba81f1c18d280636f32af80b9aad02cf0854e",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xd3b7cea28feb5e537fca4e657e3f60129456eaf3",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 80435143.2987628
+        },
+        "txHash": "0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f",
+        "method": "0xa91864d4",
+        "significance": 79,
+        "admissionRule": "value-threshold",
+        "primary": true,
+        "relationshipIds": [
+          "rel_010",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"0xa91864d4\" at 2023-03-13T08:56:35.000Z, $80435143.2987628 USD (volume_usd). Evidence tx 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f."
+        }
+      },
+      {
+        "id": "event_004",
+        "type": "funding",
+        "title": "Reported funding link: 0xc02a...6cc2 → subject (\"First Funder\")",
+        "timestamp": "2023-03-13T08:58:11.000Z",
+        "order": 4,
+        "participants": [
+          {
+            "entityId": "entity_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "to"
+          }
+        ],
+        "txHash": "0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_001",
+          "rel_021"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 (label \"wraps.eth\") as \"First Funder\" with evidence tx 0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691 at 2023-03-13T08:58:11.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_005",
+        "type": "transfer",
+        "title": "Transfer observed in 0x68eb306c...4691 (method \"unwrapWETH()\") ($13027963.819340745 USD)",
+        "timestamp": "2023-03-13T08:58:11.000Z",
+        "order": 5,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x0000000000000000000000000000000000000000",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 13027963.819340745
+        },
+        "txHash": "0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691",
+        "method": "unwrapWETH()",
+        "significance": 86,
+        "admissionRule": "burn-sink",
+        "primary": true,
+        "relationshipIds": [
+          "rel_009",
+          "rel_016",
+          "rel_021",
+          "rel_024",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"unwrapWETH()\" at 2023-03-13T08:58:11.000Z, $13027963.819340745 USD (volume_usd). Evidence tx 0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691."
+        }
+      },
+      {
+        "id": "event_006",
+        "type": "transfer",
+        "title": "Transfer observed in 0xe237c57c...1366 (method \"ethToDeployer()\") ($13027963.819340745 USD)",
+        "timestamp": "2023-03-13T08:58:35.000Z",
+        "order": 6,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+            "side": "to"
+          }
+        ],
+        "value": {
+          "valueUsd": 13027963.819340745
+        },
+        "txHash": "0xe237c57ccf8664411cae71a50b1e94b21dde7a0e096f0cceaa7f432db8151366",
+        "method": "ethToDeployer()",
+        "significance": 71,
+        "admissionRule": "value-threshold",
+        "primary": true,
+        "relationshipIds": [
+          "rel_013",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0xe237c57ccf8664411cae71a50b1e94b21dde7a0e096f0cceaa7f432db8151366",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"ethToDeployer()\" at 2023-03-13T08:58:35.000Z, $13027963.819340745 USD (volume_usd). Evidence tx 0xe237c57ccf8664411cae71a50b1e94b21dde7a0e096f0cceaa7f432db8151366."
+        }
+      },
+      {
+        "id": "event_007",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0xb324...9af0 (\"Created Contract\")",
+        "timestamp": "2023-03-13T09:03:23.000Z",
+        "order": 7,
+        "participants": [
+          {
+            "entityId": "entity_0xb324581ee258aa67bc144ad27f79f8dcac569af0",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_008"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xb324581ee258aa67bc144ad27f79f8dcac569af0 (label unavailable) as \"Created Contract\" with evidence tx 0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617 at 2023-03-13T09:03:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_008",
+        "type": "transfer",
+        "title": "Transfer observed in 0x71a908be...8617 (method \"0x97fb9928\") ($191810203.87263674 USD)",
+        "timestamp": "2023-03-13T09:03:23.000Z",
+        "order": 8,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x0000000000000000000000000000000000000000",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xcbcdf9626bc03e24f779434178a73a0b4bad62ed",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xb324581ee258aa67bc144ad27f79f8dcac569af0",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0xd041709eb1c61ce6ec9d46126ac0e4b50eade576",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 191810203.87263674
+        },
+        "txHash": "0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617",
+        "method": "0x97fb9928",
+        "significance": 98,
+        "admissionRule": "burn-sink",
+        "primary": true,
+        "relationshipIds": [
+          "rel_009",
+          "rel_016",
+          "rel_018",
+          "rel_021",
+          "rel_022",
+          "rel_024",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"0x97fb9928\" at 2023-03-13T09:03:23.000Z, $191810203.87263674 USD (volume_usd). Evidence tx 0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617."
+        }
+      },
+      {
+        "id": "event_009",
+        "type": "capital-consolidation",
+        "title": "Consolidation into 0x0000...0000 (3 observed transfers, $1270784356.0933828 USD combined)",
+        "timestamp": "2023-03-13T09:04:23.000Z",
+        "order": 9,
+        "participants": [
+          {
+            "entityId": "entity_0x0000000000000000000000000000000000000000",
+            "side": "to"
+          }
+        ],
+        "value": {
+          "valueUsd": 1270784356.0933828
+        },
+        "significance": 106,
+        "admissionRule": "derived-grouping",
+        "primary": true,
+        "relationshipIds": [
+          "rel_024"
+        ],
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [
+            "event_005",
+            "event_008",
+            "event_012"
+          ],
+          "calculation": "consolidation",
+          "inputs": {
+            "engine": "trace-3b/1.0.0",
+            "members": 3,
+            "members_with_usd": 3,
+            "combined_usd": 1270784356.0933828
+          }
+        }
+      },
+      {
+        "id": "event_010",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0x1e44...9a9b (\"Created Contract\")",
+        "timestamp": "2023-03-13T09:04:23.000Z",
+        "order": 10,
+        "participants": [
+          {
+            "entityId": "entity_0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_003"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b (label unavailable) as \"Created Contract\" with evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4 at 2023-03-13T09:04:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_011",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0x8427...4e1a (\"Created Contract\")",
+        "timestamp": "2023-03-13T09:04:23.000Z",
+        "order": 11,
+        "participants": [
+          {
+            "entityId": "entity_0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_005"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a (label unavailable) as \"Created Contract\" with evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4 at 2023-03-13T09:04:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_012",
+        "type": "transfer",
+        "title": "Transfer observed in 0x62bd3d31...18c4 (method \"0x4d350f5c\") ($1065946188.4014055 USD)",
+        "timestamp": "2023-03-13T09:04:23.000Z",
+        "order": 12,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x0000000000000000000000000000000000000000",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xba12222222228d8ba445958a75a0704d566bf2c8",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0xcec2981d8047c401f2a4e972a7e5ada3f5ecf838",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x22c5cf8fc9891f8ef5a5e8630b95115018a09736",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 1065946188.4014055
+        },
+        "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+        "method": "0x4d350f5c",
+        "significance": 105,
+        "admissionRule": "burn-sink",
+        "primary": true,
+        "relationshipIds": [
+          "rel_009",
+          "rel_016",
+          "rel_017",
+          "rel_020",
+          "rel_023",
+          "rel_024",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"0x4d350f5c\" at 2023-03-13T09:04:23.000Z, $1065946188.4014055 USD (volume_usd). Evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4."
+        }
+      },
+      {
+        "id": "event_013",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0x7db7...b05b (\"Created Contract\")",
+        "timestamp": "2023-03-13T09:04:59.000Z",
+        "order": 13,
+        "participants": [
+          {
+            "entityId": "entity_0x7db7099b00d1d24ef2814cfcde723eacd958b05b",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_004"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x7db7099b00d1d24ef2814cfcde723eacd958b05b (label unavailable) as \"Created Contract\" with evidence tx 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9 at 2023-03-13T09:04:59.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_014",
+        "type": "transfer",
+        "title": "Transfer observed in 0x465a6780...31d9 (method \"0x840f2e95\") ($451531576.18316036 USD)",
+        "timestamp": "2023-03-13T09:04:59.000Z",
+        "order": 14,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x7db7099b00d1d24ef2814cfcde723eacd958b05b",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xbcca60bb61934080951369a648fb03df4f96263c",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xd444a7ac5d1c5eb8ebc9dab83834a412e9b7be76",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 451531576.18316036
+        },
+        "txHash": "0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9",
+        "method": "0x840f2e95",
+        "significance": 87,
+        "admissionRule": "value-threshold",
+        "primary": true,
+        "relationshipIds": [
+          "rel_012",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"0x840f2e95\" at 2023-03-13T09:04:59.000Z, $451531576.18316036 USD (volume_usd). Evidence tx 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9."
+        }
+      },
+      {
+        "id": "event_015",
+        "type": "transfer",
+        "title": "Transfer observed in 0x9f43b657...f705 (method \"swapUSDC()\") ($34007779.62128266 USD)",
+        "timestamp": "2023-03-13T09:05:35.000Z",
+        "order": 15,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0x6c6bc977e13df9b0de53b251522280bb72383700",
+            "side": "to"
+          }
+        ],
+        "value": {
+          "valueUsd": 34007779.62128266
+        },
+        "txHash": "0x9f43b6577f513435368b4b339a24932a9b2465906bc5ac8a1b1239d7bef0f705",
+        "method": "swapUSDC()",
+        "significance": 75,
+        "admissionRule": "method-of-interest",
+        "primary": true,
+        "relationshipIds": [
+          "rel_011",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x9f43b6577f513435368b4b339a24932a9b2465906bc5ac8a1b1239d7bef0f705",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"swapUSDC()\" at 2023-03-13T09:05:35.000Z, $34007779.62128266 USD (volume_usd). Evidence tx 0x9f43b6577f513435368b4b339a24932a9b2465906bc5ac8a1b1239d7bef0f705."
+        }
+      },
+      {
+        "id": "event_016",
+        "type": "entity-relationship",
+        "title": "Reported relationship: 0xa4c0...988d (\"Created Contract\")",
+        "timestamp": "2023-03-13T09:08:59.000Z",
+        "order": 16,
+        "participants": [
+          {
+            "entityId": "entity_0xa4c0afeca6273b012382970c1ed8690c2929988d",
+            "side": "counterparty"
+          },
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "actor"
+          }
+        ],
+        "txHash": "0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311",
+        "significance": 25,
+        "admissionRule": "nansen-relation",
+        "primary": true,
+        "relationshipIds": [
+          "rel_006"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xa4c0afeca6273b012382970c1ed8690c2929988d (label unavailable) as \"Created Contract\" with evidence tx 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311 at 2023-03-13T09:08:59.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "event_017",
+        "type": "transfer",
+        "title": "Transfer observed in 0x3097830e...f311 (method \"0x6d21d1e8\") ($79771462.75461529 USD)",
+        "timestamp": "2023-03-13T09:08:59.000Z",
+        "order": 17,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0xa4c0afeca6273b012382970c1ed8690c2929988d",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x1982b2f5814301d4e9a8b0201555376e62f82428",
+            "side": "to"
+          },
+          {
+            "entityId": "entity_0x12df82a443c77eae9d5bb0f5c8d0ec706ecb338c",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 79771462.75461529
+        },
+        "txHash": "0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311",
+        "method": "0x6d21d1e8",
+        "significance": 79,
+        "admissionRule": "value-threshold",
+        "primary": true,
+        "relationshipIds": [
+          "rel_015",
+          "rel_023",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"0x6d21d1e8\" at 2023-03-13T09:08:59.000Z, $79771462.75461529 USD (volume_usd). Evidence tx 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311."
+        }
+      },
+      {
+        "id": "event_018",
+        "type": "capital-dispersal",
+        "title": "Dispersal from 0x036c...5f1c (9 observed transfers, $2106652180.9108222 USD combined)",
+        "timestamp": "2023-03-13T09:12:23.000Z",
+        "order": 18,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          }
+        ],
+        "value": {
+          "valueUsd": 2106652180.9108222
+        },
+        "significance": 93,
+        "admissionRule": "derived-grouping",
+        "primary": true,
+        "relationshipIds": [
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [
+            "event_003",
+            "event_005",
+            "event_006",
+            "event_008",
+            "event_012",
+            "event_014",
+            "event_015",
+            "event_017",
+            "event_019"
+          ],
+          "calculation": "dispersal",
+          "inputs": {
+            "engine": "trace-3b/1.0.0",
+            "members": 9,
+            "members_with_usd": 9,
+            "combined_usd": 2106652180.9108222
+          }
+        }
+      },
+      {
+        "id": "event_019",
+        "type": "transfer",
+        "title": "Transfer observed in 0x298bde3f...db55 (method \"withdraw()\") ($177093899.14027768 USD)",
+        "timestamp": "2023-03-13T09:12:23.000Z",
+        "order": 19,
+        "participants": [
+          {
+            "entityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+            "side": "from"
+          },
+          {
+            "entityId": "entity_0xb66cd966670d962c227b3eaba30a872dbfb995db",
+            "side": "to"
+          }
+        ],
+        "value": {
+          "valueUsd": 177093899.14027768
+        },
+        "txHash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+        "method": "withdraw()",
+        "significance": 92,
+        "admissionRule": "method-of-interest",
+        "primary": true,
+        "relationshipIds": [
+          "rel_014",
+          "rel_019",
+          "rel_025"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): method \"withdraw()\" at 2023-03-13T09:12:23.000Z, $177093899.14027768 USD (volume_usd). Evidence tx 0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55."
+        }
+      }
+    ],
+    "entities": [
+      {
+        "id": "entity_0x0000000000000000000000000000000000000000",
+        "kind": "wallet",
+        "address": "0x0000000000000000000000000000000000000000",
+        "chain": "ethereum",
+        "displayName": "[0x000000]",
+        "labels": [
+          {
+            "label": "[0x000000]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x000000]\" for 0x0000000000000000000000000000000000000000 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "burn-sink",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0x0000000000000000000000000000000000000000 as a counterparty with interaction_count 3 and total volume $150483761.49660528 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x030ba81f1c18d280636f32af80b9aad02cf0854e",
+        "kind": "wallet",
+        "address": "0x030ba81f1c18d280636f32af80b9aad02cf0854e",
+        "chain": "ethereum",
+        "displayName": "aWETH_v2 [0x030ba8]",
+        "labels": [
+          {
+            "label": "aWETH_v2 [0x030ba8]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"aWETH_v2 [0x030ba8]\" for 0x030ba81f1c18d280636f32af80b9aad02cf0854e (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0x030ba81f1c18d280636f32af80b9aad02cf0854e as a transaction participant (evidence tx 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f at 2023-03-13T08:56:35.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "kind": "wallet",
+        "address": "0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "chain": "ethereum",
+        "displayName": "[0x036cec]",
+        "labels": [
+          {
+            "label": "[0x036cec]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x036cec]\" for 0x036cec1a199234fc02f72d29e596a09440825f1c (from_address_label)."
+            }
+          }
+        ],
+        "role": "subject",
+        "admissionReason": "case-subject+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [],
+          "statement": "Case subject 0x036cec1a199234fc02f72d29e596a09440825f1c (authored case input; its on-chain activity is evidenced by the case events)."
+        }
+      },
+      {
+        "id": "entity_0x0b812c74729b6abc723f22986c61d95344ff7aba",
+        "kind": "wallet",
+        "address": "0x0b812c74729b6abc723f22986c61d95344ff7aba",
+        "chain": "ethereum",
+        "displayName": "[0x0b812c]",
+        "labels": [
+          {
+            "label": "[0x0b812c]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x0b812c]\" for 0x0b812c74729b6abc723f22986c61d95344ff7aba (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0x0b812c74729b6abc723f22986c61d95344ff7aba as \"Created Contract\" in connection with the case subject (evidence tx 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0x12df82a443c77eae9d5bb0f5c8d0ec706ecb338c",
+        "kind": "wallet",
+        "address": "0x12df82a443c77eae9d5bb0f5c8d0ec706ecb338c",
+        "chain": "ethereum",
+        "displayName": "[0x12df82]",
+        "labels": [
+          {
+            "label": "[0x12df82]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x12df82]\" for 0x12df82a443c77eae9d5bb0f5c8d0ec706ecb338c (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0x12df82a443c77eae9d5bb0f5c8d0ec706ecb338c as a transaction participant (evidence tx 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311 at 2023-03-13T09:08:59.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x1982b2f5814301d4e9a8b0201555376e62f82428",
+        "kind": "wallet",
+        "address": "0x1982b2f5814301d4e9a8b0201555376e62f82428",
+        "chain": "ethereum",
+        "displayName": "aSTETH [0x1982b2]",
+        "labels": [
+          {
+            "label": "aSTETH [0x1982b2]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"aSTETH [0x1982b2]\" for 0x1982b2f5814301d4e9a8b0201555376e62f82428 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0x1982b2f5814301d4e9a8b0201555376e62f82428 as a transaction participant (evidence tx 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311 at 2023-03-13T09:08:59.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b",
+        "kind": "wallet",
+        "address": "0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b",
+        "chain": "ethereum",
+        "displayName": "[0x1e4446]",
+        "labels": [
+          {
+            "label": "[0x1e4446]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x1e4446]\" for 0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b as \"Created Contract\" in connection with the case subject (evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0x22c5cf8fc9891f8ef5a5e8630b95115018a09736",
+        "kind": "wallet",
+        "address": "0x22c5cf8fc9891f8ef5a5e8630b95115018a09736",
+        "chain": "ethereum",
+        "displayName": "[0x22c5cf]",
+        "labels": [
+          {
+            "label": "[0x22c5cf]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x22c5cf]\" for 0x22c5cf8fc9891f8ef5a5e8630b95115018a09736 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0x22c5cf8fc9891f8ef5a5e8630b95115018a09736 as a transaction participant (evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4 at 2023-03-13T09:04:23.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x6c6bc977e13df9b0de53b251522280bb72383700",
+        "kind": "wallet",
+        "address": "0x6c6bc977e13df9b0de53b251522280bb72383700",
+        "chain": "ethereum",
+        "displayName": "Liquidity Pool [0x6c6bc9]",
+        "labels": [
+          {
+            "label": "Liquidity Pool [0x6c6bc9]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"Liquidity Pool [0x6c6bc9]\" for 0x6c6bc977e13df9b0de53b251522280bb72383700 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0x6c6bc977e13df9b0de53b251522280bb72383700 as a transaction participant (evidence tx 0x9f43b6577f513435368b4b339a24932a9b2465906bc5ac8a1b1239d7bef0f705 at 2023-03-13T09:05:35.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x7db7099b00d1d24ef2814cfcde723eacd958b05b",
+        "kind": "wallet",
+        "address": "0x7db7099b00d1d24ef2814cfcde723eacd958b05b",
+        "chain": "ethereum",
+        "displayName": "[0x7db709]",
+        "labels": [
+          {
+            "label": "[0x7db709]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x7db709]\" for 0x7db7099b00d1d24ef2814cfcde723eacd958b05b (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0x7db7099b00d1d24ef2814cfcde723eacd958b05b as \"Created Contract\" in connection with the case subject (evidence tx 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+        "kind": "wallet",
+        "address": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+        "chain": "ethereum",
+        "displayName": "wstETH",
+        "labels": [
+          {
+            "label": "wstETH",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"wstETH\" for 0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0 (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "wstETH [0x7f39c5]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"wstETH [0x7f39c5]\" for 0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0 as a counterparty with interaction_count 1 and total volume $118875056.95919444 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a",
+        "kind": "wallet",
+        "address": "0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a",
+        "chain": "ethereum",
+        "displayName": "[0x84273b]",
+        "labels": [
+          {
+            "label": "[0x84273b]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0x84273b]\" for 0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a as \"Created Contract\" in connection with the case subject (evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656",
+        "kind": "wallet",
+        "address": "0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656",
+        "chain": "ethereum",
+        "displayName": "aWBTC_v2",
+        "labels": [
+          {
+            "label": "aWBTC_v2",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"aWBTC_v2\" for 0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656 (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "aWBTC_v2 [0x9ff58f]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"aWBTC_v2 [0x9ff58f]\" for 0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656 as a counterparty with interaction_count 8 and total volume $687695021.8992198 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xa4c0afeca6273b012382970c1ed8690c2929988d",
+        "kind": "wallet",
+        "address": "0xa4c0afeca6273b012382970c1ed8690c2929988d",
+        "chain": "ethereum",
+        "displayName": "[0xa4c0af]",
+        "labels": [
+          {
+            "label": "[0xa4c0af]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xa4c0af]\" for 0xa4c0afeca6273b012382970c1ed8690c2929988d (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0xa4c0afeca6273b012382970c1ed8690c2929988d as \"Created Contract\" in connection with the case subject (evidence tx 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+        "kind": "wallet",
+        "address": "0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+        "chain": "ethereum",
+        "displayName": "[0xb2698c]",
+        "labels": [
+          {
+            "label": "[0xb2698c]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xb2698c]\" for 0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4 as \"Deployed by\" in connection with the case subject (evidence tx 0x50dc9c9126519a70319cc312418488145bed4e2ef6e110eb864a97f5beaeca05). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0xb324581ee258aa67bc144ad27f79f8dcac569af0",
+        "kind": "wallet",
+        "address": "0xb324581ee258aa67bc144ad27f79f8dcac569af0",
+        "chain": "ethereum",
+        "displayName": "[0xb32458]",
+        "labels": [
+          {
+            "label": "[0xb32458]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xb32458]\" for 0xb324581ee258aa67bc144ad27f79f8dcac569af0 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen reports 0xb324581ee258aa67bc144ad27f79f8dcac569af0 as \"Created Contract\" in connection with the case subject (evidence tx 0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617). Reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "entity_0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "kind": "wallet",
+        "address": "0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "chain": "ethereum",
+        "displayName": "jaydoteth.eth*",
+        "labels": [
+          {
+            "label": "jaydoteth.eth*",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"jaydoteth.eth*\" for 0xb66cd966670d962c227b3eaba30a872dbfb995db (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "jaydoteth.eth* [0xb66cd9]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"jaydoteth.eth* [0xb66cd9]\" for 0xb66cd966670d962c227b3eaba30a872dbfb995db (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0xb66cd966670d962c227b3eaba30a872dbfb995db as a counterparty with interaction_count 4 and total volume $236868576.312146 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xba12222222228d8ba445958a75a0704d566bf2c8",
+        "kind": "wallet",
+        "address": "0xba12222222228d8ba445958a75a0704d566bf2c8",
+        "chain": "ethereum",
+        "displayName": "balancervault.eth",
+        "labels": [
+          {
+            "label": "balancervault.eth",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"balancervault.eth\" for 0xba12222222228d8ba445958a75a0704d566bf2c8 (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "balancervault.eth [0xba1222]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"balancervault.eth [0xba1222]\" for 0xba12222222228d8ba445958a75a0704d566bf2c8 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0xba12222222228d8ba445958a75a0704d566bf2c8 as a counterparty with interaction_count 4 and total volume $709995386.841842 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xbcca60bb61934080951369a648fb03df4f96263c",
+        "kind": "wallet",
+        "address": "0xbcca60bb61934080951369a648fb03df4f96263c",
+        "chain": "ethereum",
+        "displayName": "aUSDC_v2 [0xbcca60]",
+        "labels": [
+          {
+            "label": "aUSDC_v2 [0xbcca60]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"aUSDC_v2 [0xbcca60]\" for 0xbcca60bb61934080951369a648fb03df4f96263c (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0xbcca60bb61934080951369a648fb03df4f96263c as a transaction participant (evidence tx 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9 at 2023-03-13T09:04:59.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "kind": "wallet",
+        "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "chain": "ethereum",
+        "displayName": "wraps.eth",
+        "labels": [
+          {
+            "label": "wraps.eth",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"wraps.eth\" for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "wraps.eth [0xc02aaa]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"wraps.eth [0xc02aaa]\" for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+nansen-relation-target+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 as a counterparty with interaction_count 2 and total volume $31664423.153593384 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xcbcdf9626bc03e24f779434178a73a0b4bad62ed",
+        "kind": "wallet",
+        "address": "0xcbcdf9626bc03e24f779434178a73a0b4bad62ed",
+        "chain": "ethereum",
+        "displayName": "Token Millionaire",
+        "labels": [
+          {
+            "label": "Token Millionaire",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"Token Millionaire\" for 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "Token Millionaire [0xcbcdf9]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"Token Millionaire [0xcbcdf9]\" for 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed as a counterparty with interaction_count 4 and total volume $105742784.70260116 USD. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xcec2981d8047c401f2a4e972a7e5ada3f5ecf838",
+        "kind": "wallet",
+        "address": "0xcec2981d8047c401f2a4e972a7e5ada3f5ecf838",
+        "chain": "ethereum",
+        "displayName": "[0xcec298]",
+        "labels": [
+          {
+            "label": "[0xcec298]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xcec298]\" for 0xcec2981d8047c401f2a4e972a7e5ada3f5ecf838 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0xcec2981d8047c401f2a4e972a7e5ada3f5ecf838 as a transaction participant (evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4 at 2023-03-13T09:04:23.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xd041709eb1c61ce6ec9d46126ac0e4b50eade576",
+        "kind": "wallet",
+        "address": "0xd041709eb1c61ce6ec9d46126ac0e4b50eade576",
+        "chain": "ethereum",
+        "displayName": "[0xd04170]",
+        "labels": [
+          {
+            "label": "[0xd04170]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xd04170]\" for 0xd041709eb1c61ce6ec9d46126ac0e4b50eade576 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0xd041709eb1c61ce6ec9d46126ac0e4b50eade576 as a transaction participant (evidence tx 0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617 at 2023-03-13T09:03:23.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xd3b7cea28feb5e537fca4e657e3f60129456eaf3",
+        "kind": "wallet",
+        "address": "0xd3b7cea28feb5e537fca4e657e3f60129456eaf3",
+        "chain": "ethereum",
+        "displayName": "[0xd3b7ce]",
+        "labels": [
+          {
+            "label": "[0xd3b7ce]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xd3b7ce]\" for 0xd3b7cea28feb5e537fca4e657e3f60129456eaf3 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0xd3b7cea28feb5e537fca4e657e3f60129456eaf3 as a transaction participant (evidence tx 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f at 2023-03-13T08:56:35.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xd444a7ac5d1c5eb8ebc9dab83834a412e9b7be76",
+        "kind": "wallet",
+        "address": "0xd444a7ac5d1c5eb8ebc9dab83834a412e9b7be76",
+        "chain": "ethereum",
+        "displayName": "[0xd444a7]",
+        "labels": [
+          {
+            "label": "[0xd444a7]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"[0xd444a7]\" for 0xd444a7ac5d1c5eb8ebc9dab83834a412e9b7be76 (from_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Observed 0xd444a7ac5d1c5eb8ebc9dab83834a412e9b7be76 as a transaction participant (evidence tx 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9 at 2023-03-13T09:04:59.000Z) in Nansen profiler/address/transactions data. Role \"counterparty\" records observed interaction only."
+        }
+      },
+      {
+        "id": "entity_0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+        "kind": "wallet",
+        "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+        "chain": "ethereum",
+        "displayName": "High Activity",
+        "labels": [
+          {
+            "label": "High Activity",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/counterparties",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "5f860818ac0baa3935be631ea65e6605",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned counterparty label \"High Activity\" for 0xdc24316b9ae028f1497c275eb9192a3ea0f67022 (counterparty_address_label)."
+            }
+          },
+          {
+            "label": "High Activity [0xdc2431]",
+            "provenance": {
+              "kind": "FACT",
+              "sources": [
+                {
+                  "source": "profiler/address/transactions",
+                  "capturedAt": "2026-09-27T21:52:40.954Z",
+                  "requestId": "2c997e20fe6a63066e628102faa59d45",
+                  "origin": "live-nansen"
+                }
+              ],
+              "statement": "Nansen returned label \"High Activity [0xdc2431]\" for 0xdc24316b9ae028f1497c275eb9192a3ea0f67022 (to_address_label)."
+            }
+          }
+        ],
+        "role": "counterparty",
+        "admissionReason": "counterparty-above-threshold+transaction-participant",
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen returned 0xdc24316b9ae028f1497c275eb9192a3ea0f67022 as a counterparty with interaction_count 4 and total volume $249578002.0360344 USD. Role \"counterparty\" records observed interaction only."
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "id": "rel_001",
+        "kind": "funder",
+        "fromEntityId": "entity_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": true,
+        "nansenRelation": "First Funder",
+        "evidenceEventIds": [
+          "event_004"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 (label \"wraps.eth\") as \"First Funder\" with evidence tx 0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691 at 2023-03-13T08:58:11.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_002",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0x0b812c74729b6abc723f22986c61d95344ff7aba",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Created Contract",
+        "evidenceEventIds": [
+          "event_002"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x0b812c74729b6abc723f22986c61d95344ff7aba (label unavailable) as \"Created Contract\" with evidence tx 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f at 2023-03-13T08:56:35.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_003",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Created Contract",
+        "evidenceEventIds": [
+          "event_010"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x1e4446016f3fddfe2ecc046cf91a8010a30e9a9b (label unavailable) as \"Created Contract\" with evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4 at 2023-03-13T09:04:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_004",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0x7db7099b00d1d24ef2814cfcde723eacd958b05b",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Created Contract",
+        "evidenceEventIds": [
+          "event_013"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x7db7099b00d1d24ef2814cfcde723eacd958b05b (label unavailable) as \"Created Contract\" with evidence tx 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9 at 2023-03-13T09:04:59.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_005",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Created Contract",
+        "evidenceEventIds": [
+          "event_011"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0x84273bba41cd0ec99f59b5b4c85783cf514e4e1a (label unavailable) as \"Created Contract\" with evidence tx 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4 at 2023-03-13T09:04:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_006",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0xa4c0afeca6273b012382970c1ed8690c2929988d",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Created Contract",
+        "evidenceEventIds": [
+          "event_016"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xa4c0afeca6273b012382970c1ed8690c2929988d (label unavailable) as \"Created Contract\" with evidence tx 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311 at 2023-03-13T09:08:59.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_007",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Deployed by",
+        "evidenceEventIds": [
+          "event_001"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x50dc9c9126519a70319cc312418488145bed4e2ef6e110eb864a97f5beaeca05",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4 (label unavailable) as \"Deployed by\" with evidence tx 0x50dc9c9126519a70319cc312418488145bed4e2ef6e110eb864a97f5beaeca05 at 2023-03-13T08:50:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_008",
+        "kind": "related-wallet",
+        "fromEntityId": "entity_0xb324581ee258aa67bc144ad27f79f8dcac569af0",
+        "toEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "directed": false,
+        "nansenRelation": "Created Contract",
+        "evidenceEventIds": [
+          "event_007"
+        ],
+        "provenance": {
+          "kind": "RELATION",
+          "sources": [
+            {
+              "source": "profiler/address/related-wallets",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+              "txHash": "0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-27T21:52:40.954Z): Nansen reports 0xb324581ee258aa67bc144ad27f79f8dcac569af0 (label unavailable) as \"Created Contract\" with evidence tx 0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617 at 2023-03-13T09:03:23.000Z. This is a reported link, not proof of common control."
+        }
+      },
+      {
+        "id": "rel_009",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x0000000000000000000000000000000000000000",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 1270784356.0933828
+        },
+        "evidenceEventIds": [
+          "event_005",
+          "event_008",
+          "event_012"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691",
+              "origin": "live-nansen"
+            },
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617",
+              "origin": "live-nansen"
+            },
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "3 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0x0000000000000000000000000000000000000000 (evidence txs: 0x68eb306c558d45e777c8d588e611db5323a6a5021a9f551bc0be915ef5e24691, 0x71a908be0bef6174bccc3d493becdfd28395d78898e355d451cb52f7bac38617, 0x62bd3d31a7b75c098ccf28bc4d4af8c4a191b4b9e451fab4232258079e8b18c4)."
+        }
+      },
+      {
+        "id": "rel_010",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x0b812c74729b6abc723f22986c61d95344ff7aba",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 80435143.2987628
+        },
+        "evidenceEventIds": [
+          "event_003"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "1 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0x0b812c74729b6abc723f22986c61d95344ff7aba (evidence txs: 0x47ac3527d02e6b9631c77fad1cdee7bfa77a8a7bfd4880dccbda5146ace4088f)."
+        }
+      },
+      {
+        "id": "rel_011",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x6c6bc977e13df9b0de53b251522280bb72383700",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 34007779.62128266
+        },
+        "evidenceEventIds": [
+          "event_015"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x9f43b6577f513435368b4b339a24932a9b2465906bc5ac8a1b1239d7bef0f705",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "1 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0x6c6bc977e13df9b0de53b251522280bb72383700 (evidence txs: 0x9f43b6577f513435368b4b339a24932a9b2465906bc5ac8a1b1239d7bef0f705)."
+        }
+      },
+      {
+        "id": "rel_012",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x7db7099b00d1d24ef2814cfcde723eacd958b05b",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 451531576.18316036
+        },
+        "evidenceEventIds": [
+          "event_014"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "1 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0x7db7099b00d1d24ef2814cfcde723eacd958b05b (evidence txs: 0x465a6780145f1efe3ab52f94c006065575712d2003d83d85481f3d110ed131d9)."
+        }
+      },
+      {
+        "id": "rel_013",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 13027963.819340745
+        },
+        "evidenceEventIds": [
+          "event_006"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0xe237c57ccf8664411cae71a50b1e94b21dde7a0e096f0cceaa7f432db8151366",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "1 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0xb2698c2d99ad2c302a95a8db26b08d17a77cedd4 (evidence txs: 0xe237c57ccf8664411cae71a50b1e94b21dde7a0e096f0cceaa7f432db8151366)."
+        }
+      },
+      {
+        "id": "rel_014",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 177093899.14027768
+        },
+        "evidenceEventIds": [
+          "event_019"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "1 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0xb66cd966670d962c227b3eaba30a872dbfb995db (evidence txs: 0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55)."
+        }
+      },
+      {
+        "id": "rel_015",
+        "kind": "transfer",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 79771462.75461529
+        },
+        "evidenceEventIds": [
+          "event_017"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/transactions",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "2c997e20fe6a63066e628102faa59d45",
+              "txHash": "0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "1 observed transfer(s) 0x036cec1a199234fc02f72d29e596a09440825f1c → 0xdc24316b9ae028f1497c275eb9192a3ea0f67022 (evidence txs: 0x3097830e9921e4063d334acb82f6a79374f76f0b1a8f857e89b89bc58df1f311)."
+        }
+      },
+      {
+        "id": "rel_016",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x0000000000000000000000000000000000000000",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 3,
+          "volumeInUsd": 0,
+          "volumeOutUsd": 150483761.49660528
+        },
+        "evidenceEventIds": [
+          "event_005",
+          "event_008",
+          "event_012"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0x0000000000000000000000000000000000000000 interacted with the investigated cluster (3 interactions, total $150483761.49660528 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_017",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 1,
+          "volumeInUsd": 118875056.95919444,
+          "volumeOutUsd": 0
+        },
+        "evidenceEventIds": [
+          "event_012"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0 interacted with the investigated cluster (1 interactions, total $118875056.95919444 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_018",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 8,
+          "volumeInUsd": 343692849.16748446,
+          "volumeOutUsd": 344002172.7317352
+        },
+        "evidenceEventIds": [
+          "event_008"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656 interacted with the investigated cluster (8 interactions, total $687695021.8992198 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_019",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xb66cd966670d962c227b3eaba30a872dbfb995db",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 4,
+          "volumeInUsd": 46746713.35252757,
+          "volumeOutUsd": 190121862.95961842
+        },
+        "evidenceEventIds": [
+          "event_019"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0xb66cd966670d962c227b3eaba30a872dbfb995db interacted with the investigated cluster (4 interactions, total $236868576.312146 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_020",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xba12222222228d8ba445958a75a0704d566bf2c8",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 4,
+          "volumeInUsd": 354997693.420921,
+          "volumeOutUsd": 354997693.420921
+        },
+        "evidenceEventIds": [
+          "event_012"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0xba12222222228d8ba445958a75a0704d566bf2c8 interacted with the investigated cluster (4 interactions, total $709995386.841842 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_021",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 2,
+          "volumeInUsd": 31664423.153593384,
+          "volumeOutUsd": 0
+        },
+        "evidenceEventIds": [
+          "event_004",
+          "event_005",
+          "event_008"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 interacted with the investigated cluster (2 interactions, total $31664423.153593384 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_022",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xcbcdf9626bc03e24f779434178a73a0b4bad62ed",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 4,
+          "volumeInUsd": 52636841.79997456,
+          "volumeOutUsd": 53105942.902626604
+        },
+        "evidenceEventIds": [
+          "event_008"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0xcbcdf9626bc03e24f779434178a73a0b4bad62ed interacted with the investigated cluster (4 interactions, total $105742784.70260116 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_023",
+        "kind": "counterparty",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+        "directed": false,
+        "metrics": {
+          "interactionCount": 4,
+          "volumeInUsd": 124457057.34030311,
+          "volumeOutUsd": 125120944.69573131
+        },
+        "evidenceEventIds": [
+          "event_012",
+          "event_017"
+        ],
+        "provenance": {
+          "kind": "FACT",
+          "sources": [
+            {
+              "source": "profiler/address/counterparties",
+              "capturedAt": "2026-09-27T21:52:40.954Z",
+              "requestId": "5f860818ac0baa3935be631ea65e6605",
+              "origin": "live-nansen"
+            }
+          ],
+          "statement": "Nansen profiler/address/counterparties aggregate (live Nansen capture): 0xdc24316b9ae028f1497c275eb9192a3ea0f67022 interacted with the investigated cluster (4 interactions, total $249578002.0360344 USD). Window-level aggregate, not a single transaction."
+        }
+      },
+      {
+        "id": "rel_024",
+        "kind": "flow",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x0000000000000000000000000000000000000000",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 1270784356.0933828
+        },
+        "evidenceEventIds": [
+          "event_009"
+        ],
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [
+            "event_005",
+            "event_008",
+            "event_012"
+          ],
+          "calculation": "net_flow_consolidation",
+          "inputs": {
+            "engine": "trace-3b/1.0.0",
+            "group": "event_009"
+          }
+        }
+      },
+      {
+        "id": "rel_025",
+        "kind": "flow",
+        "fromEntityId": "entity_0x036cec1a199234fc02f72d29e596a09440825f1c",
+        "toEntityId": "entity_0x0000000000000000000000000000000000000000",
+        "directed": true,
+        "metrics": {
+          "netFlowUsd": 2106652180.9108222
+        },
+        "evidenceEventIds": [
+          "event_018"
+        ],
+        "provenance": {
+          "kind": "DERIVED",
+          "sourceEventIds": [
+            "event_003",
+            "event_005",
+            "event_006",
+            "event_008",
+            "event_012",
+            "event_014",
+            "event_015",
+            "event_017",
+            "event_019"
+          ],
+          "calculation": "net_flow_dispersal",
+          "inputs": {
+            "engine": "trace-3b/1.0.0",
+            "group": "event_018"
+          }
+        }
+      }
+    ],
+    "dataGaps": [
+      "Nansen rows carry no txIndex/logIndex; ordering uses (timestamp, txHash lexicographic, event-kind rank, source endpoint) with no invented indexes.",
+      "Counterparty rows are window-level aggregates without per-transaction timestamps; they are represented as undirected aggregate relationships, not timeline events.",
+      "profiler/address/transactions returns latest-first; exploit-day rows may require pagination beyond the captured sample (is_last_page=false observed in fixtures).",
+      "8 event(s) have no USD value in the source rows; values were not estimated or zero-filled."
+    ],
+    "sources": [
+      {
+        "source": "profiler/address/counterparties",
+        "capturedAt": "2026-09-27T21:52:40.954Z",
+        "requestId": "5f860818ac0baa3935be631ea65e6605",
+        "origin": "live-nansen"
+      },
+      {
+        "source": "profiler/address/related-wallets",
+        "capturedAt": "2026-09-27T21:52:40.954Z",
+        "requestId": "d2e71257374cc66a0fc6e943f3bf9a11",
+        "origin": "live-nansen"
+      },
+      {
+        "source": "profiler/address/transactions",
+        "capturedAt": "2026-09-27T21:52:40.954Z",
+        "requestId": "2c997e20fe6a63066e628102faa59d45",
+        "origin": "live-nansen"
+      }
+    ],
+    "reconstructedAt": "2026-09-27T21:52:40.954Z"
+  }
+}
