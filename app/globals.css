@@ -1,456 +1,146 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* ── TRACE design system ──────────────────────────────────────────────
+   Duolingo-flavoured: friendly, chunky, playful — but rigorous.
+   Light mode ONLY. No gradients, no glass. The one signature depth is
+   the 3D "pressed sticker" button (solid darker bottom lip, presses on
+   :active). Shape language: fat borders, generous radii, flat fills. */
 
-/* ─────────────────────────────────────────────────────────────
-   TRACE design tokens — warm-parchment register (Slite-inspired).
-   The whole page sits on a cream paper canvas (#fdf9f4), never cold
-   white; a SINGLE ember orange (#f67748) is the only saturated brand
-   color — reserved for the primary CTA, a selected border, and the
-   hand-drawn scribble on one headline word. Serif display (Lora) +
-   humanist sans (Manrope) give it the rhythm of an edited document.
-   Provenance hues stay SEMANTIC and separate from the ember: fact is
-   neutral ink, relation is violet, derived is deep blue — a reported
-   link is never the action you take, so it never wears the ember.
-   ───────────────────────────────────────────────────────────── */
-:root {
-  --radius: 1rem;
+/* dark: utilities still compile, but .dark never mounts, so they never fire. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  --background: #fdf9f4;          /* Parchment Cream — page canvas */
-  --foreground: #2d2f34;          /* Shade Ink — headings & body */
-  --card: #ffffff;                /* Star White — elevated product panels */
-  --card-foreground: #2d2f34;
-  --popover: #ffffff;
-  --popover-foreground: #2d2f34;
-  --primary: #f67748;             /* Ember — the single brand action color */
-  --primary-foreground: #ffffff;
-  --secondary: #f9efe4;           /* Dust Sand — secondary surface / chips */
-  --secondary-foreground: #3f434a;
-  --muted: #f4ede2;               /* dust, a hair lighter — muted fills */
-  --muted-foreground: #5e646e;    /* Shade Slate — tertiary text */
-  --accent: #f9efe4;              /* Dust — hover / accent surface */
-  --accent-foreground: #2d2f34;
-  --destructive: #c4442f;         /* warm red — errors only */
-  --destructive-foreground: #fff8f5;
-  --border: #e7e4de;              /* warm hairline border */
-  --input: #ddd8d0;               /* input border, a touch warmer */
-  --ring: #f67748;                /* focus ring — ember */
+@theme {
+  /* surfaces */
+  --color-page:  #ffffff;
+  --color-polar: #f7f7f7;   /* subtle fill / rails */
+  --color-swan:  #e5e5e5;   /* borders + button lips */
+  --color-hare:  #afafaf;   /* faint / disabled text */
 
-  /* provenance — semantic, load-bearing; its own vocabulary, NOT the ember */
-  --fact: #4a4f57;                /* neutral charcoal — returned unchanged */
-  --fact-border: #e2ddd4;
-  --fact-bg: #f6f1e9;
-  --relation: #4b51c3;            /* Tag Violet — a reported link */
-  --relation-border: #cdd0f0;
-  --relation-bg: #eeeffb;
-  --derived: #2f5fb0;             /* deep Neptune — computed by a named rule */
-  --derived-border: #c6d6f2;
-  --derived-bg: #e9f0fc;
+  /* text */
+  --color-ink:  #3c3c3c;    /* display headings */
+  --color-eel:  #4b4b4b;    /* body */
+  --color-wolf: #777777;    /* muted / captions */
 
-  /* craft surfaces */
-  --glass-bg: #fdf9f4f2;          /* cream, near-opaque */
-  --glass-border: #0000000f;
-  --hatch: #2d2f340a;             /* faint ink hatch */
-  --graph-edge: #e3ddd2;
-  --graph-node: #ffffff;
+  /* brand */
+  --color-feather:     #58cc02;  /* green — go / progress / correct / complete */
+  --color-feather-lip: #58a700;
+  --color-macaw:       #1cb0f6;  /* blue — links / secondary / DERIVED provenance */
+  --color-macaw-lip:   #1899d6;
 
-  /* Slite three-layer product shadow — the only depth on the page */
-  --shadow-product: 0 1px 3px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05),
-    0 4px 12px rgba(0, 0, 0, 0.01);
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-.dark {
-  --background: #1d1a16;          /* espresso paper */
-  --foreground: #f1ece3;          /* warm cream ink */
-  --card: #26221c;                /* lifted warm panel */
-  --card-foreground: #f1ece3;
-  --popover: #26221c;
-  --popover-foreground: #f1ece3;
-  --primary: #f67748;             /* ember holds across themes */
-  --primary-foreground: #ffffff;
-  --secondary: #2b2620;           /* warm secondary surface */
-  --secondary-foreground: #f1ece3;
-  --muted: #2b2620;
-  --muted-foreground: #b3a898;    /* warm gray */
-  --accent: #332d25;
-  --accent-foreground: #f1ece3;
-  --destructive: #e0644a;
-  --destructive-foreground: #1d1a16;
-  --border: #39322a;
-  --input: #443c32;
-  --ring: #f67748;
+  /* gamified + provenance accent family */
+  --color-beetle:      #ce82ff;  /* purple — RELATION provenance */
+  --color-bee:         #ffc800;  /* yellow — highlight / xp / streak */
+  --color-fox:         #ff9600;  /* orange — value / caution */
+  --color-cardinal:    #ff4b4b;  /* red — wrong / incomplete / loss */
+  --color-cardinal-lip:#ea2b2b;
 
-  --fact: #c7bfb2;
-  --fact-border: #443c32;
-  --fact-bg: #2b2620;
-  --relation: #b3b6f2;
-  --relation-border: #4a4a86;
-  --relation-bg: #2c2a3d;
-  --derived: #9ec0f5;
-  --derived-border: #37507e;
-  --derived-bg: #22283a;
-
-  --glass-bg: #1d1a16d9;
-  --glass-border: #ffffff14;
-  --hatch: #ffffff0a;
-  --graph-edge: #3a332b;
-  --graph-node: #26221c;
-
-  --shadow-product: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.35),
-    0 8px 24px rgba(0, 0, 0, 0.25);
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-fact: var(--fact);
-  --color-relation: var(--relation);
-  --color-derived: var(--derived);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: var(--font-lora), ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-}
-@layer base {
-  * {
-    border-color: var(--border);
-  }
-  :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-    border-radius: 3px;
-  }
-  html {
-    -webkit-text-size-adjust: 100%;
-  }
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01";
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    min-height: 100vh;
-  }
-  ::selection {
-    background: color-mix(in oklch, var(--primary) 28%, transparent);
-  }
-}
-/* Theme crossfade — applied to surfaces only, so hover/focus stay snappy. */
-.theme-surface {
-  transition:
-    background-color 440ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 440ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 440ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 440ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* type + shape */
+  --font-display: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --radius-sticker: 12px;
 }
 
-/* Glass depth — subtle, restrained; used on the sticky chrome only. */
-.glass {
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-}
+:root { color-scheme: light; }
 
-/* Hatch — evidence-board framing texture. */
-.hatch {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--hatch) 0,
-    var(--hatch) 1px,
-    transparent 1px,
-    transparent 7px
-  );
-}
+html { scroll-behavior: smooth; }
 
-/* Faint structural grid — hero backdrop only. Blueprint, not decoration:
-   a ruled plane that fades out below the fold. */
-.grid-faint {
-  background-image:
-    linear-gradient(to right, var(--hatch) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--hatch) 1px, transparent 1px);
-  background-size: 46px 46px;
-  -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 0%, #000 42%, transparent 100%);
-  mask-image: radial-gradient(ellipse 78% 62% at 50% 0%, #000 42%, transparent 100%);
-}
-
-/* Mount entrance — plays once on load (CSS-only); reduced-motion safe. */
-@keyframes trace-enter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.enter { animation: trace-enter 620ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-.enter-1 { animation-delay: 60ms; }
-.enter-2 { animation-delay: 130ms; }
-.enter-3 { animation-delay: 210ms; }
-.enter-4 { animation-delay: 300ms; }
-.enter-5 { animation-delay: 400ms; }
-.enter-6 { animation-delay: 500ms; }
-@media (prefers-reduced-motion: reduce) {
-  .theme-surface { transition: none; }
-  .enter { animation: none; }
-  * { scroll-behavior: auto; }
-}
-
-/* Reconstruction stage — the active hop (event at the replay cursor) is the
-   only animated element: a marching-ants ember overlay on its edge plus a
-   radiating ring on each endpoint node. Everything else is static: past hops
-   are lit, future hops are faint ghosts. Reduced-motion drops all motion to a
-   steady emphasis so the same fact stays legible. */
-@keyframes trace-flow-dash { to { stroke-dashoffset: -24; } }
-.stage-flow-pulse {
-  stroke: var(--primary);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 2 10;
-  animation: trace-flow-dash 900ms linear infinite;
-}
-@keyframes trace-node-ring {
-  0% { opacity: 0.9; transform: scale(1); }
-  70% { opacity: 0; transform: scale(1.9); }
-  100% { opacity: 0; transform: scale(1.9); }
-}
-.stage-node-pulse {
-  fill: none;
-  stroke: var(--primary);
-  stroke-width: 2;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: trace-node-ring 1500ms ease-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .stage-flow-pulse { animation: none; stroke-dasharray: none; opacity: 0.85; }
-  .stage-node-pulse { animation: none; opacity: 0.5; }
-}
-
-/* Live cinematic title beat — a brief hold over the stage before it auto-plays
-   the reconstruction from the first observed event. Fades in, holds, fades out
-   across its own lifetime so the unmount lands while it is already invisible. */
-@keyframes trace-beat {
-  0% { opacity: 0; transform: scale(0.985); }
-  14% { opacity: 1; transform: scale(1); }
-  82% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.008); }
-}
-.stage-beat { animation: trace-beat 1400ms ease-in-out both; transform-origin: center; }
-@media (prefers-reduced-motion: reduce) { .stage-beat { animation: none; } }
-
-/* Hero CTAs — Slite pill system. Primary is the single flat ember pill;
-   secondary is a 2px charcoal outline that inverts on hover; dark is the
-   charcoal fill used for the highest-intent nav action. Motion is 130ms. */
-.cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 3rem;
-  padding-inline: 1.5rem;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  white-space: nowrap;
-  transition:
-    transform 130ms ease,
-    background-color 130ms ease,
-    box-shadow 130ms ease,
-    color 130ms ease,
-    border-color 130ms ease;
-}
-.cta-primary {
-  color: var(--primary-foreground);
-  background: var(--primary);
-  border: 1px solid transparent;
-  box-shadow: var(--shadow-sm);
-}
-.cta-primary:hover {
-  transform: translateY(-1px);
-  background: color-mix(in oklch, var(--primary) 92%, black 8%);
-}
-.cta-primary:active {
-  transform: translateY(0);
-}
-.cta-secondary {
-  color: var(--foreground);
-  background: transparent;
-  border: 2px solid var(--foreground);
-}
-.cta-secondary:hover {
-  transform: translateY(-1px);
-  background: var(--foreground);
-  color: var(--background);
-}
-.cta-dark {
-  color: #fff;
-  background: var(--foreground);
-  border: 1px solid transparent;
-}
-.cta-dark:hover {
-  transform: translateY(-1px);
-  background: color-mix(in oklch, var(--foreground) 88%, white 12%);
-}
-
-/* Product shadow + dust panel helpers. */
-.product-shadow {
-  box-shadow: var(--shadow-product);
-}
-.font-display {
-  font-family: var(--font-serif);
-  font-feature-settings: "ss14", "ss15", "ss19";
-}
-
-/* Dust tag chip — the most-repeated component; warm pill, never gray. */
-.tag-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--secondary);
-  color: var(--secondary-foreground);
-  border-radius: 9999px;
-  padding: 0.4rem 0.85rem;
-  font-size: 13px;
+body {
+  background: var(--color-page);
+  color: var(--color-eel);
+  font-family: var(--font-display);
   font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Scribble annotation — hand-drawn ember oval/underline around one word.
-   The <svg> is positioned by .scribble; the stroke inherits ember. */
-.scribble {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-}
-.scribble > svg {
-  position: absolute;
-  inset: -22% -8% -26% -8%;
-  width: 116%;
-  height: 148%;
-  overflow: visible;
-  color: var(--primary);
-  pointer-events: none;
+h1, h2, h3, h4 { color: var(--color-ink); font-weight: 800; line-height: 1.05; }
+
+::selection { background: color-mix(in srgb, var(--color-feather) 25%, transparent); }
+
+@layer components {
+  /* ── the pressed sticker button ─────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase;
+    font-size: 0.9rem; line-height: 1;
+    border: 2px solid transparent; border-radius: 16px;
+    padding: 0.8rem 1.4rem;
+    cursor: pointer; user-select: none; white-space: nowrap;
+    transition: filter .12s ease, transform .05s ease, background .12s ease;
+  }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn:not(:disabled):active { transform: translateY(4px); box-shadow: none !important; }
+
+  .btn-green { background: var(--color-feather); color: #fff; box-shadow: 0 4px 0 var(--color-feather-lip); }
+  .btn-green:not(:disabled):hover { filter: brightness(1.06); }
+
+  .btn-blue { background: var(--color-macaw); color: #fff; box-shadow: 0 4px 0 var(--color-macaw-lip); }
+  .btn-blue:not(:disabled):hover { filter: brightness(1.06); }
+
+  .btn-white {
+    background: #fff; color: var(--color-macaw);
+    border-color: var(--color-swan); box-shadow: 0 4px 0 var(--color-swan);
+  }
+  .btn-white:not(:disabled):hover { background: var(--color-polar); }
+
+  .btn-lg { padding: 1.05rem 2.1rem; font-size: 1.05rem; border-radius: 18px; }
+  .btn-sm { padding: 0.5rem 0.9rem; font-size: 0.78rem; border-radius: 12px; box-shadow: 0 3px 0 var(--color-swan); }
+
+  /* ── chunky card ─────────────────────────────────────────────── */
+  .card {
+    background: #fff;
+    border: 2px solid var(--color-swan);
+    border-radius: 16px;
+  }
+  .card-drop { box-shadow: 0 2px 0 var(--color-swan); }
+
+  /* pill tag */
+  .pill {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-weight: 700; font-size: 0.72rem; letter-spacing: 0.3px;
+    padding: 0.28rem 0.6rem; border-radius: 999px;
+    border: 2px solid var(--color-swan); color: var(--color-wolf);
+    text-transform: uppercase;
+  }
+
+  /* ── path node (Duolingo lesson bubble) ─────────────────────── */
+  .node {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 76px; width: 76px; border-radius: 999px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: transform .12s ease, filter .12s ease;
+  }
+  .node:hover { filter: brightness(1.03); }
+  .node:active { transform: translateY(4px) !important; box-shadow: none !important; }
+
+  .node-ping {
+    position: absolute; inset: -6px; border-radius: 999px;
+    border: 3px solid currentColor;
+    animation: node-ping 1.4s cubic-bezier(0, 0, .2, 1) infinite;
+    pointer-events: none;
+  }
+  @keyframes node-ping {
+    0%   { transform: scale(1);    opacity: .7; }
+    80%,
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+
+  /* small round replay control */
+  .node-ctl {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 40px; width: 40px; border-radius: 12px;
+    border: 2px solid var(--color-swan); background: #fff; color: var(--color-wolf);
+    box-shadow: 0 3px 0 var(--color-swan); cursor: pointer;
+    transition: filter .12s ease, transform .05s ease;
+  }
+  .node-ctl:not(:disabled):hover { filter: brightness(1.03); }
+  .node-ctl:not(:disabled):active { transform: translateY(3px); box-shadow: none; }
+  .node-ctl:disabled { opacity: .4; cursor: not-allowed; }
+  .node-ctl-go {
+    background: var(--color-feather); border-color: var(--color-feather-lip);
+    color: #fff; box-shadow: 0 3px 0 var(--color-feather-lip);
+  }
 }
 
-/* Hero product stage — warm dust panel the real contract card floats on. */
-.hero-stage {
-  background: var(--secondary);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-product);
-}
-
-/* Feature card — restrained Slite hover: soft lift, product shadow, no
-   color shift (the ember stays reserved for CTAs and selected borders). */
-.card-lift {
-  transition:
-    transform 130ms ease,
-    box-shadow 130ms ease,
-    border-color 130ms ease,
-    background-color 440ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 440ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.card-lift:hover {
-  transform: translateY(-2px);
-  border-color: var(--border);
-  box-shadow: var(--shadow-product);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cta { transition: none; }
-  .cta-primary:hover,
-  .cta-secondary:hover { transform: none; }
-  .card-lift { transition: none; }
-  .card-lift:hover { transform: none; }
-}
-
-/* Quiet, themed scrollbars. */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-thumb {
-  background-color: var(--border);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-*::-webkit-scrollbar-thumb:hover { background-color: var(--muted-foreground); }
-
-/* Replay scrubber — native range input, themed to match. */
-.replay-scrub {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 4px;
-  border-radius: 9999px;
-  background: var(--border);
-  cursor: pointer;
-}
-.replay-scrub::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 9999px;
-  background: var(--primary);
-  border: 2px solid var(--card);
-  box-shadow: 0 1px 3px oklch(0 0 0 / 0.3);
-}
-.replay-scrub::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--card);
-  border-radius: 9999px;
-  background: var(--primary);
-}
-/* Provenance badges — semantic vocabulary, rendered by <ProvBadge>.
-   Dot + label; one hue per kind, consistent across the app and both themes. */
-.prov {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.34rem;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.12rem 0.46rem;
-  border-radius: 9999px;
-  border: 1px solid transparent;
-  white-space: nowrap;
-  line-height: 1.4;
-}
-.prov::before {
-  content: "";
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 9999px;
-  background: currentColor;
-  flex: none;
-}
-.prov-fact { color: var(--fact); border-color: var(--fact-border); background: var(--fact-bg); }
-.prov-relation { color: var(--relation); border-color: var(--relation-border); background: var(--relation-bg); }
-.prov-derived { color: var(--derived); border-color: var(--derived-border); background: var(--derived-bg); }
