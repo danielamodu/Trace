@@ -29,7 +29,7 @@ import type { LiveBudget } from '../src/investigations/live.ts';
 import type { InvestigationContract } from '../src/contract/types.ts';
 
 // ---- tiny arg parser --------------------------------------------------------
-const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--out']);
+const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--out', '--name', '--headline']);
 
 interface ParsedArgs {
   positionals: string[];
@@ -71,6 +71,8 @@ const USAGE = `TRACE CLI — onchain incident reconstruction
       --max-credits <n>         credit ceiling (default ${DEFAULT_BUDGET.maxCredits})
       --max-pages <n>           transaction pages (default ${DEFAULT_BUDGET.maxPages})
       --per-page <n>            rows per page (default ${DEFAULT_BUDGET.perPage}, max 100)
+      --name <text>             human-readable case name (default: "Live reconstruction: 0x…")
+      --headline <text>         one-line case headline (default: auto from window + coverage)
       --no-counterparties       skip the counterparties fetch
       --no-related              skip the related-wallets fetch
       --save                    save the result into the library (data/cases/)
@@ -199,7 +201,14 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
     ' Calling Nansen…\n',
   );
 
-  const { contract, meta } = await reconstructFromAddress({ address, window: { from, to }, chain, budget });
+  const { contract, meta } = await reconstructFromAddress({
+    address,
+    window: { from, to },
+    chain,
+    budget,
+    name: args.flags['--name'],
+    headline: args.flags['--headline'],
+  });
 
   console.log('Run accounting:');
   console.log(`  credits spent      ${meta.creditsSpent}`);
