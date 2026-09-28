@@ -1,134 +1,284 @@
 # TRACE
 
-**Something happened onchain. TRACE reconstructs how it happened.** Starting from
-an incident — an exploit, a drain, an unauthorized transfer — TRACE reconstructs
-the sequence of relevant onchain actions from Nansen data into an evidence
-timeline. It is **deterministic**: no LLM, no inference, no attribution. Every
-claim it renders traces back to a specific source row.
+**Something happened on a blockchain — a hack, a drained fund, a suspicious flow of money. TRACE reconstructs exactly how it happened, step by step, into a single evidence file you can read, replay, and independently verify.**
 
-TRACE is *not* a Bubblemaps clone, a wallet explorer, or a generic analytics
-dashboard.
+A blockchain records every transaction in public, but only as anonymous
+addresses (long strings like `0x1f9e…c4a2`) and raw numbers. Staring at that,
+you can't tell who did what, or follow money from where it started to where it
+ended up. TRACE turns that raw activity into a plain, ordered account of the
+incident — and it does so **deterministically**: no AI, no language model, no
+guesswork. Every single claim it shows is tagged with where it came from, so you
+trust the evidence trail rather than having to trust TRACE.
 
-## One product, three surfaces
+The engine that makes the trail human-readable is **Nansen**. TRACE cannot do
+its job without it — see [How Nansen makes it work](#how-nansen-makes-it-work).
 
-All three share one deterministic engine and one output type, the
-**InvestigationContract**:
+## The problem
 
-- **Curated case library** — vetted, fixture-backed reconstructions (the Euler
-  and FTX incidents) you can open, replay, and inspect down to the evidence row.
-  Offline; no key required.
-- **Live tool (BYO-key)** — point it at any address + time window with your own
-  Nansen key and get a contract back. `/reconstruct` in the UI,
-  `POST /api/reconstruct` over HTTP, or `reconstruct` on the CLI.
-- **Engine-as-API** — the same contract over HTTP (`/api/cases`), a CLI
-  (`scripts/trace.ts`), and importable library modules.
+Reconstructing a blockchain incident by hand is slow and error-prone:
 
-A run from the live tool can be **saved into the library** with one click (or
-`--save`), so your own reconstructions sit alongside the curated ones.
+- The raw data is anonymous. An address is just a number; a plain block explorer
+  won't tell you it belongs to an exchange, an attacker, or the victim.
+- "Follow the money" means manually chasing transfers across dozens of
+  addresses, any of which can be a dead end.
+- Write-ups are usually screenshots and prose. You have to *trust the author* —
+  there's no way to independently re-check that the numbers are right.
 
-See [`docs/architecture.md`](docs/architecture.md) for how the pieces fit.
+## What TRACE does
 
-## Quickstart
+You point TRACE at an address and a date range. It gathers the relevant on-chain
+evidence, works out the sequence of events, and produces one structured object
+called an **InvestigationContract**: an ordered timeline of what happened, the
+actors involved, how value moved between them, and a plain-language summary —
+with **every fact carrying a pointer back to its source**.
+
+Because the whole process is rule-based and deterministic, the same input always
+produces the same result, and that result can be re-checked by anyone with a
+cryptographic fingerprint. A TRACE case is evidence you can audit, not a
+screenshot you have to believe.
+
+## How Nansen makes it work
+
+Nansen is a blockchain-analytics provider. It is not an optional data source for
+TRACE — it is the reason the trail is readable at all. Concretely, it
+contributes three things:
+
+- **It puts names to anonymous addresses.** Nansen resolves a bare address into
+  a labeled actor — for example "Uniswap V2", "FTX Exploiter", or "Balancer
+  Vault". Without those labels the timeline would be an unreadable list of hex
+  strings; with them it reads like an account of known parties.
+- **It asserts relationships a plain block explorer can't.** Nansen reports
+  links such as **"First Funder"** (which address originally funded a wallet) and
+  **"Deployed Contract"** (which wallet deployed a contract). These reported
+  links are the backbone of follow-the-money reasoning — they tell you where to
+  look next.
+- **It provides pre-aggregated intelligence.** Nansen returns figures like the
+  total USD volume moved between two parties over a window, so TRACE doesn't have
+  to crawl and sum thousands of individual transfers itself.
+
+Inside a TRACE contract, each of these is tagged explicitly: a named actor or a
+reported link becomes a **RELATION** or a sourced **FACT**, always citing the
+exact Nansen endpoint it came from. Every case even has a dedicated **"What
+Nansen resolved"** panel that adds it all up — how many addresses Nansen named,
+which relationships it asserted, how much counterparty volume it priced, and
+which Nansen endpoints backed the evidence. Nansen's contribution is never
+hidden in a black box; it's itemized and auditable throughout the case.
+
+## The three surfaces
+
+TRACE is **one product with three ways in**, all producing and sharing the same
+InvestigationContract.
+
+### 1. The curated case library
+
+Pre-built investigations of real incidents you can browse and replay — no Nansen
+key required, nothing to spend. It ships with two built-in reference cases,
+constructed from real captured Nansen data: the **Euler Finance** exploit and
+the November 2022 **FTX** unauthorized-transfer incident. Any live
+reconstruction that has been saved into the library appears here alongside them.
+
+In the web app, the home page (`/`) lists the cases, and each opens into a
+workspace (`/cases/<id>`) with the full timeline, the evidence behind each
+event, a follow-the-money view, and the "What Nansen resolved" panel.
+
+From the command line, the same cases are read-only and free to explore:
 
 ```bash
-npm install        # UI dependencies (the engine itself needs none)
-npm run dev        # start the dev server, then open http://localhost:3000
+npm run trace -- list
 ```
 
-The home page lists the curated cases — no API key needed to browse, open, or
-replay them. To run your own reconstructions, add a Nansen key (below).
+```bash
+npm run trace -- show case_euler_2023
+```
 
-## The CLI
+The CLI's read-only commands never touch the network or spend anything: `list`,
+`show`, `timeline`, `follow`, `entities`, `search`, `stats`, `diff`, `export`,
+and `verify`. Run `npm run trace -- help` for the full list.
 
-A thin command-line surface over the same engine (`scripts/trace.ts`):
+### 2. The live reconstruction tool (bring your own key)
+
+Point TRACE at any address and time window with your own Nansen key, and it
+builds a fresh investigation live from Nansen data. This is the only surface that
+spends Nansen **credits** (Nansen's paid usage units), so it always runs under a
+**budget** — a ceiling on credits and pages per run — and reports exactly what it
+spent. It refuses to run if no key is available, and no calls are made until you
+start a run.
+
+In the web app, use the `/reconstruct` page. From the command line:
 
 ```bash
-# Offline — no key, no credits:
-npm run trace -- list                    # every case in the library
-npm run trace -- show case_euler_2023    # one case's full reconstruction
-
-# Live — BYO-key, SPENDS CREDITS:
 npm run trace -- reconstruct 0xADDRESS --from 2022-11-06 --to 2022-11-12 --save
 ```
 
-`reconstruct` flags: `--chain` (default ethereum), `--max-credits` (default 12),
-`--max-pages` (default 5), `--per-page`, `--no-counterparties`, `--no-related`,
-`--save` (into the library), `--out <path>` (write the contract JSON). Run
-`npm run trace -- help` for the full list.
+`reconstruct` requires `--from` and `--to` (`YYYY-MM-DD`). Useful options:
+`--chain` (default `ethereum`), `--max-credits` (default 12), `--max-pages`
+(default 5), `--per-page`, `--no-counterparties`, `--no-related`, `--name`,
+`--headline`, `--save` (add the result to the library), and `--out <path>` (also
+write the contract JSON to a file).
 
-## BYO-key & credits
+### 3. The engine, as an API
+
+The same reconstruction is available programmatically:
+
+- **HTTP.** `POST /api/reconstruct` runs a live reconstruction and returns the
+  contract plus an accounting of what it spent. `GET /api/cases/<id>` returns a
+  stored case's full contract as JSON. `POST /api/cases` saves a finished
+  reconstruction into the local library. `GET /api/reconstruct` reports only the
+  credential posture — whether a server key is enabled and whether you must bring
+  your own — and never the key itself.
+- **Library.** The engine and contract layer are importable TypeScript modules
+  with no framework dependency (`src/investigations/live.ts` exposes
+  `reconstructFromAddress`; `src/contract/` holds the contract, validation, and
+  verifier).
+- **CLI.** `scripts/trace.ts`, described above.
+
+## The InvestigationContract
+
+Everything TRACE produces is one object, the InvestigationContract. It holds the
+investigation itself — name, chain, time window, an ordered list of events, the
+actors, the relationships between them, and a summary — wrapped in an envelope
+that records where the data came from (`fixture-cache` vs `live-nansen`) and how
+complete the reconstruction is.
+
+The heart of it is **provenance** — every claim is tagged by how TRACE knows it:
+
+- **FACT** — something Nansen returned directly (a field in a response), carrying
+  a citation to the exact source it came from.
+- **RELATION** — a relationship Nansen asserts, such as "First Funder", also
+  sourced back to Nansen.
+- **DERIVED** — something TRACE computed itself from other facts (for example, a
+  net flow), recorded together with the named calculation and its inputs, so the
+  math is reproducible.
+
+There is a fourth category, **HYPOTHESIS** (an interpretation that isn't directly
+proven), and TRACE deliberately **forbids it inside a contract** — validation
+rejects any contract that contains one. That is the point: nothing is presented
+as truth without provenance, and nothing interpretive is smuggled in as fact.
+
+## Verify it yourself
+
+A TRACE contract is a portable file: hand someone the JSON and they can re-derive
+its verdict on their own machine — **offline, with zero credits and no network**.
+Verification recomputes the completeness verdict and evidence counts from the
+file itself, confirms the file contains no HYPOTHESIS, and produces a
+**SHA-256 fingerprint** of the contract's content. Change one byte of meaning and
+the fingerprint changes.
+
+```bash
+npm run trace -- verify case_euler_2023
+```
+
+`verify` also works on any contract file you were handed:
+
+```bash
+npm run trace -- verify ./some-case.json
+```
+
+The web app's `/verify` page runs the identical check in your browser — drop a
+file in, nothing is uploaded. Because the fingerprint is computed the same way
+everywhere, the CLI, the `/verify` page, and a case's own page all produce the
+**identical fingerprint** for the same contract. Results are reproducible and
+tamper-evident, not a screenshot you have to take on faith.
+
+## Getting started
+
+**Requirements:** Node.js **22.6 or newer** — TRACE runs its TypeScript engine
+files directly using Node's built-in type stripping, so the engine needs no build
+step — plus npm.
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+Then open <http://localhost:3000>. Browsing, opening, and replaying the curated
+cases needs **no API key**.
+
+### Enabling the live surface
+
+Running your own reconstructions needs a Nansen API key. Copy the example
+environment file:
 
 ```bash
 cp .env.example .env
-# then edit .env and set NANSEN_API_KEY (get one at https://app.nansen.ai/auth/agent-setup)
 ```
 
-The API key is **server-side only**. It is read from `NANSEN_API_KEY`, never
-logged, and never shipped to a client. `.env` is gitignored.
-
-Live runs spend Nansen credits. TRACE runs under a **budget** — a credit ceiling
-and page cap per run (defaults: 12 credits, 5 pages) — and reports exactly what
-it spent. ⚠️ `profiler/address/labels` costs **100 credits** (500 for premium)
-and is never called by a reconstruction; it exists only as an explicit recon
-probe (below).
-
-> **⚠️ No authentication.** The app's routes are unauthenticated by design, for
-> local / self-hosted / hackathon use. **Do not expose this deployment publicly
-> as-is:** a public `POST /api/reconstruct` would let anyone spend your Nansen
-> credits, and `POST /api/cases` writes to your local store. Put it behind your
-> own auth or proxy before putting it on the open internet.
-
-## Add your own case
-
-Two ways: save a live run (zero code, into `data/cases/`), or register a
-fixture-backed case in the repo. See
-[`docs/adding-a-case.md`](docs/adding-a-case.md).
-
-## Reproduce the reconnaissance
-
-```bash
-# Zero-credit connectivity + auth smoke test (POST /api/v1/search/general)
-npm run smoke
-
-# List the deliberate probe set and each probe's estimated credit cost
-node scripts/recon.ts --list
-
-# Run the default sweep (all probes ≤5 credits)
-npm run recon
-```
-
-Each probe writes a sanitized, row-truncated fixture to `fixtures/`. Runtime
-credit usage is captured from the `X-Nansen-Credits-*` response headers.
+Then set `NANSEN_API_KEY` in `.env`. This key is **server-side only** — it is
+never sent to the browser, logged, or written into a contract. (In the web form
+you can instead paste a key that is used for a single request and never stored.)
 
 ## Development
 
 ```bash
-npm test           # engine + contract + adapter suite (Node test runner, no browser)
-npm run typecheck  # tsc --noEmit
-npm run build      # production build (also type-checks)
-npm run e2e        # Playwright end-to-end tests
+npm test
 ```
 
-Node.js **≥ 22.6** is required (24.x recommended): Node runs the `.ts` engine
-files directly via native type stripping. The engine and its test suite are
-dependency-free — `npm test` uses only the standard library.
+```bash
+npm run typecheck
+```
+
+```bash
+npm run build
+```
+
+```bash
+npm run e2e
+```
+
+`npm test` runs the engine, contract, and adapter suite on Node's built-in test
+runner — no browser, no dependencies. `npm run e2e` runs the Playwright
+end-to-end tests, and `npm run build` produces the production build.
+
+## A note on security
+
+The two HTTP routes that cost something — `POST /api/reconstruct` (spends Nansen
+credits) and `POST /api/cases` (writes to the server's disk) — sit behind a set
+of gates you turn on with environment variables before exposing the app:
+
+- **`TRACE_API_TOKEN`** — a shared secret. When set, both routes require it in an
+  `Authorization: Bearer <token>` header (or `x-trace-token`). In production, if
+  it is **not** set, the reconstruct route refuses every request rather than spend
+  credits for an anonymous caller — it fails closed.
+- **`TRACE_RATE_LIMIT_PER_MIN`** — how many requests one IP may make per minute
+  (default 5); bursts past it get a `429`.
+- **`TRACE_CREDIT_BUDGET`** — a ceiling on the total credits the running server
+  may spend. A run is refused *before* spending anything if it would exceed what
+  is left (no cap locally; a conservative default in production). Send
+  `{"dryRun": true}` to `POST /api/reconstruct` for a cost estimate that spends
+  nothing and needs no key.
+- **`TRACE_ALLOW_SAVE`** — the save-to-disk route is disabled in production unless
+  you set this. `TRACE_ALLOW_SERVER_KEY` similarly controls whether the server's
+  own key may be used, so a deployment never silently spends the owner's credits
+  for anonymous callers.
+
+These controls are in-memory and per-process: they suit a single-instance
+deployment (they reset on restart and are not shared across replicas), so for a
+multi-instance host put a shared store or your own gateway in front. The API
+token is never logged.
 
 ## Project layout
 
 ```
-src/reconstruction/   Deterministic engine: normalize → reconstruct
-src/contract/         InvestigationContract: assemble, validate, completeness, service
-src/investigations/   Case builders (euler, ftx), live orchestrator, registry, saved store
-src/nansen/           Server-side Nansen client, types, sanitize
-src/types/            Domain + provenance types
-app/                  Next.js surfaces: library pages, /reconstruct, API routes
-components/           UI (timeline, graph, evidence inspector, replay, forms)
-lib/                  App adapter over the contract service + view helpers
-scripts/              CLI (trace.ts), recon + capture scripts
-docs/                 Architecture, add-a-case, phase reports, endpoint reference
-fixtures/             Sanitized captured responses
+app/                 Next.js pages and HTTP routes: the library, /reconstruct, /verify, app/api/*
+components/          UI: the app shell and the case workspace (timeline, evidence, replay)
+lib/                 App-side helpers: case adapter, follow-the-money, the Nansen-authority summary
+src/contract/        The InvestigationContract: assembly, validation, completeness, verification
+src/investigations/  Case builders (Euler, FTX), the live orchestrator, the case registry
+src/nansen/          Server-side Nansen API client, response types, sanitizer
+src/reconstruction/  The deterministic engine: normalize → reconstruct
+src/types/           Domain and provenance types
+scripts/             The CLI (trace.ts) and the Nansen reconnaissance scripts
+docs/                Architecture notes and how to add a case
+fixtures/            Sanitized captured Nansen responses used by the built-in cases
 ```
+
+See [`docs/architecture.md`](docs/architecture.md) for how the pieces fit and
+[`docs/adding-a-case.md`](docs/adding-a-case.md) to add your own.
 
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
