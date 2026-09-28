@@ -140,3 +140,31 @@ test('ROUTE8: a caller-supplied key never appears in the response payload', asyn
   assert.equal(status, 200);
   assert.ok(!JSON.stringify(body).includes(SECRET), 'the BYO key must not be echoed anywhere in the response');
 });
+
+test('ROUTE9: a dry-run returns a cost estimate with no key, no client, no spend', async () => {
+  const { status, body } = await runReconstruct(
+    { address: ADDR, window: WINDOW, dryRun: true, budget: { maxPages: 5 } },
+    { allowServerKey: false, hasServerKey: false }, // no key, no injected client
+  );
+  assert.equal(status, 200);
+  const b = body as { dryRun: boolean; estimate: { worstCaseCredits: number } };
+  assert.equal(b.dryRun, true);
+  assert.equal(b.estimate.worstCaseCredits, 11); // 5 + 1 + 5
+});
+
+test('ROUTE10: guardSpend can short-circuit a run before any spend', async () => {
+  let ran = false;
+  const refusal = { status: 429, body: { error: 'deploy credit budget exhausted' } };
+  const { status, body } = await runReconstruct(
+    { address: ADDR, window: WINDOW },
+    {
+      allowServerKey: false,
+      hasServerKey: false,
+      client: { async post() { ran = true; throw new Error('should not be called'); } } as unknown as NansenLike,
+      guardSpend: () => refusal,
+    },
+  );
+  assert.equal(status, 429);
+  assert.equal((body as { error: string }).error, 'deploy credit budget exhausted');
+  assert.equal(ran, false, 'the orchestrator must not be called once guardSpend refuses');
+});

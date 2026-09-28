@@ -9,9 +9,12 @@
  * SECURITY POSTURE (read before deploying):
  *  - This endpoint SPENDS CREDITS. Each successful run makes paid Nansen calls,
  *    against either a caller-supplied key (BYO) or the server's NANSEN_API_KEY.
- *  - There is NO authentication and NO rate limiting here. That is acceptable
- *    for local / self-hosted single-user use (the intended hackathon/OSS mode)
- *    but is NOT safe to expose publicly as-is: add auth + rate limiting first.
+ *  - The route adapter wraps this logic in a Guard (see ./guard.ts): a shared
+ *    API token, per-IP rate limiting, and a per-process credit budget, with a
+ *    dry-run cost estimate that spends nothing. In production the guard is
+ *    fail-closed — with no TRACE_API_TOKEN set it refuses every request. This
+ *    logic itself stays gate-agnostic (a `guardSpend` hook is the only seam) so
+ *    it remains unit-testable with no next/*, no network, and no key.
  *  - The server key is used ONLY when TRACE_ALLOW_SERVER_KEY is truthy, so a
  *    deployed instance does not silently drain the owner's credits for anon
  *    callers. BYO keys always work.
@@ -22,6 +25,7 @@
 
 import { reconstructFromAddress, type LiveBudget, type NansenLike } from './live.ts';
 import { NansenApiError } from '../nansen/client.ts';
+import { estimateCredits, type CreditEstimate } from './guard.ts';
 
 /** Hard server-side ceilings on a single request's spend (caller cannot exceed). */
 export const SERVER_MAX_CREDITS = 25;
@@ -36,6 +40,13 @@ export interface RunOptions {
   client?: NansenLike;
   /** Fixed clock for deterministic tests. */
   reconstructedAt?: string;
+  /**
+   * Budget gate, invoked with the worst-case estimate once the budget is parsed
+   * and clamped, before any credential handling or spend. Return a RouteResult
+   * to short-circuit (e.g. the deploy's credit budget is exhausted); return null
+   * to proceed. The route wires this to Guard.preflight; tests can inject a stub.
+   */
+  guardSpend?: (estimate: CreditEstimate) => RouteResult | null;
 }
 
 export interface RouteResult {
@@ -92,6 +103,8 @@ export interface ParsedRequest {
   apiKey?: string; // BYO, server-side only — never logged, persisted, or returned
   name?: string;
   headline?: string;
+  /** When true, return a credit estimate WITHOUT calling Nansen or spending. */
+  dryRun?: boolean;
 }
 
 /** Validate + normalize the request body. Throws BadRequest (→ 400) on bad input. */
@@ -108,6 +121,7 @@ export function parseReconstructRequest(body: unknown): ParsedRequest {
   if (typeof rec.apiKey === 'string' && rec.apiKey.trim() !== '') parsed.apiKey = rec.apiKey.trim();
   if (typeof rec.name === 'string' && rec.name.trim() !== '') parsed.name = rec.name.trim();
   if (typeof rec.headline === 'string' && rec.headline.trim() !== '') parsed.headline = rec.headline.trim();
+  if (rec.dryRun === true) parsed.dryRun = true;
   return parsed;
 }
 
@@ -147,6 +161,11 @@ export async function runReconstruct(body: unknown, opts: RunOptions): Promise<R
     throw err;
   }
 
+  // Dry-run: report the worst-case cost without a key, a network call, or spend.
+  if (parsed.dryRun) {
+    return { status: 200, body: { dryRun: true, estimate: estimateCredits(parsed.budget) } };
+  }
+
   const useInjected = opts.client !== undefined;
   const byoKey = parsed.apiKey;
   const serverKeyUsable = opts.allowServerKey && opts.hasServerKey;
@@ -160,6 +179,12 @@ export async function runReconstruct(body: unknown, opts: RunOptions): Promise<R
           : 'Provide your own Nansen API key in the request. It is used once to call Nansen and is never stored, logged, or returned.',
       },
     };
+  }
+
+  // Budget gate: refuse before spending if the deploy's credit ceiling is reached.
+  if (opts.guardSpend) {
+    const stop = opts.guardSpend(estimateCredits(parsed.budget));
+    if (stop) return stop;
   }
 
   try {
