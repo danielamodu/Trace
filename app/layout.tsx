@@ -1,24 +1,26 @@
 import type { Metadata } from 'next';
-import { Nunito } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
+import { AppShell } from '@/components/AppShell.tsx';
 
-const nunito = Nunito({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800', '900'],
-  variable: '--font-nunito',
+  variable: '--font-inter',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'TRACE — walk the incident',
+  title: 'TRACE — follow the evidence',
   description:
-    'Onchain incident reconstruction you can walk through, step by step, with the receipts.',
+    'Reconstruct how value moved onchain, inspect the evidence behind each conclusion, and share a case others can verify.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={nunito.variable}>
-      <body>{children}</body>
+    <html lang="en" className={inter.variable}>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
