@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight, Check, ChevronRight, CircleHelp, Clock3, Database, ExternalLink,
-  Hash, Pause, Play, RotateCcw, SkipBack, SkipForward, Wrench,
+  Hash, Lightbulb, Pause, Play, RotateCcw, SkipBack, SkipForward, Wrench,
 } from 'lucide-react';
 import Link from 'next/link';
 import type { InvestigationContract } from '@/src/contract/types.ts';
@@ -314,6 +314,54 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
           </>
         ) : null}
       </section>
+      {inv.hypotheses && inv.hypotheses.length > 0 ? (
+        <section className="leads-panel" aria-labelledby="leads-heading">
+          <div className="leads-head">
+            <span className="leads-icon"><Lightbulb size={17} aria-hidden="true" /></span>
+            <div>
+              <div className="eyebrow">OPEN LEADS <span className="eyebrow-separator">/</span> NOT EVIDENCE</div>
+              <h2 id="leads-heading">Where the trail could go next</h2>
+              <p>Deterministic, rule-generated leads from gaps in the captured evidence. These are possibilities, not findings — each names the evidence that would confirm it.</p>
+            </div>
+            <span className="leads-status">{inv.hypotheses.length} {inv.hypotheses.length === 1 ? 'lead' : 'leads'}</span>
+          </div>
+          <div className="leads-list">
+            {inv.hypotheses.map((h) => (
+              <div className="lead-card" key={h.id}>
+                <div className="lead-topline">
+                  <span className={`lead-confidence lead-confidence-${h.confidence}`}>{h.confidence} confidence</span>
+                  <span className="lead-tag">LEAD <span className="middot">·</span> NOT EVIDENCE</span>
+                </div>
+                <p className="lead-statement">{h.statement}</p>
+                <div className="lead-section">
+                  <div className="receipt-section-label">OBSERVED BASIS</div>
+                  <p>{h.basis}</p>
+                </div>
+                <div className="lead-section">
+                  <div className="receipt-section-label">WHAT WOULD CONFIRM THIS</div>
+                  <p>{h.whatWouldConfirm}</p>
+                </div>
+                {h.supportingEventIds.length > 0 ? (
+                  <div className="lead-section">
+                    <div className="receipt-section-label">SUPPORTING EVENTS</div>
+                    <div className="input-chips">
+                      {h.supportingEventIds.map((eid) => {
+                        const idx = events.findIndex((e) => e.id === eid);
+                        const srcEv = inv.events.find((e) => e.id === eid);
+                        return (
+                          <button key={eid} type="button" disabled={idx < 0} onClick={() => { setPlaying(false); if (idx >= 0) moveTo(idx); }}>
+                            <ChevronRight size={9} aria-hidden="true" /> {srcEv ? srcEv.title : eid}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

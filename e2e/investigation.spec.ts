@@ -88,6 +88,20 @@ test('the FTX built-in also serves its workspace', async ({ page }) => {
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
 });
 
+test('the FTX workspace surfaces open leads, fenced as not-evidence, that jump the cursor', async ({ page }) => {
+  await page.goto(`/cases/${FTX_ID}`);
+  // The leads channel is its own section, explicitly marked NOT evidence.
+  const leads = page.getByRole('region', { name: 'Where the trail could go next' });
+  await expect(leads.getByRole('heading', { name: 'Where the trail could go next' })).toBeVisible();
+  await expect(leads.getByText('NOT EVIDENCE').first()).toBeVisible();
+
+  const bar = page.getByRole('progressbar');
+  await expect(bar).toHaveAttribute('aria-valuenow', '1');
+  // Clicking a supporting-event chip re-binds the replay cursor to that event.
+  await leads.getByRole('button').first().click();
+  await expect(bar).not.toHaveAttribute('aria-valuenow', '1');
+});
+
 test('an unknown case id renders the friendly 404', async ({ page }) => {
   await page.goto('/cases/case_does_not_exist');
   await expect(page.getByRole('heading', { level: 1, name: /No such case/i })).toBeVisible();
