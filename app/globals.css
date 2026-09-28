@@ -203,7 +203,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .event-meta { display: flex; align-items: center; gap: 5px; margin-top: 5px; color: #8b9690; font-size: 11px; }
 .trail-end { display: flex; align-items: center; gap: 8px; margin: 4px 0 0 37px; color: #96a199; font-size: 9px; }
 .trail-end-line { height: 1px; width: 20px; background: #e4e9e5; }
-.receipt-panel { position: sticky; top: 83px; padding: 21px 21px 18px; }
+.receipt-panel { position: sticky; top: 83px; max-height: calc(100vh - 103px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #cfd9d3 transparent; padding: 21px 21px 18px; }
+.receipt-panel::-webkit-scrollbar { width: 9px; }
+.receipt-panel::-webkit-scrollbar-thumb { background: #d7e0da; border: 3px solid #fff; border-radius: 6px; }
+.receipt-panel::-webkit-scrollbar-thumb:hover { background: #c3d0c8; }
 .receipt-kicker { display: flex; align-items: center; gap: 7px; margin-bottom: 18px; color: #809087; font-size: 9px; letter-spacing: .12em; font-weight: 700; }
 .receipt-kicker > svg:last-child { margin-left: auto; color: #a1aca5; }
 .receipt-icon { display: grid; place-items: center; width: 25px; height: 25px; color: var(--accent); border-radius: 7px; background: #edf4f0; }
@@ -418,7 +421,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .timeline-row { grid-template-columns: 22px 1fr; gap: 7px; min-height: 78px; }
   .event-button { padding-left: 9px; padding-right: 7px; }
   .event-title { font-size: 11px; }
-  .receipt-panel { position: static; }
+  .receipt-panel { position: static; max-height: none; overflow: visible; }
   .authority-card { align-items: flex-start; padding: 14px; }
   .authority-status { align-self: center; font-size: 8px; }
   .authority-card p { line-height: 1.6; }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight, Check, ChevronRight, CircleHelp, Clock3, Database, ExternalLink,
   Hash, Lightbulb, Pause, Play, RotateCcw, SkipBack, SkipForward, Wrench,
@@ -37,6 +37,8 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
   const [playing, setPlaying] = useState(false);
   const total = events.length;
   const active = events[selected];
+  const activeRef = useRef<HTMLLIElement | null>(null);
+  const didMount = useRef(false);
 
   useEffect(() => {
     if (!playing || total === 0) return;
@@ -48,6 +50,17 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
     }, 1600);
     return () => window.clearInterval(timer);
   }, [playing, total]);
+
+  // Follow the cursor: track the active step into view so replay visibly walks
+  // the trail. Centre it while playing (a moving playhead); on manual selection
+  // only nudge if off-screen. Skip the initial mount so the page opens at the top.
+  useEffect(() => {
+    if (!didMount.current) { didMount.current = true; return; }
+    const el = activeRef.current;
+    if (!el) return;
+    const reduce = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: playing ? 'center' : 'nearest' });
+  }, [selected, playing]);
 
   if (!active) {
     return (
@@ -115,7 +128,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
               const showGap = gap != null && gap >= GAP_THRESHOLD_MS;
               const cls = kindClass(ev.provenance);
               return (
-                <li key={ev.id}>
+                <li key={ev.id} ref={i === selected ? activeRef : null}>
                   {showGap ? <div className="timeline-gap"><Clock3 size={11} aria-hidden="true" /> Evidence gap <span className="middot">·</span> {formatGap(gap!)}</div> : null}
                   <div className={`timeline-row ${state}`}>
                     <div className="timeline-rail">
