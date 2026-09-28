@@ -25,3 +25,15 @@ export async function POST(request: Request) {
   const { status, body: payload } = await runReconstruct(body, { allowServerKey, hasServerKey });
   return NextResponse.json(payload, { status });
 }
+
+/**
+ * GET /api/reconstruct — credential posture only. Returns whether the server key
+ * is enabled for this endpoint and whether the caller must bring their own key.
+ * SECURITY: never returns the key value — only two booleans derived from env.
+ */
+export function GET() {
+  const allowServerKey = /^(1|true|yes)$/i.test(process.env.TRACE_ALLOW_SERVER_KEY ?? '');
+  const hasServerKey = Boolean(process.env.NANSEN_API_KEY);
+  const serverKeyEnabled = allowServerKey && hasServerKey;
+  return NextResponse.json({ serverKeyEnabled, byoRequired: !serverKeyEnabled });
+}
