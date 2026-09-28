@@ -9,7 +9,7 @@ import Link from 'next/link';
 import type { InvestigationContract } from '@/src/contract/types.ts';
 import type { Provenance } from '@/src/types/provenance.ts';
 import { DERIVED_EVENT_TYPES, EVENT_STYLE, entityById, sideLabel } from '@/components/CaseVisuals.tsx';
-import { fmtAmount, fmtTimestamp, fmtUsd, fmtWindow, shortAddr } from '@/components/format.ts';
+import { cleanTitle, fmtAmount, fmtMethod, fmtTimestamp, fmtUsd, fmtWindow, shortAddr } from '@/components/format.ts';
 import { FOLLOW_DEAD_END, followFromEvent } from '@/lib/follow.ts';
 import { GAP_THRESHOLD_MS, formatGap, prevGapMs } from '@/lib/replay.ts';
 import { eventOrigin, originLabel } from '@/lib/sources.ts';
@@ -129,7 +129,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
                         <span className="event-step">STEP {String(i + 1).padStart(2, '0')}</span>
                         <span className={`provenance provenance-${cls}`}>{PROV_LABEL[ev.provenance.kind]}</span>
                       </div>
-                      <div className="event-title">{ev.title}</div>
+                      <div className="event-title">{cleanTitle(ev.title)}</div>
                       <div className="event-meta"><span>{EVENT_STYLE[ev.type].noun}</span><span className="middot">·</span><span>{fmtTimestamp(ev.timestamp)}</span></div>
                     </button>
                   </div>
@@ -146,7 +146,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
             <CircleHelp size={13} aria-hidden="true" />
           </div>
           <span className={`provenance provenance-${kindClass(prov)}`}>{PROV_LABEL[prov.kind]}</span>
-          <h2>{active.title}</h2>
+          <h2>{cleanTitle(active.title)}</h2>
           <p className="receipt-step">{noun} <span className="middot">·</span> {fmtTimestamp(active.timestamp)}</p>
 
           {value ? (
@@ -176,7 +176,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
           {prov.kind === 'FACT' || prov.kind === 'RELATION' ? (
             <div className="receipt-section">
               <div className="receipt-section-label">EVIDENCE STATEMENT</div>
-              <p>“{prov.statement}”</p>
+              <p className="receipt-statement">“{prov.statement}”</p>
             </div>
           ) : prov.kind === 'DERIVED' ? (
             <>
@@ -193,7 +193,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
                       const srcEv = contract.investigation.events.find((e) => e.id === eid);
                       return (
                         <button key={eid} type="button" disabled={idx < 0} onClick={() => { setPlaying(false); if (idx >= 0) moveTo(idx); }}>
-                          <ChevronRight size={9} aria-hidden="true" /> {srcEv ? srcEv.title : eid}
+                          <ChevronRight size={9} aria-hidden="true" /> {srcEv ? cleanTitle(srcEv.title) : eid}
                         </button>
                       );
                     })}
@@ -230,7 +230,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
 
           {active.method || active.txHash ? (
             <div className="receipt-tags">
-              {active.method ? <span><Wrench size={9} aria-hidden="true" /> {active.method}</span> : null}
+              {active.method ? <span title={active.method}><Wrench size={9} aria-hidden="true" /> {fmtMethod(active.method)}</span> : null}
               {active.txHash ? (
                 inv.chain === 'ethereum'
                   ? <a href={`https://etherscan.io/tx/${active.txHash}`} target="_blank" rel="noreferrer"><ExternalLink size={9} aria-hidden="true" /> {shortAddr(active.txHash)}</a>
@@ -350,7 +350,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
                         const srcEv = inv.events.find((e) => e.id === eid);
                         return (
                           <button key={eid} type="button" disabled={idx < 0} onClick={() => { setPlaying(false); if (idx >= 0) moveTo(idx); }}>
-                            <ChevronRight size={9} aria-hidden="true" /> {srcEv ? srcEv.title : eid}
+                            <ChevronRight size={9} aria-hidden="true" /> {srcEv ? cleanTitle(srcEv.title) : eid}
                           </button>
                         );
                       })}

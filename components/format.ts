@@ -65,3 +65,27 @@ export function shortAddr(addr: string | null | undefined): string {
   if (addr.length <= 12) return addr;
   return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
 }
+
+/**
+ * A clean human event line. The engine bakes redundant metadata into titles —
+ * a full method signature and a raw-precision USD figure — both of which the UI
+ * already surfaces in dedicated slots (the method tag and the formatted value
+ * block). We strip only those parentheticals; nothing is invented or relabelled.
+ */
+export function cleanTitle(title: string | null | undefined): string {
+  if (!title) return EMPTY;
+  const cleaned = title
+    .replace(/\s*\(method\s+"[^"]*"\)/gi, '')
+    .replace(/\s*\([^()]*USD[^()]*\)/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return cleaned || title.trim();
+}
+
+/** Function name only, so a long signature never overflows its pill. Full sig belongs in a title attr. */
+export function fmtMethod(method: string | null | undefined): string {
+  if (!method) return EMPTY;
+  const m = method.match(/^\s*([A-Za-z_$][\w$]*)\s*\((.*)\)\s*$/s);
+  if (!m) return method.trim();
+  return m[2].trim() ? `${m[1]}(…)` : `${m[1]}()`;
+}
