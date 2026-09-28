@@ -15,7 +15,9 @@
  *    and statements are descriptive; interpretive roles are never assigned.
  *  - Derived groupings carry DERIVED provenance with `calculation` named and
  *    `sourceEventIds` listing every member (expandable).
- *  - No HYPOTHESIS records are produced anywhere in this engine.
+ *  - No HYPOTHESIS provenance is attached to any record here; open investigative
+ *    leads (when present) are a separate, clearly-fenced contract channel
+ *    (see src/contract/hypotheses.ts), never inline evidence.
  *  - Missing USD / quantities / timestamps are never fabricated. A missing
  *    value stays absent; a missing/invalid timestamp fails loudly (EngineError).
  *  - Nansen relationships ("First Funder", etc.) are reported as reported

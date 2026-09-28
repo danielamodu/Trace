@@ -14,7 +14,9 @@ import type {
 } from '../reconstruction/engine.ts';
 import { ENGINE_VERSION, reconstruct } from '../reconstruction/engine.ts';
 import type { ReconstructionSubject, CaseDescriptor } from '../reconstruction/engine.ts';
+import type { Investigation } from '../types/investigation.ts';
 import { collectOrigins, computeCompleteness, computeEvidence } from './completeness.ts';
+import { deriveHypotheses } from './hypotheses.ts';
 import { deepFreeze } from './service.ts';
 import { CONTRACT_VERSION } from './types.ts';
 import type {
@@ -40,26 +42,35 @@ export function buildContract(
   result: ReconstructionResult,
   options: BuildContractOptions,
 ): InvestigationContract {
+  // Derive the optional open-leads channel (never inline, never evidence). It
+  // is folded onto the investigation before validation/freeze so the contract
+  // carries it end-to-end; absent when no lead rule fires. Completeness,
+  // origins, and evidence counts ignore it by construction.
+  const hypotheses = deriveHypotheses(result.investigation);
+  const investigation: Investigation = hypotheses.length
+    ? { ...result.investigation, hypotheses }
+    : result.investigation;
+
   const { completeness, completenessReasons } = computeCompleteness(
-    result.investigation,
+    investigation,
     options.coverage,
     options.dataSource,
   );
   const contract: InvestigationContract = {
     contractVersion: CONTRACT_VERSION,
     engineVersion: ENGINE_VERSION,
-    caseId: result.investigation.id,
+    caseId: investigation.id,
     dataSource: options.dataSource,
     // Phase 3H: full pool enumeration alongside the conservative single value.
-    dataSources: collectOrigins(result.investigation),
+    dataSources: collectOrigins(investigation),
     completeness,
     completenessReasons,
     coverage: {
       flags: { ...options.coverage.flags },
       reasons: [...options.coverage.reasons],
     },
-    evidence: computeEvidence(result.investigation, result.stats, options.inputs),
-    investigation: result.investigation,
+    evidence: computeEvidence(investigation, result.stats, options.inputs),
+    investigation,
   };
   assertContract(contract);
   return deepFreeze(contract);

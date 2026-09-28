@@ -32,6 +32,33 @@ export type InvestigationStatus =
   | 'partial'         // some steps unresolved / data gaps present
   | 'error';
 
+/**
+ * An OPEN LEAD — a deterministic, rule-generated suggestion of where an
+ * investigation could go next. Leads are explicitly NOT evidence: they are
+ * derived from honest gaps in the captured trail (e.g. value reaching an
+ * unnamed wallet where the follow-the-money walk dead-ends) and every lead
+ * names the concrete evidence that would confirm or dismiss it.
+ *
+ * Leads live in their own `investigation.hypotheses` channel, never inline on
+ * the evidence timeline. Note the deliberate absence of any `kind` field: the
+ * contract bans `HYPOTHESIS` provenance on evidence, and leads carry no
+ * provenance at all — they are possibilities, not claims.
+ */
+export interface Hypothesis {
+  /** Stable id within the case, e.g. "hyp_001" (zero-padded, unique). */
+  id: string;
+  /** Possibility-phrased; never asserted as fact. */
+  statement: string;
+  /** The OBSERVED evidence that motivates the lead. */
+  basis: string;
+  /** ≥1 event id; each must resolve to an existing event in this case. */
+  supportingEventIds: string[];
+  /** Deliberately capped: a lead is never "high" confidence. */
+  confidence: 'low' | 'medium';
+  /** The concrete evidence gap that would settle the lead. */
+  whatWouldConfirm: string;
+}
+
 export interface Investigation {
   /** Stable case id, e.g. "case_euler_2023". */
   id: string;
@@ -60,6 +87,13 @@ export interface Investigation {
 
   /** Provenance for the case as a whole (which queries built it). */
   sources: SourceRef[];
+
+  /**
+   * OPTIONAL, clearly-fenced open leads (see {@link Hypothesis}). Present only
+   * when the deterministic lead rules fire against this case's evidence; absent
+   * when the trail resolved cleanly. Never rendered inline on the timeline.
+   */
+  hypotheses?: Hypothesis[];
 
   /** When this case snapshot was reconstructed. */
   reconstructedAt: string;     // ISO 8601

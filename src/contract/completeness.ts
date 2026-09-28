@@ -34,7 +34,7 @@ export const ENGINE_LIMITATIONS: readonly string[] = [
   'Fixture snapshots are point-in-time and revisable; re-capture may shift labels and prices.',
   'Transaction rows carry no per-token USD; row-level volume_usd is used and never estimated when absent.',
   'DERIVED groupings are computed summaries, not observed facts; members remain listed individually.',
-  'No HYPOTHESIS records are produced; intent, attribution, and causation questions are out of scope for this contract.',
+  'No HYPOTHESIS provenance is ever attached to evidence; open investigative leads, when present, live in a separate clearly-fenced hypotheses channel that is explicitly not evidence and names what would confirm each.',
 ];
 
 /** Subset of EvidenceCompleteness recomputable from the Investigation alone. */

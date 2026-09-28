@@ -379,6 +379,50 @@ export function validateInvestigation(inv: unknown): string[] {
       }
     });
   }
+
+  // Open leads (hypotheses) — OPTIONAL, clearly-fenced, never evidence. Absent
+  // is valid. When present: well-formed ids, non-empty prose, capped
+  // confidence, and every supporting event id resolves to a real event. Leads
+  // must NOT carry provenance (they are possibilities, not claims) — a stray
+  // `kind: 'HYPOTHESIS'` would already be rejected by checkProvenance elsewhere.
+  if (v.hypotheses !== undefined) {
+    if (!Array.isArray(v.hypotheses)) {
+      errors.push('hypotheses must be an array when present');
+    } else {
+      const hypIds = new Set<string>();
+      v.hypotheses.forEach((h, i) => {
+        const path = `hypotheses[${i}]`;
+        if (!isObject(h)) {
+          errors.push(`${path} must be an object`);
+          return;
+        }
+        if (typeof h.id !== 'string' || !/^hyp_\d+$/.test(h.id)) {
+          errors.push(`${path}.id must match hyp_###, got ${JSON.stringify(h.id)}`);
+        } else if (hypIds.has(h.id)) {
+          errors.push(`${path}.id '${h.id}' is duplicated`);
+        } else {
+          hypIds.add(h.id);
+        }
+        for (const field of ['statement', 'basis', 'whatWouldConfirm'] as const) {
+          if (typeof h[field] !== 'string' || (h[field] as string).length === 0) {
+            errors.push(`${path}.${field} must be a non-empty string`);
+          }
+        }
+        if (h.confidence !== 'low' && h.confidence !== 'medium') {
+          errors.push(`${path}.confidence must be low|medium, got ${JSON.stringify(h.confidence)}`);
+        }
+        if (!Array.isArray(h.supportingEventIds) || h.supportingEventIds.length === 0) {
+          errors.push(`${path}.supportingEventIds must list at least one event`);
+        } else {
+          h.supportingEventIds.forEach((id: unknown, j: number) => {
+            if (typeof id !== 'string' || !eventIds.has(id)) {
+              errors.push(`${path}.supportingEventIds[${j}] dangles: ${JSON.stringify(id)}`);
+            }
+          });
+        }
+      });
+    }
+  }
   return errors;
 }
 
