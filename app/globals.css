@@ -212,6 +212,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .receipt-icon { display: grid; place-items: center; width: 25px; height: 25px; color: var(--accent); border-radius: 7px; background: #edf4f0; }
 .receipt-panel h2 { margin: 9px 0 2px; font-size: 19px; letter-spacing: -.015em; line-height: 1.35; overflow-wrap: anywhere; }
 .receipt-step { margin: 0; color: #849088; font-size: 11.5px; }
+.receipt-lede { margin: 12px 0 0; color: #2b3a32; font-size: 14.5px; font-weight: 500; line-height: 1.5; letter-spacing: -.005em; overflow-wrap: anywhere; }
 .receipt-value { display: flex; flex-direction: column; padding: 13px 0 12px; margin-top: 15px; border-top: 1px solid #edf0ed; border-bottom: 1px solid #edf0ed; }
 .receipt-value > span { color: #89958e; font-size: 10px; }
 .receipt-value strong { margin-top: 3px; color: #42564a; font-size: 15px; font-weight: 600; }
@@ -219,7 +220,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .receipt-section { margin-top: 18px; }
 .receipt-section-label { margin-bottom: 7px; color: #7d8880; font-size: 10px; font-weight: 700; letter-spacing: .09em; }
 .receipt-section p { color: #4b5952; margin: 0; font-size: 12.5px; line-height: 1.6; }
-.receipt-section p.receipt-statement { margin-top: 2px; padding: 2px 0 3px 13px; border-left: 2px solid #cddcd3; color: #3a4a41; font-size: 13.5px; line-height: 1.6; overflow-wrap: anywhere; }
+.receipt-source { margin-top: 16px; border-top: 1px solid #edf0ed; padding-top: 12px; }
+.receipt-source-toggle { cursor: pointer; border: 0; background: none; padding: 0; display: inline-flex; align-items: center; gap: 5px; color: #8b968f; font-size: 9px; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; user-select: none; }
+.receipt-source-toggle::before { content: '▸'; font-size: 8px; color: #a9b3ac; transition: transform .15s ease; }
+.receipt-source-toggle[aria-expanded="true"]::before { transform: rotate(90deg); }
+.receipt-source-toggle:hover { color: var(--accent); }
+.receipt-statement { margin: 8px 0 0; padding: 2px 0 3px 13px; border-left: 2px solid #cddcd3; color: #526158; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
 .input-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .input-chips button { display: inline-flex; align-items: center; gap: 3px; border: 1px solid #e9ece9; border-radius: 5px; padding: 5px 8px; background: #fafbfa; color: #69776f; font-size: 10px; cursor: pointer; }
 .input-chips button:hover { color: var(--accent); border-color: #c7d7cc; }

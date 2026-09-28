@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import type { InvestigationContract } from '@/src/contract/types.ts';
+import type { TraceEvent } from '@/src/types/events.ts';
 import type { Provenance } from '@/src/types/provenance.ts';
 import { DERIVED_EVENT_TYPES, EVENT_STYLE, entityById, sideLabel } from '@/components/CaseVisuals.tsx';
 import { cleanTitle, fmtAmount, fmtMethod, fmtTimestamp, fmtUsd, fmtWindow, shortAddr } from '@/components/format.ts';
@@ -24,6 +25,56 @@ function kindClass(p: Provenance): string {
   return p.kind === 'HYPOTHESIS' ? 'derived' : p.kind.toLowerCase();
 }
 
+/**
+ * A plain-language readout of an event, composed ONLY from structured contract
+ * fields — participants, value, method, and the asserted relationship kind. No
+ * inference: when the shape isn't enough for a confident line we return null and
+ * the structured WHO / VALUE blocks carry the meaning. The raw Nansen capture is
+ * still preserved verbatim (collapsed) below, so nothing is invented or lost.
+ */
+function plainStatement(contract: InvestigationContract, ev: TraceEvent): string | null {
+  const nameOf = (id: string) => {
+    const e = entityById(contract, id);
+    return e?.displayName ?? (e?.address ? shortAddr(e.address) : id);
+  };
+  const side = (s: TraceEvent['participants'][number]['side']) => ev.participants.find((p) => p.side === s);
+  const from = side('from');
+  const to = side('to');
+  const actor = side('actor');
+  const v = ev.value;
+  const val = v?.valueUsd != null ? fmtUsd(v.valueUsd) : v?.amount != null ? fmtAmount(v.amount, v.tokenSymbol) : null;
+
+  switch (ev.type) {
+    case 'transfer':
+      if (!from || !to) return null;
+      return val
+        ? `${nameOf(from.entityId)} sent ${val} to ${nameOf(to.entityId)}.`
+        : `${nameOf(from.entityId)} transferred to ${nameOf(to.entityId)}.`;
+    case 'funding':
+      if (!from || !to) return null;
+      return `${nameOf(from.entityId)} funded ${nameOf(to.entityId)}${val ? ` with ${val}` : ''}.`;
+    case 'swap':
+      if (!actor) return null;
+      return `${nameOf(actor.entityId)} swapped${val ? ` ${val}` : ''}.`;
+    case 'contract-interaction':
+      if (!actor || !ev.method) return null;
+      return `${nameOf(actor.entityId)} called ${fmtMethod(ev.method)}${val ? `, moving ${val}` : ''}.`;
+    case 'capital-consolidation':
+      if (!to) return null;
+      return `Value consolidated into ${nameOf(to.entityId)}${val ? `: ${val}` : ''}.`;
+    case 'capital-dispersal':
+      if (!from) return null;
+      return `${nameOf(from.entityId)} dispersed${val ? ` ${val}` : ''} across multiple addresses.`;
+    case 'entity-relationship': {
+      const rel = contract.investigation.relationships.find((r) => ev.relationshipIds.includes(r.id));
+      if (!rel?.nansenRelation) return null;
+      return `Nansen reports ${nameOf(rel.fromEntityId)} → ${nameOf(rel.toEntityId)} (${rel.nansenRelation}).`;
+    }
+    default:
+      return null;
+  }
+}
+
 export function CaseWorkspace({ contract }: { contract: InvestigationContract }) {
   const inv = contract.investigation;
   const events = useMemo(() => {
@@ -35,6 +86,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
 
   const [selected, setSelected] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [showCapture, setShowCapture] = useState(false);
   const total = events.length;
   const active = events[selected];
   const activeRef = useRef<HTMLLIElement | null>(null);
@@ -62,6 +114,10 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
     el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: playing ? 'center' : 'nearest' });
   }, [selected, playing]);
 
+  // The raw capture is opt-in per event: re-collapse whenever the cursor moves so
+  // every step opens on the plain-language readout, not the verbatim Nansen text.
+  useEffect(() => { setShowCapture(false); }, [selected]);
+
   if (!active) {
     return (
       <div className="page-wrap not-found">
@@ -83,6 +139,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
   const noun = EVENT_STYLE[active.type].noun;
   const ReceiptIcon = EVENT_STYLE[active.type].Icon;
   const value = active.value;
+  const lede = plainStatement(contract, active);
   const moveTo = (i: number) => setSelected(Math.max(0, Math.min(total - 1, i)));
 
   return (
@@ -161,6 +218,7 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
           <span className={`provenance provenance-${kindClass(prov)}`}>{PROV_LABEL[prov.kind]}</span>
           <h2>{cleanTitle(active.title)}</h2>
           <p className="receipt-step">{noun} <span className="middot">·</span> {fmtTimestamp(active.timestamp)}</p>
+          {lede ? <p className="receipt-lede">{lede}</p> : null}
 
           {value ? (
             <div className="receipt-value">
@@ -187,9 +245,16 @@ export function CaseWorkspace({ contract }: { contract: InvestigationContract })
             </div>
           ) : null}
           {prov.kind === 'FACT' || prov.kind === 'RELATION' ? (
-            <div className="receipt-section">
-              <div className="receipt-section-label">EVIDENCE STATEMENT</div>
-              <p className="receipt-statement">“{prov.statement}”</p>
+            <div className="receipt-source">
+              <button
+                type="button"
+                className="receipt-source-toggle"
+                aria-expanded={showCapture}
+                onClick={() => setShowCapture((v) => !v)}
+              >
+                {showCapture ? 'Hide source capture' : 'Source capture'}
+              </button>
+              {showCapture ? <p className="receipt-statement">“{prov.statement}”</p> : null}
             </div>
           ) : prov.kind === 'DERIVED' ? (
             <>
