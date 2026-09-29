@@ -154,6 +154,15 @@ export interface CaseDescriptor {
   /** One-line thesis. Must not assert causation (caller responsibility). */
   headline: string;
   window: { from: string; to: string };
+  /**
+   * Case-local meaningful-value floor (USD). When set, this case admits primary
+   * events at its own threshold instead of {@link DEFAULT_VALUE_THRESHOLD_USD} —
+   * a small-flow incident can lower it, a whale-only case can raise it. An
+   * explicit `options.valueThresholdUsd` still wins (per-run override beats the
+   * case default); when neither is set the global default applies. Validated as
+   * a finite number >= 0.
+   */
+  valueThresholdUsd?: number;
 }
 
 export interface EngineOptions {
@@ -702,7 +711,10 @@ export function reconstruct(
   if (!isObject(caseDesc) || typeof caseDesc.id !== 'string' || caseDesc.id.length === 0) {
     throw new EngineError('caseDesc.id is required', 'caseDesc.id');
   }
-  const threshold = options.valueThresholdUsd ?? DEFAULT_VALUE_THRESHOLD_USD;
+  // Threshold precedence: explicit per-run option > case-local default > global
+  // default. A single resolved value is validated (and reported) below, so the
+  // engine never carries an unvalidated case-authored number into extraction.
+  const threshold = options.valueThresholdUsd ?? caseDesc.valueThresholdUsd ?? DEFAULT_VALUE_THRESHOLD_USD;
   if (typeof threshold !== 'number' || !Number.isFinite(threshold) || threshold < 0) {
     throw new EngineError('valueThresholdUsd must be a finite number >= 0', 'valueThresholdUsd');
   }
