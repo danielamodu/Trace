@@ -21,7 +21,7 @@
  * or meta. Do NOT import this module into client components.
  */
 
-import { NansenClient } from '../nansen/client.ts';
+import { NansenClient, NansenApiError } from '../nansen/client.ts';
 import type {
   AddressCounterparty,
   AddressRelatedWallet,
@@ -160,6 +160,17 @@ const COST_FALLBACK: Record<string, number> = {
 
 const ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/;
 
+/**
+ * Pseudo-addresses that appear in token fields but are NOT real ERC-20 contracts:
+ * the zero address and the native-token sentinel (0xEeee…EEeE, used for ETH and
+ * other native coins). The tgm token-scoped endpoints reject them with a 422, so
+ * they must be excluded from token discovery.
+ */
+const NON_TOKEN_ADDRESSES = new Set<string>([
+  '0x0000000000000000000000000000000000000000',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+]);
+
 /** Actual credit cost of a call: the response header when numeric, else a conservative estimate. */
 function costOf(path: string, meta: CallMeta): number {
   if (meta.creditsCost !== null && meta.creditsCost.trim() !== '') {
@@ -208,6 +219,7 @@ function discoverTokens(
   const bump = (addr: string | null): void => {
     if (addr === null || addr === '') return;
     const k = addr.toLowerCase();
+    if (NON_TOKEN_ADDRESSES.has(k)) return; // native/zero sentinels aren't tgm-queryable
     const e = score.get(k) ?? { addr, count: 0 };
     e.count += 1;
     score.set(k, e);
@@ -383,69 +395,82 @@ export async function reconstructFromAddress(
       }
       tokensDiscovered.push(token);
 
-      // transfers: one call per direction so the filter's AND/OR semantics never
-      // matter; the engine's dedupe collapses any self-transfer seen twice.
-      for (const dir of ['from_address', 'to_address'] as const) {
-        if (!budgetLeft()) {
-          stopReasons.push(`token transfers (${dir}) skipped for ${token}: credit budget reached`);
-          break;
+      try {
+        // transfers: one call per direction so the filter's AND/OR semantics never
+        // matter; the engine's dedupe collapses any self-transfer seen twice.
+        for (const dir of ['from_address', 'to_address'] as const) {
+          if (!budgetLeft()) {
+            stopReasons.push(`token transfers (${dir}) skipped for ${token}: credit budget reached`);
+            break;
+          }
+          const { data, meta } = await client.post<Paged<TgmTransfer>>(EP.tgmTransfers, {
+            chain,
+            token_address: token,
+            date: { from: window.from, to: window.to },
+            filters: { [dir]: [address] },
+            pagination: { page: 1, per_page: perPage },
+          });
+          const rows: Array<Record<string, unknown>> = Array.isArray(data?.data)
+            ? (data.data as Array<Record<string, unknown>>)
+            : [];
+          accumulateSanitization(rows);
+          recordCall(EP.tgmTransfers, null, meta, rows.length);
+          const src = sourceMeta('tgm/transfers', metaToFixture(meta), nowIso, null, 'live-nansen');
+          for (const r of rows) {
+            try {
+              const t = normalizeTransfer(r, src);
+              if (
+                t.value.fromAddress.toLowerCase() === subjectLc ||
+                t.value.toAddress.toLowerCase() === subjectLc
+              ) {
+                transfers.push(t);
+              } else {
+                rowsSkipped += 1; // off-subject row (defensive; filter should exclude it)
+              }
+            } catch {
+              rowsSkipped += 1;
+            }
+          }
         }
-        const { data, meta } = await client.post<Paged<TgmTransfer>>(EP.tgmTransfers, {
+
+        // dex-trades: the endpoint has no address filter, so fetch one market-wide
+        // page and keep only trades where the subject is the trader.
+        if (!budgetLeft()) {
+          stopReasons.push(`token dex-trades skipped for ${token}: credit budget reached`);
+          continue;
+        }
+        const { data, meta } = await client.post<Paged<TgmDexTrade>>(EP.tgmDexTrades, {
           chain,
           token_address: token,
           date: { from: window.from, to: window.to },
-          filters: { [dir]: [address] },
           pagination: { page: 1, per_page: perPage },
         });
         const rows: Array<Record<string, unknown>> = Array.isArray(data?.data)
           ? (data.data as Array<Record<string, unknown>>)
           : [];
         accumulateSanitization(rows);
-        recordCall(EP.tgmTransfers, null, meta, rows.length);
-        const src = sourceMeta('tgm/transfers', metaToFixture(meta), nowIso, null, 'live-nansen');
+        recordCall(EP.tgmDexTrades, null, meta, rows.length);
+        const src = sourceMeta('tgm/dex-trades', metaToFixture(meta), nowIso, null, 'live-nansen');
         for (const r of rows) {
           try {
-            const t = normalizeTransfer(r, src);
-            if (
-              t.value.fromAddress.toLowerCase() === subjectLc ||
-              t.value.toAddress.toLowerCase() === subjectLc
-            ) {
-              transfers.push(t);
-            } else {
-              rowsSkipped += 1; // off-subject row (defensive; filter should exclude it)
-            }
+            const s = normalizeSwap(r, src);
+            if (s.value.traderAddress.toLowerCase() === subjectLc) swaps.push(s);
+            else rowsSkipped += 1; // trade by another party (kept out of a subject-scoped case)
           } catch {
             rowsSkipped += 1;
           }
         }
-      }
-
-      // dex-trades: the endpoint has no address filter, so fetch one market-wide
-      // page and keep only trades where the subject is the trader.
-      if (!budgetLeft()) {
-        stopReasons.push(`token dex-trades skipped for ${token}: credit budget reached`);
-        continue;
-      }
-      const { data, meta } = await client.post<Paged<TgmDexTrade>>(EP.tgmDexTrades, {
-        chain,
-        token_address: token,
-        date: { from: window.from, to: window.to },
-        pagination: { page: 1, per_page: perPage },
-      });
-      const rows: Array<Record<string, unknown>> = Array.isArray(data?.data)
-        ? (data.data as Array<Record<string, unknown>>)
-        : [];
-      accumulateSanitization(rows);
-      recordCall(EP.tgmDexTrades, null, meta, rows.length);
-      const src = sourceMeta('tgm/dex-trades', metaToFixture(meta), nowIso, null, 'live-nansen');
-      for (const r of rows) {
-        try {
-          const s = normalizeSwap(r, src);
-          if (s.value.traderAddress.toLowerCase() === subjectLc) swaps.push(s);
-          else rowsSkipped += 1; // trade by another party (kept out of a subject-scoped case)
-        } catch {
-          rowsSkipped += 1;
+      } catch (err) {
+        // A credential / rate-limit failure is systemic — rethrow so it is not
+        // silently masked and no further paid calls are attempted. Any other
+        // upstream error (e.g. a 422 for a token the tgm endpoints don't support)
+        // is specific to THIS token: note it and move on, preserving the core
+        // reconstruction that was already paid for.
+        if (err instanceof NansenApiError && (err.status === 401 || err.status === 403 || err.status === 429)) {
+          throw err;
         }
+        const detail = err instanceof NansenApiError ? `Nansen ${err.status}` : err instanceof Error ? err.message : String(err);
+        stopReasons.push(`token ${token} enrichment skipped (${detail})`);
       }
     }
     if (tokensDiscovered.length === 0) {

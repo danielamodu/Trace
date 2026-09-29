@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { reconstructFromAddress, type NansenLike } from '../src/investigations/live.ts';
+import { NansenApiError } from '../src/nansen/client.ts';
 import type { CallMeta } from '../src/nansen/types.ts';
 
 /**
@@ -17,6 +18,9 @@ import type { CallMeta } from '../src/nansen/types.ts';
  * TOK2  the credit budget bounds token activity as a hard stop.
  * TOK3  the injected-metadata defense reaches tgm rows too.
  * TOK4  off by default: no tgm call is ever made unless opted in.
+ * TOK5  native/zero sentinels are never enriched, and one token's upstream 422
+ *       is contained — the paid core reconstruction survives.
+ * TOK6  a systemic upstream failure (401/403/429) during enrichment is rethrown.
  */
 
 const ADDR = '0x1234567890abcdef1234567890abcdef12345678';
@@ -27,6 +31,10 @@ const CP_ADDR = '0x' + 'aa'.repeat(20);
 const FUNDER = '0x' + 'bb'.repeat(20);
 const DEST = '0x' + 'cc'.repeat(20);
 const TOKEN = '0x' + 'dd'.repeat(20);
+// A second real token (0xffff…ffff) — NOT the native sentinel 0xeeee…eeee.
+const TOKEN2 = '0x' + 'ff'.repeat(20);
+// The native-coin sentinel: the tgm token-scoped endpoints reject it with a 422.
+const NATIVE = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 function meta(over: Partial<CallMeta> = {}): CallMeta {
   return {
@@ -259,5 +267,96 @@ test('TOK4: off by default — no tgm call is ever made unless opted in', async 
   assert.deepEqual(run.tokensDiscovered, []);
   assert.deepEqual(run.tokenActivity, { transfers: 0, swaps: 0 });
   assert.equal(run.creditsSpent, 7); // only cp + rel + tx
+});
+
+/**
+ * A scripted client whose counterparty aggregate references extra tokens, and
+ * which can be told to throw an upstream NansenApiError on tgm/transfers for one
+ * specific token — the two failure modes item #1's per-token guard must handle.
+ */
+function resilienceClient(opts: {
+  cpTokens: Array<{ token_address: string }>;
+  throwOn?: { token: string; status: number };
+}): NansenLike & { calls: Recorded[] } {
+  const calls: Recorded[] = [];
+  const paged = (rows: unknown[]) => ({ data: rows, pagination: { page: 1, per_page: 100, is_last_page: true } });
+  const cp = (): Record<string, unknown> => ({
+    ...cpRow(),
+    tokens_info: opts.cpTokens.map((t) => ({
+      token_address: t.token_address, token_symbol: 'TKN', token_name: 'Token', num_transfer: 1, total_token_amount: 1,
+    })),
+  });
+  const client = {
+    async post(path: string, body?: { token_address?: string; filters?: { from_address?: unknown; to_address?: unknown } }) {
+      const tokenAddress = body?.token_address ?? null;
+      const filterDir = body?.filters?.from_address ? 'from_address' : body?.filters?.to_address ? 'to_address' : null;
+      calls.push({ path, tokenAddress, filterDir });
+      if (path.includes('counterparties')) return { data: paged([cp()]), meta: meta({ creditsCost: '5' }) };
+      if (path.includes('related-wallets')) return { data: paged([relRow()]), meta: meta({ creditsCost: '1' }) };
+      if (path.includes('tgm/transfers')) {
+        if (opts.throwOn && tokenAddress === opts.throwOn.token) {
+          throw new NansenApiError(`${opts.throwOn.status} upstream`, opts.throwOn.status, null, meta({ status: opts.throwOn.status }));
+        }
+        return { data: paged(filterDir === 'from_address' ? [transferFrom()] : [transferTo()]), meta: meta({ creditsCost: '1' }) };
+      }
+      if (path.includes('tgm/dex-trades')) return { data: paged([tradeBySubject()]), meta: meta({ creditsCost: '1' }) };
+      return { data: paged([txReceived()]), meta: meta({ creditsCost: '1' }) }; // transactions
+    },
+    calls,
+  };
+  return client as unknown as NansenLike & { calls: Recorded[] };
+}
+
+test('TOK5: native/zero sentinels are skipped and a token 422 is contained', async () => {
+  // The subject's aggregate lists the native sentinel and the zero address next to
+  // TOKEN and TOKEN2; both pseudo-addresses must be dropped BEFORE any tgm call,
+  // and TOKEN2's upstream 422 must not abort the paid core reconstruction.
+  const client = resilienceClient({
+    cpTokens: [
+      { token_address: NATIVE },
+      { token_address: '0x0000000000000000000000000000000000000000' },
+      { token_address: TOKEN },
+      { token_address: TOKEN2 },
+    ],
+    throwOn: { token: TOKEN2, status: 422 },
+  });
+  const { contract, meta: run } = await reconstructFromAddress({
+    address: ADDR, window: WINDOW, client, reconstructedAt: AT,
+    budget: { fetchTokenActivity: true, maxTokens: 5, maxCredits: 100 },
+  });
+
+  // discovery never surfaces the native/zero sentinels, so no tgm call targets them.
+  assert.ok(!run.tokensDiscovered.includes(NATIVE));
+  assert.ok(!run.tokensDiscovered.includes('0x0000000000000000000000000000000000000000'));
+  assert.ok(client.calls.every((c) => c.tokenAddress !== NATIVE && c.tokenAddress !== '0x0000000000000000000000000000000000000000'));
+  // both real tokens are attempted (TOKEN ranks first: it is also in the tx).
+  assert.deepEqual(run.tokensDiscovered, [TOKEN, TOKEN2]);
+
+  // TOKEN2's 422 is contained: recorded as a stop reason, the run still completes.
+  assert.match(run.stopReason, new RegExp(`token ${TOKEN2} enrichment skipped \\(Nansen 422\\)`));
+  assert.equal(contract.dataSource, 'live-nansen');
+
+  // TOKEN's events survived; TOKEN2 contributed nothing (its first call threw).
+  const json = JSON.stringify(contract);
+  assert.ok(json.includes(HASH('3')) && json.includes(HASH('4')) && json.includes(HASH('6')));
+  assert.equal(run.tokenActivity.transfers, 2);
+  assert.equal(run.tokenActivity.swaps, 1);
+  // TOKEN2 threw on its first (from_address) transfer, so it never reached dex-trades.
+  assert.equal(client.calls.filter((c) => c.tokenAddress === TOKEN2).length, 1);
+});
+
+test('TOK6: a systemic upstream failure during enrichment is rethrown', async () => {
+  // A 429 (rate limit) is not token-specific — it must abort, not be swallowed.
+  const client = resilienceClient({
+    cpTokens: [{ token_address: TOKEN }],
+    throwOn: { token: TOKEN, status: 429 },
+  });
+  await assert.rejects(
+    reconstructFromAddress({
+      address: ADDR, window: WINDOW, client, reconstructedAt: AT,
+      budget: { fetchTokenActivity: true, maxTokens: 3, maxCredits: 100 },
+    }),
+    (err: unknown) => err instanceof NansenApiError && err.status === 429,
+  );
 });
 
