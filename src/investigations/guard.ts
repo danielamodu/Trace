@@ -31,6 +31,14 @@ import { DEFAULT_BUDGET, type LiveBudget } from './live.ts';
 const COUNTERPARTIES_COST = 5;
 const RELATED_WALLETS_COST = 1;
 const TX_PAGE_COST = 1;
+/**
+ * Token-scoped tgm calls, per discovered token (item #1). Transfers are fetched
+ * in BOTH directions (subject-as-sender + subject-as-receiver = 2 calls) so the
+ * filter's AND/OR semantics never matter; dex-trades is one market-wide call
+ * post-filtered to the subject. Worst case per token = 2·transfers + 1·trades.
+ */
+const TGM_TRANSFERS_COST = 1;
+const TGM_DEX_TRADES_COST = 1;
 
 /** Defaults when the corresponding env var is unset. */
 const DEFAULT_RATE_PER_MIN = 5;
@@ -43,7 +51,7 @@ export interface CreditEstimate {
   plannedCredits: number;
   /** The hard per-run ceiling the orchestrator stops at. */
   budgetCeiling: number;
-  breakdown: { counterparties: number; relatedWallets: number; transactionPages: number };
+  breakdown: { counterparties: number; relatedWallets: number; transactionPages: number; tokenActivity: number };
 }
 
 /**
@@ -57,13 +65,17 @@ export function estimateCredits(partial: Partial<LiveBudget> = {}): CreditEstima
   const relatedWallets = b.fetchRelatedWallets ? RELATED_WALLETS_COST : 0;
   const pages = Math.max(0, Math.trunc(b.maxPages));
   const transactionPages = pages * TX_PAGE_COST;
-  const plannedCredits = counterparties + relatedWallets + transactionPages;
+  // Token activity is opt-in; worst case uses the full maxTokens ceiling since
+  // the actual token count is only known after the (already-paid) subject calls.
+  const tokens = b.fetchTokenActivity ? Math.max(0, Math.trunc(b.maxTokens)) : 0;
+  const tokenActivity = tokens * (2 * TGM_TRANSFERS_COST + TGM_DEX_TRADES_COST);
+  const plannedCredits = counterparties + relatedWallets + transactionPages + tokenActivity;
   const budgetCeiling = Math.max(0, Math.trunc(b.maxCredits));
   return {
     worstCaseCredits: Math.min(plannedCredits, budgetCeiling),
     plannedCredits,
     budgetCeiling,
-    breakdown: { counterparties, relatedWallets, transactionPages },
+    breakdown: { counterparties, relatedWallets, transactionPages, tokenActivity },
   };
 }
 

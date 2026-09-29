@@ -47,6 +47,22 @@ test('EST2: the maxCredits ceiling caps the worst case; disabled calls drop out'
   assert.equal(noCp.plannedCredits, 4); // 0 + 1 + 3
 });
 
+test('EST3: opt-in token activity adds 3 credits per capped token; off by default', () => {
+  const off = estimateCredits({ maxPages: 5 });
+  assert.equal(off.breakdown.tokenActivity, 0); // fetchTokenActivity defaults false
+
+  // 3 tokens × (2 transfer directions + 1 dex-trades) = 9, on top of 5 + 1 + 5.
+  const on = estimateCredits({ fetchTokenActivity: true, maxTokens: 3, maxPages: 5, maxCredits: 100 });
+  assert.equal(on.breakdown.tokenActivity, 9);
+  assert.equal(on.plannedCredits, 20);
+  assert.equal(on.worstCaseCredits, 20); // under the 100 ceiling
+
+  // the ceiling still clamps the worst case when the budget is tight.
+  const clamped = estimateCredits({ fetchTokenActivity: true, maxTokens: 3, maxPages: 5, maxCredits: 12 });
+  assert.equal(clamped.plannedCredits, 20);
+  assert.equal(clamped.worstCaseCredits, 12);
+});
+
 test('TOKEN1: header parsing accepts Bearer and x-trace-token, case-insensitive', () => {
   assert.equal(presentedToken({ Authorization: 'Bearer abc' }), 'abc');
   assert.equal(presentedToken({ 'X-Trace-Token': 'xyz' }), 'xyz');
