@@ -100,6 +100,8 @@ ${h('RECONSTRUCT OPTIONS')}
   --headline <text>         one-line case headline
   --no-counterparties       skip the counterparties fetch
   --no-related              skip the related-wallets fetch
+  --token-activity          also fetch token-scoped transfers + dex-trades (opt-in; ~3 credits/token)
+  --max-tokens <n>          cap discovered tokens to enrich (default ${DEFAULT_BUDGET.maxTokens})
   --save                    save the result into the library (data/cases/)
   --out <path>              also write the contract JSON to <path>
 
@@ -116,7 +118,7 @@ ${h('EXAMPLES')}
 }
 
 // ---- tiny arg parser --------------------------------------------------------
-const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--out', '--name', '--headline']);
+const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--out', '--name', '--headline']);
 
 interface ParsedArgs {
   positionals: string[];
@@ -296,6 +298,8 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   if (args.flags['--per-page']) budget.perPage = Number(args.flags['--per-page']);
   if (args.bools.has('--no-counterparties')) budget.fetchCounterparties = false;
   if (args.bools.has('--no-related')) budget.fetchRelatedWallets = false;
+  if (args.bools.has('--token-activity')) budget.fetchTokenActivity = true;
+  if (args.flags['--max-tokens']) budget.maxTokens = Number(args.flags['--max-tokens']);
   const chain = args.flags['--chain'] ?? 'ethereum';
   const eff: LiveBudget = { ...DEFAULT_BUDGET, ...budget };
 
@@ -304,7 +308,8 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   console.log(`  ${gray('window')}  ${from} → ${to}`);
   console.log(
     `  ${gray('budget')}  up to ${eff.maxCredits} credits, ${eff.maxPages} page(s)` +
-    `${eff.fetchCounterparties ? '' : ', no counterparties'}${eff.fetchRelatedWallets ? '' : ', no related-wallets'}`,
+    `${eff.fetchCounterparties ? '' : ', no counterparties'}${eff.fetchRelatedWallets ? '' : ', no related-wallets'}` +
+    `${eff.fetchTokenActivity ? `, token activity (≤${eff.maxTokens} token${eff.maxTokens === 1 ? '' : 's'})` : ''}`,
   );
   console.log(dim('  Calling Nansen…\n'));
 
@@ -322,6 +327,9 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   acc('credits spent', bold(String(meta.creditsSpent)));
   acc('credits remaining', String(meta.creditsRemaining ?? 'unknown'));
   acc('tx pages fetched', `${meta.transactionPagesFetched}  (reached last page: ${meta.reachedLastPage})`);
+  if (meta.tokensDiscovered.length > 0) {
+    acc('tokens enriched', `${meta.tokensDiscovered.length}  (${meta.tokenActivity.transfers} transfer(s), ${meta.tokenActivity.swaps} swap(s))`);
+  }
   acc('rows skipped', String(meta.rowsSkipped));
   acc('stop reason', meta.stopReason);
   acc('calls', String(meta.calls.length));

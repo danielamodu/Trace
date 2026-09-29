@@ -5,6 +5,7 @@ import {
   parseReconstructRequest,
   SERVER_MAX_CREDITS,
   SERVER_MAX_PAGES,
+  SERVER_MAX_TOKENS,
 } from '../src/investigations/live-route.ts';
 import type { NansenLike } from '../src/investigations/live.ts';
 import { NansenApiError } from '../src/nansen/client.ts';
@@ -167,4 +168,32 @@ test('ROUTE10: guardSpend can short-circuit a run before any spend', async () =>
   assert.equal(status, 429);
   assert.equal((body as { error: string }).error, 'deploy credit budget exhausted');
   assert.equal(ran, false, 'the orchestrator must not be called once guardSpend refuses');
+});
+
+test('ROUTE11: token activity is opt-in, maxTokens is clamped, and the dry-run prices it', () => {
+  // fetchTokenActivity passes through as a boolean; maxTokens is clamped to the ceiling.
+  const parsed = parseReconstructRequest({
+    address: ADDR, window: WINDOW, budget: { fetchTokenActivity: true, maxTokens: 9999 },
+  });
+  assert.equal(parsed.budget.fetchTokenActivity, true);
+  assert.equal(parsed.budget.maxTokens, SERVER_MAX_TOKENS);
+
+  // a bad maxTokens is a 400, not a silent default.
+  assert.throws(
+    () => parseReconstructRequest({ address: ADDR, window: WINDOW, budget: { maxTokens: -1 } }),
+    /maxTokens/,
+  );
+});
+
+test('ROUTE12: a dry-run reflects opt-in token activity without spending', async () => {
+  const { status, body } = await runReconstruct(
+    { address: ADDR, window: WINDOW, dryRun: true, budget: { fetchTokenActivity: true, maxTokens: 3, maxPages: 5 } },
+    { allowServerKey: false, hasServerKey: false }, // no key, no injected client
+  );
+  assert.equal(status, 200);
+  const b = body as { dryRun: boolean; estimate: { worstCaseCredits: number; breakdown: { tokenActivity: number } } };
+  assert.equal(b.dryRun, true);
+  assert.equal(b.estimate.breakdown.tokenActivity, 9); // 3 tokens × (2 transfers + 1 dex)
+  // 5 + 1 + 5 + 9 = 20, clamped to the default maxCredits (12) since none was given.
+  assert.equal(b.estimate.worstCaseCredits, 12);
 });

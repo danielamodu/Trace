@@ -112,9 +112,11 @@ npm run trace -- reconstruct 0xADDRESS --from 2022-11-06 --to 2022-11-12 --save
 
 `reconstruct` requires `--from` and `--to` (`YYYY-MM-DD`). Useful options:
 `--chain` (default `ethereum`), `--max-credits` (default 12), `--max-pages`
-(default 5), `--per-page`, `--no-counterparties`, `--no-related`, `--name`,
-`--headline`, `--save` (add the result to the library), and `--out <path>` (also
-write the contract JSON to a file).
+(default 5), `--per-page`, `--no-counterparties`, `--no-related`,
+`--token-activity` (opt-in token-scoped transfers + dex-trades, ~3 credits per
+discovered token) with `--max-tokens` (default 3), `--name`, `--headline`,
+`--save` (add the result to the library), and `--out <path>` (also write the
+contract JSON to a file).
 
 ### 3. The engine, as an API
 

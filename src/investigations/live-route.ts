@@ -30,6 +30,8 @@ import { estimateCredits, type CreditEstimate } from './guard.ts';
 /** Hard server-side ceilings on a single request's spend (caller cannot exceed). */
 export const SERVER_MAX_CREDITS = 25;
 export const SERVER_MAX_PAGES = 10;
+/** Cap on discovered tokens to enrich (each ≈3 credits; also bounded by maxCredits). */
+export const SERVER_MAX_TOKENS = 5;
 
 export interface RunOptions {
   /** Whether the server's NANSEN_API_KEY may be used as a fallback credential. */
@@ -92,6 +94,14 @@ function clampBudget(raw: unknown): Partial<LiveBudget> {
   }
   if (typeof rec.fetchCounterparties === 'boolean') out.fetchCounterparties = rec.fetchCounterparties;
   if (typeof rec.fetchRelatedWallets === 'boolean') out.fetchRelatedWallets = rec.fetchRelatedWallets;
+  // Item #1 — opt-in token enrichment. maxTokens is clamped to a server ceiling so
+  // worst-case spend stays bounded; the credit ledger + maxCredits bound it again.
+  if (typeof rec.fetchTokenActivity === 'boolean') out.fetchTokenActivity = rec.fetchTokenActivity;
+  if (rec.maxTokens !== undefined) {
+    const n = Number(rec.maxTokens);
+    if (!Number.isFinite(n) || n < 0) throw new BadRequest('"budget.maxTokens" must be a non-negative number');
+    out.maxTokens = Math.min(Math.trunc(n), SERVER_MAX_TOKENS);
+  }
   return out;
 }
 
