@@ -43,7 +43,7 @@ import { normalizeTransaction } from '../reconstruction/transaction.ts';
 import { reconstruct } from '../reconstruction/engine.ts';
 import type { EngineInput } from '../reconstruction/engine.ts';
 import { buildContract } from '../contract/assemble.ts';
-import type { CoverageReport, InvestigationContract } from '../contract/types.ts';
+import type { CoverageReport, InvestigationContract, OriginAttestation } from '../contract/types.ts';
 
 /** The minimal client surface the orchestrator needs — satisfied by NansenClient. */
 export interface NansenLike {
@@ -113,6 +113,8 @@ export interface LiveCall {
   creditsRemaining: string | null;
   requestId: string | null;
   rows: number;
+  /** SHA-256 hex of the raw response body (item #3); null on a scripted client / empty body. */
+  responseSha256: string | null;
 }
 
 /**
@@ -350,6 +352,7 @@ export async function reconstructFromAddress(
       creditsRemaining: m.creditsRemaining,
       requestId: m.requestId,
       rows,
+      responseSha256: m.responseSha256 ?? null,
     });
   };
   const budgetLeft = (): boolean => creditsSpent < budget.maxCredits;
@@ -671,7 +674,22 @@ export async function reconstructFromAddress(
   };
 
   const result = reconstruct(input, { address, chain }, caseDesc, { reconstructedAt: nowIso });
-  const contract = buildContract(result, { dataSource: 'live-nansen', coverage, inputs: input });
+  // Item #3, hybrid origin-proof: one receipt per recorded live HTTP response,
+  // captured at the run clock (= reconstructedAt) so the attestation is
+  // deterministic. Folded onto the contract before fingerprinting.
+  const origin: OriginAttestation = {
+    mode: 'live-http',
+    capturedAt: nowIso,
+    receipts: calls.map((c) => ({
+      path: c.endpoint,
+      status: c.status,
+      requestId: c.requestId,
+      creditsCost: c.creditsCost,
+      creditsRemaining: c.creditsRemaining,
+      responseSha256: c.responseSha256,
+    })),
+  };
+  const contract = buildContract(result, { dataSource: 'live-nansen', coverage, inputs: input, origin });
 
   const meta: LiveRunMeta = {
     address,

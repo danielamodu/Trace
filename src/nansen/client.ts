@@ -52,7 +52,20 @@ function readMeta(res: Response): CallMeta {
     creditsRemaining: h.get('x-nansen-credits-remaining'),
     rateLimitRemaining: h.get('x-ratelimit-remaining') ?? h.get('ratelimit-remaining'),
     retryAfter: h.get('retry-after'),
+    responseSha256: null,
   };
+}
+
+/**
+ * SHA-256 hex of a string via the Web Crypto API (present in Node ≥ 20 and the
+ * Next.js server runtime). Matches the digest used by the contract fingerprint
+ * (verify.ts), so an origin receipt and the artifact fingerprint agree on the
+ * algorithm. Server-side only; never touches the API key.
+ */
+async function sha256Hex(text: string): Promise<string> {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 export class NansenClient {
@@ -107,6 +120,9 @@ export class NansenClient {
 
     const meta = readMeta(res);
     const text = await res.text();
+    // Hash the raw wire body for the origin receipt (item #3). Only when a body
+    // was returned; an empty body leaves responseSha256 null.
+    if (text) meta.responseSha256 = await sha256Hex(text);
     let parsed: unknown = null;
     if (text) {
       try { parsed = JSON.parse(text); } catch { parsed = text; }

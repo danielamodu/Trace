@@ -504,6 +504,58 @@ export function validateContract(c: unknown): string[] {
     }
   }
 
+  // Item #3: optional hybrid origin-proof. Absent = pre-#3 contract (still
+  // valid, e.g. shipped live contracts not yet re-pinned). Present = a mode that
+  // agrees with dataSource, an ISO capture time, and structurally-sound
+  // receipts. The receipts' responseSha256 is not re-derivable offline (raw
+  // bodies are not shipped); folding origin in binds it to the fingerprint.
+  if (v.origin !== undefined) {
+    if (!isObject(v.origin)) {
+      errors.push('origin must be an object when present');
+    } else {
+      const o = v.origin as Record<string, unknown>;
+      const mode = o.mode;
+      if (mode !== 'live-http' && mode !== 'no-live-http') {
+        errors.push(`origin.mode must be live-http|no-live-http, got ${JSON.stringify(mode)}`);
+      }
+      if (!isValidIso(o.capturedAt)) {
+        errors.push('origin.capturedAt must be ISO-8601');
+      }
+      if (o.note !== undefined && (typeof o.note !== 'string' || (o.note as string).length === 0)) {
+        errors.push('origin.note must be a non-empty string when present');
+      }
+      const receipts = o.receipts;
+      if (!Array.isArray(receipts)) {
+        errors.push('origin.receipts must be an array');
+      } else {
+        receipts.forEach((r, i) => {
+          const rp = `origin.receipts[${i}]`;
+          if (!isObject(r)) {
+            errors.push(`${rp} must be an object`);
+            return;
+          }
+          if (typeof r.path !== 'string' || r.path.length === 0) errors.push(`${rp}.path is required`);
+          if (typeof r.status !== 'number' || !Number.isFinite(r.status)) errors.push(`${rp}.status must be a number`);
+          for (const f of ['requestId', 'creditsCost', 'creditsRemaining', 'responseSha256'] as const) {
+            const val = (r as Record<string, unknown>)[f];
+            if (val !== null && typeof val !== 'string') errors.push(`${rp}.${f} must be a string or null`);
+          }
+        });
+        if (mode === 'no-live-http' && receipts.length > 0) {
+          errors.push('origin.receipts must be empty when origin.mode is no-live-http');
+        }
+      }
+      // Consistency with dataSource: fixture-cache never makes a live HTTP call;
+      // live-nansen is by definition a live HTTP run.
+      if (v.dataSource === 'fixture-cache' && mode === 'live-http') {
+        errors.push("origin.mode 'live-http' contradicts dataSource 'fixture-cache'");
+      }
+      if (v.dataSource === 'live-nansen' && mode === 'no-live-http') {
+        errors.push("origin.mode 'no-live-http' contradicts dataSource 'live-nansen'");
+      }
+    }
+  }
+
   const invErrors = validateInvestigation(v.investigation);
   for (const e of invErrors) errors.push(`investigation.${e}`);
 

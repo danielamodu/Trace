@@ -29,7 +29,7 @@ import type { EngineInput } from '../reconstruction/engine.ts';
 import { reconstruct } from '../reconstruction/engine.ts';
 import type { ReconstructionResult } from '../reconstruction/engine.ts';
 import { normalizeTransaction } from '../reconstruction/transaction.ts';
-import { buildContract } from '../contract/assemble.ts';
+import { buildContract, noLiveHttpOrigin } from '../contract/assemble.ts';
 import type { CoverageReport, InvestigationContract } from '../contract/types.ts';
 
 // --- canonical FTX metadata (fixture-validated) ------------------------------
@@ -173,6 +173,10 @@ export function buildFtxContract(reconstructedAt?: string): InvestigationContrac
     dataSource: 'fixture-cache',
     coverage: ftxCoverage(),
     inputs: input,
+    // Item #3: no live Nansen HTTP call at request time — records were captured
+    // earlier and cached as fixtures. capturedAt pinned to the reconstruction
+    // clock for determinism.
+    origin: noLiveHttpOrigin(result.investigation.reconstructedAt),
   });
 }
 

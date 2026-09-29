@@ -59,6 +59,14 @@ export interface CallMeta {
   creditsRemaining: string | null; // X-Nansen-Credits-Remaining
   rateLimitRemaining: string | null;
   retryAfter: string | null;
+  /**
+   * SHA-256 hex of the RAW response body as it came off the wire (item #3,
+   * hybrid origin-proof). Optional: absent on scripted/injected clients and on
+   * error paths with no body. The client sets it; the raw body is never
+   * shipped, so this hash is not re-derivable offline — folding it into the
+   * contract binds it to the fingerprint instead.
+   */
+  responseSha256?: string | null;
 }
 
 /** Structured error body the API returns for 4xx/5xx (except 402). */

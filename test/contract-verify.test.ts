@@ -57,11 +57,17 @@ test('a real contract verifies: all checks pass, verdict re-derived', async () =
   const res = await verifyContract(c);
   assert.equal(res.ok, true);
   assert.deepEqual(res.errors, []);
-  assert.equal(res.checks.length, 4);
+  assert.equal(res.checks.length, 5);
   assert.ok(res.checks.every((k) => k.ok));
   assert.match(res.fingerprint, /^[0-9a-f]{64}$/);
   // Euler is a fixture-cache case: honestly incomplete, and re-derived as such.
   assert.equal(res.recomputed.completeness, 'incomplete');
+  // Item #3: the fixture case carries a no-live-http origin attestation, and the
+  // origin check re-derives it as consistent with the fixture-cache source.
+  assert.equal(c.origin?.mode, 'no-live-http');
+  assert.deepEqual(c.origin?.receipts, []);
+  assert.equal(c.origin?.capturedAt, FIXED_AT);
+  assert.equal(res.checks.find((k) => k.id === 'origin')?.ok, true);
 });
 
 test('tampering with the verdict is caught', async () => {
