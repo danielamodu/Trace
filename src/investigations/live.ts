@@ -178,6 +178,13 @@ export interface ReconstructFromAddressParams {
   reconstructedAt?: string;
   name?: string;
   headline?: string;
+  /**
+   * Case-local meaningful-value floor (USD). Forwarded to the engine as this
+   * run's threshold so a small-flow address can surface primary events below the
+   * global $1M default (or a whale-only run can raise it). Omit to use the
+   * default. See {@link CaseDescriptor.valueThresholdUsd}.
+   */
+  valueThresholdUsd?: number;
 }
 
 const EP = {
@@ -671,6 +678,7 @@ export async function reconstructFromAddress(
           ? 'Transaction window fully paginated.'
           : 'Partial transaction sample — see coverage.'),
     window: { from: window.from, to: window.to },
+    ...(params.valueThresholdUsd !== undefined ? { valueThresholdUsd: params.valueThresholdUsd } : {}),
   };
 
   const result = reconstruct(input, { address, chain }, caseDesc, { reconstructedAt: nowIso });

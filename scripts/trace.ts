@@ -33,6 +33,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { buildTraceService, BUILT_IN_CASE_IDS } from '../src/investigations/registry.ts';
 import { reconstructFromAddress, DEFAULT_BUDGET } from '../src/investigations/live.ts';
+import { DEFAULT_VALUE_THRESHOLD_USD } from '../src/reconstruction/engine.ts';
 import { saveContract } from '../src/investigations/saved-cases.ts';
 import { verifyContract, fingerprintContract } from '../src/contract/verify.ts';
 import { NansenClient } from '../src/nansen/client.ts';
@@ -98,6 +99,8 @@ ${h('RECONSTRUCT OPTIONS')}
   --per-page <n>            rows per page (default ${DEFAULT_BUDGET.perPage}, max 100)
   --name <text>             human-readable case name
   --headline <text>         one-line case headline
+  --value-threshold <usd>   case-local meaningful-value floor in USD (default ${DEFAULT_VALUE_THRESHOLD_USD}); lower it
+                            for a small-flow address, raise it for a whale-only case
   --no-counterparties       skip the counterparties fetch
   --no-related              skip the related-wallets fetch
   --token-activity          also fetch token-scoped transfers + dex-trades (opt-in; ~3 credits/token)
@@ -120,7 +123,7 @@ ${h('EXAMPLES')}
 }
 
 // ---- tiny arg parser --------------------------------------------------------
-const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--chunk-days', '--out', '--name', '--headline']);
+const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--chunk-days', '--value-threshold', '--out', '--name', '--headline']);
 
 interface ParsedArgs {
   positionals: string[];
@@ -305,10 +308,19 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   if (args.flags['--chunk-days']) budget.chunkDays = Number(args.flags['--chunk-days']);
   const chain = args.flags['--chain'] ?? 'ethereum';
   const eff: LiveBudget = { ...DEFAULT_BUDGET, ...budget };
+  const valueThresholdUsd =
+    args.flags['--value-threshold'] !== undefined ? Number(args.flags['--value-threshold']) : undefined;
+  if (valueThresholdUsd !== undefined && (!Number.isFinite(valueThresholdUsd) || valueThresholdUsd < 0)) {
+    console.error(`${red('reconstruct:')} --value-threshold must be a number >= 0.`);
+    return 2;
+  }
 
   console.log(`\n${yellow(bold('LIVE RECONSTRUCTION'))} ${dim('· spends Nansen credits')}`);
   console.log(`  ${gray('target')}  ${address}  ${dim(`on ${chain}`)}`);
   console.log(`  ${gray('window')}  ${from} → ${to}`);
+  if (valueThresholdUsd !== undefined) {
+    console.log(`  ${gray('value floor')}  $${valueThresholdUsd.toLocaleString('en-US')}  ${dim(`(default $${DEFAULT_VALUE_THRESHOLD_USD.toLocaleString('en-US')})`)}`);
+  }
   console.log(
     `  ${gray('budget')}  up to ${eff.maxCredits} credits, ${eff.maxPages} page(s)` +
     `${eff.fetchCounterparties ? '' : ', no counterparties'}${eff.fetchRelatedWallets ? '' : ', no related-wallets'}` +
@@ -324,6 +336,7 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
     budget,
     name: args.flags['--name'],
     headline: args.flags['--headline'],
+    ...(valueThresholdUsd !== undefined ? { valueThresholdUsd } : {}),
   });
 
   console.log(under('Run accounting'));
