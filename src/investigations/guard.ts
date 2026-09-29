@@ -64,13 +64,21 @@ export function estimateCredits(partial: Partial<LiveBudget> = {}): CreditEstima
   const counterparties = b.fetchCounterparties ? COUNTERPARTIES_COST : 0;
   const relatedWallets = b.fetchRelatedWallets ? RELATED_WALLETS_COST : 0;
   const pages = Math.max(0, Math.trunc(b.maxPages));
-  const transactionPages = pages * TX_PAGE_COST;
   // Token activity is opt-in; worst case uses the full maxTokens ceiling since
   // the actual token count is only known after the (already-paid) subject calls.
   const tokens = b.fetchTokenActivity ? Math.max(0, Math.trunc(b.maxTokens)) : 0;
   const tokenActivity = tokens * (2 * TGM_TRANSFERS_COST + TGM_DEX_TRADES_COST);
-  const plannedCredits = counterparties + relatedWallets + transactionPages + tokenActivity;
   const budgetCeiling = Math.max(0, Math.trunc(b.maxCredits));
+  // Un-chunked: one query over the window ⇒ at most `pages` transaction pages.
+  // Chunked (item #2): each sub-window paginates on its own, so the transaction
+  // phase can consume the entire remaining budget — the honest worst case is
+  // whatever credits are left after the fixed calls, bounded by the ceiling.
+  const chunked = Math.max(0, Math.trunc(b.chunkDays)) > 0;
+  const fixed = counterparties + relatedWallets + tokenActivity;
+  const transactionPages = chunked
+    ? Math.max(pages * TX_PAGE_COST, Math.max(0, budgetCeiling - fixed))
+    : pages * TX_PAGE_COST;
+  const plannedCredits = fixed + transactionPages;
   return {
     worstCaseCredits: Math.min(plannedCredits, budgetCeiling),
     plannedCredits,

@@ -79,6 +79,18 @@ export interface LiveBudget {
   fetchTokenActivity: boolean;
   /** Cap on how many discovered tokens to enrich (each ≈3 credits worst case). */
   maxTokens: number;
+  /**
+   * Item #2 — optional window chunking for wide or high-activity windows. When
+   * > 0, the transaction window is split into contiguous sub-windows of at most
+   * this many calendar days each; every sub-window paginates independently (up
+   * to `maxPages` pages) and the window counts as covered only when EVERY
+   * sub-window reached is_last_page. A narrow sub-window returns far fewer rows,
+   * so each one is likely to finish within a modest page budget where the whole
+   * window would not — letting a large window reach `transactionWindowCovered`
+   * across bounded, resumable steps. `0` (the default) issues one query over the
+   * whole window, exactly as before, so existing runs stay byte-identical.
+   */
+  chunkDays: number;
 }
 
 export const DEFAULT_BUDGET: LiveBudget = {
@@ -89,6 +101,7 @@ export const DEFAULT_BUDGET: LiveBudget = {
   fetchRelatedWallets: true,
   fetchTokenActivity: false,
   maxTokens: 3,
+  chunkDays: 0,
 };
 
 /** One recorded API call, for the audit trail (no secrets, no row contents). */
@@ -102,6 +115,19 @@ export interface LiveCall {
   rows: number;
 }
 
+/**
+ * Per-sub-window transaction progress (item #2). A single entry spanning the
+ * whole window when chunking is off; one entry per attempted sub-window when it
+ * is on. `reachedLastPage` is that sub-window's own coverage.
+ */
+export interface TransactionChunk {
+  from: string;
+  to: string;
+  pagesFetched: number;
+  reachedLastPage: boolean;
+  rows: number;
+}
+
 /** Run-level accounting returned alongside the contract (safe to surface to a client). */
 export interface LiveRunMeta {
   address: string;
@@ -112,6 +138,17 @@ export interface LiveRunMeta {
   calls: LiveCall[];
   transactionPagesFetched: number;
   reachedLastPage: boolean;
+  /**
+   * Per-sub-window transaction progress (item #2). One entry for the whole
+   * window when chunking is off; one per attempted sub-window when it is on.
+   */
+  transactionChunks: TransactionChunk[];
+  /**
+   * When the transaction window was NOT fully covered, the earliest date range
+   * still needing capture — pass it back as `window` on a follow-up run to
+   * resume rather than restart. `null` when the window is fully covered.
+   */
+  resumeWindow: { from: string; to: string } | null;
   sanitization: ClearedCounts;
   rowsSkipped: number;
   /** Token addresses discovered from the subject's own activity and enriched (item #1). */
@@ -235,6 +272,47 @@ function discoverTokens(
     .map((e) => e.addr);
 }
 
+/** UTC epoch-day index for a YYYY-MM-DD date. TZ-free and deterministic; NaN if unparseable. */
+function toEpochDay(date: string): number {
+  const parts = date.split('-').map((s) => Number(s));
+  if (parts.length !== 3 || parts.some((n) => !Number.isFinite(n))) return NaN;
+  const [y, m, d] = parts;
+  return Math.floor(Date.UTC(y, m - 1, d) / 86_400_000);
+}
+
+/** Inverse of toEpochDay: an epoch-day index back to a YYYY-MM-DD string. */
+function fromEpochDay(day: number): string {
+  const dt = new Date(day * 86_400_000);
+  const y = dt.getUTCFullYear();
+  const m = String(dt.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(dt.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Split an inclusive [from, to] date window into contiguous, non-overlapping
+ * sub-windows of at most `chunkDays` calendar days (item #2). Deterministic; the
+ * final sub-window is clamped to `to`. `chunkDays <= 0`, or a window whose bounds
+ * don't parse as YYYY-MM-DD, yields a single whole-window range so the caller's
+ * un-chunked path stays byte-identical.
+ */
+function splitWindow(
+  window: { from: string; to: string },
+  chunkDays: number,
+): Array<{ from: string; to: string }> {
+  const step = Math.max(0, Math.trunc(chunkDays));
+  const whole = [{ from: window.from, to: window.to }];
+  if (step <= 0) return whole;
+  const start = toEpochDay(window.from);
+  const end = toEpochDay(window.to);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return whole;
+  const ranges: Array<{ from: string; to: string }> = [];
+  for (let s = start; s <= end; s += step) {
+    ranges.push({ from: fromEpochDay(s), to: fromEpochDay(Math.min(s + step - 1, end)) });
+  }
+  return ranges;
+}
+
 /**
  * Reconstruct an investigation for an arbitrary address + window by fetching
  * live Nansen evidence. Returns the assembled `live-nansen` contract plus a
@@ -326,18 +404,27 @@ export async function reconstructFromAddress(
     stopReasons.push('related-wallets skipped: credit budget reached');
   }
 
-  // --- transactions: paginated timeline; defines transactionWindowCovered ---
+  // --- transactions: paginated timeline; defines transactionWindowCovered -----
+  // One query over the whole window by default. When budget.chunkDays > 0 the
+  // window is split into contiguous sub-windows that each paginate on their own,
+  // so a wide/high-activity window can be fully covered across bounded, resumable
+  // steps (item #2). Coverage holds only when EVERY sub-window reached is_last_page.
   let reachedLastPage = false;
   let pagesFetched = 0;
-  for (let page = 1; page <= budget.maxPages; page += 1) {
-    if (!budgetLeft()) {
-      stopReasons.push(`transactions stopped before page ${page}: credit budget reached`);
-      break;
-    }
+  const transactionChunks: TransactionChunk[] = [];
+  let resumeWindow: { from: string; to: string } | null = null;
+
+  // Fetch + sanitize + normalize one transaction page for a date range. Shared by
+  // the un-chunked and chunked paths so the metadata-injection defense and cost
+  // accounting are identical; returns the raw row count and this page's is_last flag.
+  const fetchTxPage = async (
+    range: { from: string; to: string },
+    page: number,
+  ): Promise<{ rows: number; isLast: boolean }> => {
     const { data, meta } = await client.post<Paged<AddressTransaction>>(EP.transactions, {
       address,
       chain,
-      date: { from: window.from, to: window.to },
+      date: { from: range.from, to: range.to },
       hide_spam_token: true,
       pagination: { page, per_page: perPage },
     });
@@ -359,19 +446,81 @@ export async function reconstructFromAddress(
         rowsSkipped += 1;
       }
     }
-    if (data?.pagination?.is_last_page === true) {
-      reachedLastPage = true;
-      stopReasons.push(`transactions complete: is_last_page at page ${page}`);
-      break;
+    return { rows: rows.length, isLast: data?.pagination?.is_last_page === true };
+  };
+
+  const chunked = Math.trunc(budget.chunkDays) > 0;
+  const ranges = chunked ? splitWindow(window, budget.chunkDays) : [{ from: window.from, to: window.to }];
+
+  if (!chunked) {
+    // Un-chunked path — preserved verbatim so existing runs stay byte-identical.
+    const range = ranges[0];
+    let windowRows = 0;
+    for (let page = 1; page <= budget.maxPages; page += 1) {
+      if (!budgetLeft()) {
+        stopReasons.push(`transactions stopped before page ${page}: credit budget reached`);
+        break;
+      }
+      const { rows, isLast } = await fetchTxPage(range, page);
+      windowRows += rows;
+      if (isLast) {
+        reachedLastPage = true;
+        stopReasons.push(`transactions complete: is_last_page at page ${page}`);
+        break;
+      }
+      if (rows === 0) {
+        reachedLastPage = true;
+        stopReasons.push(`transactions complete: empty page ${page}`);
+        break;
+      }
+      if (page === budget.maxPages) {
+        stopReasons.push(`transactions stopped: page cap (${budget.maxPages}) reached before is_last_page`);
+      }
     }
-    if (rows.length === 0) {
-      reachedLastPage = true;
-      stopReasons.push(`transactions complete: empty page ${page}`);
-      break;
+    transactionChunks.push({ from: range.from, to: range.to, pagesFetched, reachedLastPage, rows: windowRows });
+    resumeWindow = reachedLastPage ? null : { from: range.from, to: range.to };
+  } else {
+    // Chunked path (item #2): each sub-window paginates within the shared credit
+    // budget; the earliest sub-window that doesn't finish is the resume boundary.
+    let firstUncovered: { from: string; to: string } | null = null;
+    for (const range of ranges) {
+      if (!budgetLeft()) {
+        stopReasons.push(`transactions stopped before chunk ${range.from}..${range.to}: credit budget reached`);
+        if (firstUncovered === null) firstUncovered = { from: range.from, to: window.to };
+        break;
+      }
+      let chunkLast = false;
+      let chunkPages = 0;
+      let chunkRows = 0;
+      for (let page = 1; page <= budget.maxPages; page += 1) {
+        if (!budgetLeft()) {
+          stopReasons.push(`transactions[${range.from}..${range.to}] stopped before page ${page}: credit budget reached`);
+          break;
+        }
+        const { rows, isLast } = await fetchTxPage(range, page);
+        chunkPages += 1;
+        chunkRows += rows;
+        if (isLast) {
+          chunkLast = true;
+          stopReasons.push(`transactions[${range.from}..${range.to}] complete: is_last_page at page ${page}`);
+          break;
+        }
+        if (rows === 0) {
+          chunkLast = true;
+          stopReasons.push(`transactions[${range.from}..${range.to}] complete: empty page ${page}`);
+          break;
+        }
+        if (page === budget.maxPages) {
+          stopReasons.push(`transactions[${range.from}..${range.to}] stopped: page cap (${budget.maxPages}) reached before is_last_page`);
+        }
+      }
+      transactionChunks.push({ from: range.from, to: range.to, pagesFetched: chunkPages, reachedLastPage: chunkLast, rows: chunkRows });
+      if (!chunkLast && firstUncovered === null) firstUncovered = { from: range.from, to: window.to };
     }
-    if (page === budget.maxPages) {
-      stopReasons.push(`transactions stopped: page cap (${budget.maxPages}) reached before is_last_page`);
-    }
+    const coveredEveryChunk =
+      transactionChunks.length === ranges.length && transactionChunks.every((c) => c.reachedLastPage);
+    reachedLastPage = coveredEveryChunk;
+    resumeWindow = coveredEveryChunk ? null : firstUncovered ?? { from: window.from, to: window.to };
   }
 
   // --- token-level enrichment (item #1) -------------------------------------
@@ -484,6 +633,8 @@ export async function reconstructFromAddress(
   const fundingEvidence = relationships.some((r) => /fund/i.test(r.value.relation));
   const counterpartyAggregates = counterparties.length > 0;
   const transactionWindowCovered = reachedLastPage;
+  const coveredChunks = transactionChunks.filter((c) => c.reachedLastPage).length;
+  const chunkNote = chunked ? ` across ${transactionChunks.length} sub-window(s)` : '';
   const coverage: CoverageReport = {
     flags: { fundingEvidence, counterpartyAggregates, transactionWindowCovered },
     reasons: [
@@ -499,8 +650,10 @@ export async function reconstructFromAddress(
       }`,
       `flags.transactionWindowCovered: ${
         transactionWindowCovered
-          ? `pagination reached is_last_page within budget (${pagesFetched} page(s), ${transactions.length} tx).`
-          : `pagination stopped before is_last_page (${pagesFetched}/${budget.maxPages} page(s)); the window is a partial sample and needs further capture.`
+          ? `pagination reached is_last_page${chunkNote} within budget (${pagesFetched} page(s), ${transactions.length} tx).`
+          : chunked
+            ? `${coveredChunks}/${ranges.length} sub-window(s) fully paginated (${pagesFetched} page(s), ${transactions.length} tx); resume from ${resumeWindow?.from ?? window.from}. The window is a partial sample and needs further capture.`
+            : `pagination stopped before is_last_page (${pagesFetched}/${budget.maxPages} page(s)); the window is a partial sample and needs further capture.`
       }`,
     ],
   };
@@ -529,6 +682,8 @@ export async function reconstructFromAddress(
     calls,
     transactionPagesFetched: pagesFetched,
     reachedLastPage,
+    transactionChunks,
+    resumeWindow,
     sanitization,
     rowsSkipped,
     tokensDiscovered,

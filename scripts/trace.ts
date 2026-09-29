@@ -102,6 +102,8 @@ ${h('RECONSTRUCT OPTIONS')}
   --no-related              skip the related-wallets fetch
   --token-activity          also fetch token-scoped transfers + dex-trades (opt-in; ~3 credits/token)
   --max-tokens <n>          cap discovered tokens to enrich (default ${DEFAULT_BUDGET.maxTokens})
+  --chunk-days <n>          split the window into <n>-day sub-windows so a wide window can
+                            fully paginate across bounded steps (default off; see 'resume from')
   --save                    save the result into the library (data/cases/)
   --out <path>              also write the contract JSON to <path>
 
@@ -118,7 +120,7 @@ ${h('EXAMPLES')}
 }
 
 // ---- tiny arg parser --------------------------------------------------------
-const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--out', '--name', '--headline']);
+const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--chunk-days', '--out', '--name', '--headline']);
 
 interface ParsedArgs {
   positionals: string[];
@@ -300,6 +302,7 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   if (args.bools.has('--no-related')) budget.fetchRelatedWallets = false;
   if (args.bools.has('--token-activity')) budget.fetchTokenActivity = true;
   if (args.flags['--max-tokens']) budget.maxTokens = Number(args.flags['--max-tokens']);
+  if (args.flags['--chunk-days']) budget.chunkDays = Number(args.flags['--chunk-days']);
   const chain = args.flags['--chain'] ?? 'ethereum';
   const eff: LiveBudget = { ...DEFAULT_BUDGET, ...budget };
 
@@ -309,7 +312,8 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   console.log(
     `  ${gray('budget')}  up to ${eff.maxCredits} credits, ${eff.maxPages} page(s)` +
     `${eff.fetchCounterparties ? '' : ', no counterparties'}${eff.fetchRelatedWallets ? '' : ', no related-wallets'}` +
-    `${eff.fetchTokenActivity ? `, token activity (≤${eff.maxTokens} token${eff.maxTokens === 1 ? '' : 's'})` : ''}`,
+    `${eff.fetchTokenActivity ? `, token activity (≤${eff.maxTokens} token${eff.maxTokens === 1 ? '' : 's'})` : ''}` +
+    `${eff.chunkDays > 0 ? `, ${eff.chunkDays}-day chunks` : ''}`,
   );
   console.log(dim('  Calling Nansen…\n'));
 
@@ -327,6 +331,13 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   acc('credits spent', bold(String(meta.creditsSpent)));
   acc('credits remaining', String(meta.creditsRemaining ?? 'unknown'));
   acc('tx pages fetched', `${meta.transactionPagesFetched}  (reached last page: ${meta.reachedLastPage})`);
+  if (meta.transactionChunks.length > 1) {
+    const covered = meta.transactionChunks.filter((c) => c.reachedLastPage).length;
+    acc('tx sub-windows', `${covered}/${meta.transactionChunks.length} fully paginated`);
+  }
+  if (meta.resumeWindow) {
+    acc('resume from', `${meta.resumeWindow.from} → ${meta.resumeWindow.to}  ${dim('(re-run with this window to continue)')}`);
+  }
   if (meta.tokensDiscovered.length > 0) {
     acc('tokens enriched', `${meta.tokensDiscovered.length}  (${meta.tokenActivity.transfers} transfer(s), ${meta.tokenActivity.swaps} swap(s))`);
   }

@@ -6,6 +6,7 @@ import {
   SERVER_MAX_CREDITS,
   SERVER_MAX_PAGES,
   SERVER_MAX_TOKENS,
+  SERVER_MAX_CHUNK_DAYS,
 } from '../src/investigations/live-route.ts';
 import type { NansenLike } from '../src/investigations/live.ts';
 import { NansenApiError } from '../src/nansen/client.ts';
@@ -196,4 +197,27 @@ test('ROUTE12: a dry-run reflects opt-in token activity without spending', async
   assert.equal(b.estimate.breakdown.tokenActivity, 9); // 3 tokens × (2 transfers + 1 dex)
   // 5 + 1 + 5 + 9 = 20, clamped to the default maxCredits (12) since none was given.
   assert.equal(b.estimate.worstCaseCredits, 12);
+});
+
+test('ROUTE13: window chunking is clamped to the server ceiling and priced by the dry-run', async () => {
+  const parsed = parseReconstructRequest({
+    address: ADDR, window: WINDOW, budget: { chunkDays: 99999 },
+  });
+  assert.equal(parsed.budget.chunkDays, SERVER_MAX_CHUNK_DAYS);
+
+  // a negative chunkDays is a 400, not a silent default.
+  assert.throws(
+    () => parseReconstructRequest({ address: ADDR, window: WINDOW, budget: { chunkDays: -1 } }),
+    /chunkDays/,
+  );
+
+  // the dry-run reflects the chunked worst case (tx phase can use the whole ceiling).
+  const { status, body } = await runReconstruct(
+    { address: ADDR, window: WINDOW, dryRun: true, budget: { chunkDays: 5, maxPages: 2, maxCredits: 20 } },
+    { allowServerKey: false, hasServerKey: false }, // no key, no injected client
+  );
+  assert.equal(status, 200);
+  const b = body as { estimate: { worstCaseCredits: number; breakdown: { transactionPages: number } } };
+  assert.equal(b.estimate.breakdown.transactionPages, 14); // 20 − (cp 5 + rel 1)
+  assert.equal(b.estimate.worstCaseCredits, 20);
 });

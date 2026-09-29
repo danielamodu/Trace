@@ -63,6 +63,26 @@ test('EST3: opt-in token activity adds 3 credits per capped token; off by defaul
   assert.equal(clamped.worstCaseCredits, 12);
 });
 
+test('EST4: window chunking prices the transaction phase up to the whole ceiling', () => {
+  // A chunked run paginates every sub-window, so the tx phase can consume all the
+  // credits left after the fixed calls — worst case = the maxCredits ceiling,
+  // regardless of the per-chunk maxPages.
+  const e = estimateCredits({ chunkDays: 5, maxPages: 2, maxCredits: 20 });
+  assert.equal(e.breakdown.transactionPages, 14); // 20 ceiling − (cp 5 + rel 1)
+  assert.equal(e.plannedCredits, 20);
+  assert.equal(e.worstCaseCredits, 20);
+
+  // a tight ceiling still clamps it, and never goes below the per-chunk page cap.
+  const tight = estimateCredits({ chunkDays: 5, maxPages: 2, maxCredits: 5 });
+  assert.equal(tight.breakdown.transactionPages, 2);
+  assert.equal(tight.worstCaseCredits, 5);
+
+  // chunkDays: 0 (the default) leaves the un-chunked estimate untouched.
+  const off = estimateCredits({ chunkDays: 0, maxPages: 5 });
+  assert.equal(off.breakdown.transactionPages, 5);
+  assert.equal(off.worstCaseCredits, 11);
+});
+
 test('TOKEN1: header parsing accepts Bearer and x-trace-token, case-insensitive', () => {
   assert.equal(presentedToken({ Authorization: 'Bearer abc' }), 'abc');
   assert.equal(presentedToken({ 'X-Trace-Token': 'xyz' }), 'xyz');
