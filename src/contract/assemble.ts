@@ -23,6 +23,7 @@ import type {
   CoverageReport,
   DataSource,
   InvestigationContract,
+  OriginAttestation,
 } from './types.ts';
 import { assertContract } from './validate.ts';
 
@@ -31,6 +32,27 @@ export interface BuildContractOptions {
   coverage: CoverageReport;
   /** Normalized build inputs (for unavailable-field aggregation). Optional but recommended. */
   inputs?: EngineInput;
+  /**
+   * Hybrid origin-proof (item #3). When present it is folded onto the contract
+   * before validation + freeze, so the attestation is covered by the
+   * fingerprint. Omit it to build a pre-#3-shaped contract (still valid).
+   */
+  origin?: OriginAttestation;
+}
+
+/**
+ * The origin attestation for a fixture-cache build (item #3): no live Nansen
+ * HTTP call is made at request time — the records were captured earlier and
+ * cached as fixtures. Shared by every fixture case builder so they attest
+ * identically. Pass the case's reconstructedAt as `capturedAt` for determinism.
+ */
+export function noLiveHttpOrigin(capturedAt: string): OriginAttestation {
+  return {
+    mode: 'no-live-http',
+    capturedAt,
+    note: 'Fixture-cache build: no live Nansen HTTP response at request time; records were captured earlier and cached as fixtures (see investigation.sources for per-source capture timestamps).',
+    receipts: [],
+  };
 }
 
 /**
@@ -72,6 +94,17 @@ export function buildContract(
     evidence: computeEvidence(investigation, result.stats, options.inputs),
     investigation,
   };
+  // Item #3: fold the origin attestation on only when supplied, so callers that
+  // don't opt in produce a byte-identical (pre-#3) contract. Cloned so the
+  // caller's object isn't captured by the deep-freeze below.
+  if (options.origin) {
+    contract.origin = {
+      mode: options.origin.mode,
+      capturedAt: options.origin.capturedAt,
+      ...(options.origin.note !== undefined ? { note: options.origin.note } : {}),
+      receipts: options.origin.receipts.map((r) => ({ ...r })),
+    };
+  }
   assertContract(contract);
   return deepFreeze(contract);
 }

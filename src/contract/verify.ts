@@ -22,10 +22,10 @@ import type { Investigation } from '../types/investigation.ts';
 import { computeCompleteness, countEvidence } from './completeness.ts';
 import type { EvidenceCounts } from './completeness.ts';
 import { validateContract } from './validate.ts';
-import type { Completeness, CoverageReport, DataSource, InvestigationContract } from './types.ts';
+import type { Completeness, CoverageReport, DataSource, InvestigationContract, OriginAttestation } from './types.ts';
 
 export interface VerifyCheck {
-  id: 'schema' | 'verdict' | 'counts' | 'no-hypothesis';
+  id: 'schema' | 'verdict' | 'counts' | 'no-hypothesis' | 'origin';
   label: string;
   ok: boolean;
   detail: string;
@@ -90,7 +90,7 @@ function countsMatch(recomputed: EvidenceCounts, stored: unknown): boolean {
 
 /**
  * Re-derive an artifact's verdict from the artifact alone. Offline, no credits.
- * Returns a fingerprint plus four named checks; `ok` is true only when all pass.
+ * Returns a fingerprint plus named checks; `ok` is true only when all pass.
  */
 export async function verifyContract(contract: unknown): Promise<VerifyResult> {
   const errors = validateContract(contract);
@@ -111,6 +111,31 @@ export async function verifyContract(contract: unknown): Promise<VerifyResult> {
   const verdictOk = verdict.completeness === c.completeness && reasonsMatch;
   const countsOk = countsMatch(counts, c.evidence);
   const noHypothesis = !hasHypothesis(inv);
+
+  // Item #3: the origin attestation, re-checked for internal consistency. Absent
+  // is legitimate (pre-#3 / not-yet-re-pinned artifacts). When present, its mode
+  // must agree with dataSource and a no-live-http build must carry no receipts.
+  // The raw response bodies aren't shipped, so the responseSha256 values can't
+  // be recomputed here; the fingerprint (which covers them) is what binds them.
+  const origin = c.origin as OriginAttestation | undefined;
+  let originOk: boolean;
+  let originDetail: string;
+  if (origin === undefined) {
+    originOk = true;
+    originDetail = 'No origin attestation on this artifact — nothing to re-check (pre-#3 or not re-pinned).';
+  } else {
+    const modeAgrees =
+      (c.dataSource === 'live-nansen' && origin.mode === 'live-http') ||
+      (c.dataSource === 'fixture-cache' && origin.mode === 'no-live-http');
+    const receiptsSound =
+      Array.isArray(origin.receipts) && (origin.mode !== 'no-live-http' || origin.receipts.length === 0);
+    originOk = modeAgrees && receiptsSound;
+    originDetail = originOk
+      ? origin.mode === 'live-http'
+        ? `${origin.receipts.length} live HTTP receipt(s) captured ${origin.capturedAt}; each raw response hashed (SHA-256) and bound to this fingerprint.`
+        : `Declared no-live-http (fixture-cache) ${origin.capturedAt}; no live response to attest — consistent with the data source.`
+      : `origin.mode '${origin.mode}' is inconsistent with dataSource '${c.dataSource ?? '—'}' or carries receipts it should not.`;
+  }
 
   const checks: VerifyCheck[] = [
     {
@@ -148,6 +173,12 @@ export async function verifyContract(contract: unknown): Promise<VerifyResult> {
       detail: noHypothesis
         ? 'Every claim is FACT, RELATION, or DERIVED. Nothing interpretive.'
         : 'Contains HYPOTHESIS provenance — interpretive claims are not allowed in the contract.',
+    },
+    {
+      id: 'origin',
+      label: 'Origin attestation consistent',
+      ok: originOk,
+      detail: originDetail,
     },
   ];
 

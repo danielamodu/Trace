@@ -29,6 +29,7 @@ import {
   CONTRACT_VERSION,
   UnknownCaseError,
   buildContract,
+  noLiveHttpOrigin,
   validateContract,
   validateInvestigation,
   type CoverageReport,
@@ -108,7 +109,7 @@ test('C-IDS-2: shuffled inputs yield identical IDs and contract JSON', () => {
       { id: EULER_CASE_ID, name: EULER_NAME, headline: EULER_HEADLINE, window: { ...EULER_WINDOW } },
       { reconstructedAt: FIXED_AT },
     ),
-    { dataSource: 'fixture-cache', coverage: eulerCoverage(), inputs: reversed },
+    { dataSource: 'fixture-cache', coverage: eulerCoverage(), inputs: reversed, origin: noLiveHttpOrigin(FIXED_AT) },
   );
   assert.equal(
     JSON.stringify(c.investigation.events.map((e) => e.id)),

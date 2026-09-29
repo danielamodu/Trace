@@ -28,6 +28,61 @@ export type DataSource = 'fixture-cache' | 'live-nansen';
 export type Completeness = 'complete' | 'incomplete';
 
 /**
+ * How the contract's records reached the engine (item #3, hybrid origin-proof):
+ *  - live-http: at least one live Nansen HTTP response was captured this run.
+ *  - no-live-http: a fixture-cache build that made no live HTTP call at request
+ *    time (records were captured earlier and cached; see investigation.sources).
+ */
+export type OriginMode = 'live-http' | 'no-live-http';
+
+/**
+ * One live HTTP response captured during a live reconstruction, reduced to the
+ * facts that make it auditable without re-disclosing row contents or the key:
+ * endpoint path, HTTP status, Nansen request id, credit accounting, and a
+ * SHA-256 of the RAW response body. The raw body is never shipped, so the hash
+ * is not re-derivable offline — folding the receipt into the contract binds it
+ * to the fingerprint, so any edit to a receipt changes the artifact fingerprint.
+ */
+export interface OriginReceipt {
+  /** Endpoint path called (no query string, no key). */
+  path: string;
+  /** HTTP status of the response. */
+  status: number;
+  /** Nansen X-Request-Id, when the response carried one. */
+  requestId: string | null;
+  /** X-Nansen-Credits-Cost header value, when present. */
+  creditsCost: string | null;
+  /** X-Nansen-Credits-Remaining header value, when present. */
+  creditsRemaining: string | null;
+  /** SHA-256 hex of the raw response body; null when no body / a scripted client. */
+  responseSha256: string | null;
+}
+
+/**
+ * Hybrid origin-proof (item #3): records HOW a contract's evidence was obtained.
+ * A live run carries `live-http` with one receipt per response; a fixture-cache
+ * build carries `no-live-http` with an empty receipt set and a note.
+ *
+ * Optional + additive on the contract: artifacts built before item #3 (and the
+ * shipped live contracts not yet re-pinned) omit it and still validate. It is
+ * folded onto the contract BEFORE fingerprinting, so the attestation is covered
+ * by the SHA-256 fingerprint — that is the tamper-evidence mechanism.
+ */
+export interface OriginAttestation {
+  mode: OriginMode;
+  /**
+   * When the responses were captured. Pinned to the run's reconstructedAt for
+   * determinism (a re-run with identical inputs + reconstructedAt yields a
+   * byte-identical attestation). For no-live-http, the case's reconstructedAt.
+   */
+  capturedAt: string;
+  /** Optional human-readable note (e.g. why there was no live HTTP call). */
+  note?: string;
+  /** One receipt per recorded live HTTP response; empty for no-live-http. */
+  receipts: OriginReceipt[];
+}
+
+/**
  * Which evidence dimensions the reconstruction actually covers. Each false
  * flag must have a corresponding entry in `reasons`.
  */
@@ -101,6 +156,13 @@ export interface InvestigationContract {
   completenessReasons: string[];
   coverage: CoverageReport;
   evidence: EvidenceCompleteness;
+  /**
+   * Hybrid origin-proof (item #3, additive + optional for backward
+   * compatibility: older contracts without it still validate). Records whether
+   * the evidence came from a live Nansen HTTP run (with per-response receipts)
+   * or a fixture-cache build (no live HTTP). Fingerprint-covered.
+   */
+  origin?: OriginAttestation;
   investigation: Investigation;
 }
 

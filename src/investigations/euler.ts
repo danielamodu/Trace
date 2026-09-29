@@ -25,7 +25,7 @@ import type { EngineInput } from '../reconstruction/engine.ts';
 import { reconstruct } from '../reconstruction/engine.ts';
 import type { ReconstructionResult } from '../reconstruction/engine.ts';
 import { normalizeTransaction } from '../reconstruction/transaction.ts';
-import { buildContract } from '../contract/assemble.ts';
+import { buildContract, noLiveHttpOrigin } from '../contract/assemble.ts';
 import { createContractService } from '../contract/service.ts';
 import type { ContractService } from '../contract/service.ts';
 import type { CoverageReport, InvestigationContract } from '../contract/types.ts';
@@ -175,6 +175,10 @@ export function buildEulerContract(reconstructedAt?: string): InvestigationContr
     dataSource: 'fixture-cache',
     coverage: eulerCoverage(),
     inputs: input,
+    // Item #3: this case makes NO live Nansen HTTP call at request time — its
+    // records were captured earlier and cached as fixtures. capturedAt is pinned
+    // to the reconstruction clock so the attestation stays deterministic.
+    origin: noLiveHttpOrigin(result.investigation.reconstructedAt),
   });
 }
 
