@@ -19,6 +19,9 @@ fixtures/raw/
 # Saved live cases (local library, per-install; not part of the shipped set)
 data/cases/
 
+# Local reconstruction output from `reconstruct --out` (scratch; promote into data/shipped/ to ship)
+data/enriched/
+
 # Playwright e2e artifacts
 test-results/
 playwright-report/
