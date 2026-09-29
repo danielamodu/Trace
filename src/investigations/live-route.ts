@@ -32,6 +32,8 @@ export const SERVER_MAX_CREDITS = 25;
 export const SERVER_MAX_PAGES = 10;
 /** Cap on discovered tokens to enrich (each ≈3 credits; also bounded by maxCredits). */
 export const SERVER_MAX_TOKENS = 5;
+/** Cap on the window-chunk size a caller may request (item #2); larger = coarser chunks. */
+export const SERVER_MAX_CHUNK_DAYS = 366;
 
 export interface RunOptions {
   /** Whether the server's NANSEN_API_KEY may be used as a fallback credential. */
@@ -101,6 +103,14 @@ function clampBudget(raw: unknown): Partial<LiveBudget> {
     const n = Number(rec.maxTokens);
     if (!Number.isFinite(n) || n < 0) throw new BadRequest('"budget.maxTokens" must be a non-negative number');
     out.maxTokens = Math.min(Math.trunc(n), SERVER_MAX_TOKENS);
+  }
+  // Item #2 — opt-in window chunking. Non-negative integer days (0 disables it),
+  // clamped to a server ceiling. A wide window with a small chunk size is still
+  // bounded by maxCredits and the deploy ledger, so this cannot amplify spend.
+  if (rec.chunkDays !== undefined) {
+    const n = Number(rec.chunkDays);
+    if (!Number.isFinite(n) || n < 0) throw new BadRequest('"budget.chunkDays" must be a non-negative number');
+    out.chunkDays = Math.min(Math.trunc(n), SERVER_MAX_CHUNK_DAYS);
   }
   return out;
 }
