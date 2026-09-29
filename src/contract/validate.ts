@@ -199,6 +199,11 @@ export function validateInvestigation(inv: unknown): string[] {
         errors.push(`${path}.txHash must be hex, got ${JSON.stringify(e.txHash)}`);
       }
       if (e.method !== undefined && typeof e.method !== 'string') errors.push(`${path}.method must be a string`);
+      for (const f of ['blockNumber', 'transactionIndex'] as const) {
+        if (e[f] !== undefined && (typeof e[f] !== 'number' || !Number.isInteger(e[f]) || (e[f] as number) < 0)) {
+          errors.push(`${path}.${f} must be a non-negative integer when present, got ${JSON.stringify(e[f])}`);
+        }
+      }
       if (!Array.isArray(e.participants) || e.participants.length === 0) {
         errors.push(`${path}.participants must list at least one participant`);
       } else {

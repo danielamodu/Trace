@@ -25,6 +25,7 @@ import type { EngineInput } from '../reconstruction/engine.ts';
 import { reconstruct } from '../reconstruction/engine.ts';
 import type { ReconstructionResult } from '../reconstruction/engine.ts';
 import { normalizeTransaction } from '../reconstruction/transaction.ts';
+import { loadBlockPositions } from './blockorder.ts';
 import { buildContract, noLiveHttpOrigin } from '../contract/assemble.ts';
 import { createContractService } from '../contract/service.ts';
 import type { ContractService } from '../contract/service.ts';
@@ -51,6 +52,8 @@ export const EULER_BALANCER_VAULT = '0xba12222222228d8ba445958a75a0704d566bf2c8'
 const COUNTERPARTIES_FIXTURE = 'discovery/entity-euler-exploiter.json';
 const ATTACKER_FIXTURE = 'discovery/0xb66cd966.json';
 const LIVE_TRANSACTIONS_FIXTURE = 'live/euler/profiler-transactions-2023-03-13-p1.json';
+/** Item #5: true intra-block positions captured out-of-band via public RPC. */
+const BLOCKORDER_FIXTURE = 'blockorder/euler.json';
 
 function fixturesDir(): URL {
   // Built as a runtime expression (not a string literal) so bundlers leave it
@@ -119,8 +122,11 @@ export function loadEulerInputs(): { input: EngineInput; files: string[] } {
       ),
       ...(liveRows as unknown[]).map((r) => normalizeTransaction(r, liveSource)),
     ],
+    // Item #5: order same-block events by true (blockNumber, transactionIndex),
+    // captured out-of-band via public RPC. Ordering metadata, not Nansen evidence.
+    blockPositions: loadBlockPositions(fixturesDir(), BLOCKORDER_FIXTURE),
   };
-  return { input, files: [COUNTERPARTIES_FIXTURE, ATTACKER_FIXTURE, LIVE_TRANSACTIONS_FIXTURE] };}
+  return { input, files: [COUNTERPARTIES_FIXTURE, ATTACKER_FIXTURE, LIVE_TRANSACTIONS_FIXTURE, BLOCKORDER_FIXTURE] };}
 
 /** Coverage for the Euler fixture case — the honest carrier of its limits. */
 export function eulerCoverage(): CoverageReport {

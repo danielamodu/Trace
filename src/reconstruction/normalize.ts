@@ -24,6 +24,8 @@ import type {
   NormalizedCounterparty,
   NormalizedRelationship,
   NormalizedFlowBucket,
+  BlockPositionFact,
+  BlockPositionCapture,
 } from './normalized-types.ts';
 
 /** Thrown when a required field is missing or the record is malformed. */
@@ -319,4 +321,48 @@ export function normalizeFlowBucket(raw: unknown, source: SourceMeta): Provenanc
     trackAbsent(raw, k, missing);
   }
   return wrap(value, 'FACT', source, missing);
+}
+
+/**
+ * Coerce a decimal number or a "0x"-hex string to a non-negative integer, or
+ * throw. Public JSON-RPC returns quantities as hex ("0x1009f4c"); our capture
+ * script writes decimals — accept both so the normalizer is robust either way.
+ */
+function requireUintFrom(v: unknown, field: string, fixtureFile: string | null): number {
+  let n: number;
+  if (typeof v === 'number') {
+    n = v;
+  } else if (typeof v === 'string' && /^0x[0-9a-fA-F]+$/.test(v)) {
+    n = Number.parseInt(v, 16);
+  } else if (typeof v === 'string' && /^\d+$/.test(v)) {
+    n = Number.parseInt(v, 10);
+  } else {
+    throw new NormalizationError(`"${field}" must be a decimal or 0x-hex integer`, field, fixtureFile);
+  }
+  if (!Number.isInteger(n) || n < 0) {
+    throw new NormalizationError(`"${field}" must be a non-negative integer`, field, fixtureFile);
+  }
+  return n;
+}
+
+/**
+ * RPC receipt row → {@link BlockPositionFact} (item #5). Accepts either our
+ * capture-script shape (`txHash`/`blockNumber`/`transactionIndex`) or a raw
+ * eth_getTransactionReceipt result (`transactionHash`/hex fields). This is
+ * ordering metadata, NOT Nansen evidence — hence no `Provenanced` wrapper.
+ */
+export function normalizeBlockPosition(raw: unknown, capture: BlockPositionCapture): BlockPositionFact {
+  if (!isObject(raw)) throw new NormalizationError('block position is not an object', '.', null);
+  const txRaw = raw.txHash ?? raw.transactionHash ?? raw.transaction_hash;
+  if (typeof txRaw !== 'string' || !/^0x[0-9a-fA-F]+$/.test(txRaw)) {
+    throw new NormalizationError('block position "txHash" must be 0x-hex', 'txHash', null);
+  }
+  const blockRaw = raw.blockNumber ?? raw.block_number;
+  const indexRaw = raw.transactionIndex ?? raw.transaction_index;
+  return {
+    txHash: txRaw.toLowerCase(),
+    blockNumber: requireUintFrom(blockRaw, 'blockNumber', null),
+    transactionIndex: requireUintFrom(indexRaw, 'transactionIndex', null),
+    capture,
+  };
 }

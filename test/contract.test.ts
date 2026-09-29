@@ -101,6 +101,9 @@ test('C-IDS-2: shuffled inputs yield identical IDs and contract JSON', () => {
     relationships: rev(input.relationships),
     transactions: rev(input.transactions),
     flows: rev(input.flows),
+    // Item #5: block positions are part of the input; reversing them too proves
+    // ordering is invariant to their array order (they key by txHash).
+    blockPositions: rev(input.blockPositions),
   };
   const c = buildContract(
     reconstruct(

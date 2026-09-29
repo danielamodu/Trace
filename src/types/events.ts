@@ -43,7 +43,11 @@ export interface TraceEvent {
   // --- what / when ---
   title: string;                 // short human summary ("Flash loan drawn from Balancer")
   timestamp: string;             // ISO 8601 UTC (FACT: block_timestamp)
-  /** Ordering key: (timestamp, txIndex, logIndex) resolved deterministically. */
+  /**
+   * Ordering key: events sort by (timestamp, then true intra-block position when
+   * captured, else txHash lexicographic, then event-kind rank, then source).
+   * `order` is the resolved 1-based sequence in that total order.
+   */
   order: number;
 
   // --- who / how much ---
@@ -51,6 +55,16 @@ export interface TraceEvent {
   value?: EventValue;
   txHash?: string;               // FACT anchor
   method?: string;               // FACT: Nansen tx method string
+  /**
+   * True intra-block position captured out-of-band via public JSON-RPC
+   * (item #5), when available. `blockNumber`/`transactionIndex` are chain FACTs
+   * used to order same-block events by their real sequence instead of by
+   * arbitrary txHash lexicographic tie-break. Absent when no position was
+   * captured for this event's transaction (e.g. DERIVED groupings, or a
+   * reconstruction run without a captured block-order fixture).
+   */
+  blockNumber?: number;
+  transactionIndex?: number;
 
   // --- why it is in the timeline ---
   /** Deterministic significance score (see reconstruction rules). */

@@ -157,6 +157,39 @@ export interface NormalizedFlowBucket {
   holdersCount: number | null;
 }
 
+// --- block positions  (public JSON-RPC eth_getTransactionReceipt) -------------
+/**
+ * Intra-block position for a transaction, captured out-of-band from a public
+ * Ethereum JSON-RPC endpoint (item #5). This is ORDERING METADATA, not Nansen
+ * evidence: Nansen rows carry no txIndex/logIndex, so same-block events could
+ * only be tie-broken by txHash (lexicographic, arbitrary). A captured
+ * `(blockNumber, transactionIndex)` lets the engine order same-block events by
+ * their true on-chain sequence instead. It never becomes a timeline event and
+ * never counts as an observed fact; its citation lives in the reconstruction's
+ * `dataGaps`. `transactionIndex` is transaction-level only — no log-level
+ * (intra-transaction) index is available from a receipt.
+ */
+export interface BlockPositionFact {
+  /** The transaction hash this position belongs to (0x-hex). */
+  txHash: string;
+  /** Canonical block height (integer >= 0). */
+  blockNumber: number;
+  /** Position of the transaction within its block (integer >= 0). */
+  transactionIndex: number;
+  /** Provenance of the capture — endpoint + method + time, no secrets. */
+  capture: BlockPositionCapture;
+}
+
+/** Where/how a {@link BlockPositionFact} was captured (audit trail, no secrets). */
+export interface BlockPositionCapture {
+  /** JSON-RPC endpoint host the receipt was read from (no keys, no query). */
+  rpc: string;
+  /** The JSON-RPC method used, e.g. "eth_getTransactionReceipt". */
+  method: string;
+  /** ISO-8601 capture time (positions are chain-stable, but recorded anyway). */
+  capturedAt: string;
+}
+
 /** Convenience aliases for the provenance-wrapped records. */
 export type TransferFact = Provenanced<NormalizedTransfer>;
 export type SwapFact = Provenanced<NormalizedSwap>;

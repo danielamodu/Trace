@@ -60,7 +60,11 @@ test('F2: full Euler trail is deterministic and ends in an explicit dead end', (
   const trail = walkTrail(contract, 'event_001');
   assert.deepEqual(
     trail.map((s) => s.toEventId),
-    ['event_002', 'event_003', 'event_004', 'event_005', 'event_009'],
+    // Item #5: true intra-block order (block 16818504: tx …f7f6ae idx 27 before
+    // …32be97 idx 36) makes event_005 → event_006 a connected same-entity hop, so
+    // the trail now continues through event_006 before the event_009 dead end
+    // (previously the arbitrary txHash-lexicographic tie-break skipped it).
+    ['event_002', 'event_003', 'event_004', 'event_005', 'event_006', 'event_009'],
   );
   assert.ok(trail.every((s) => typeof s.entity === 'string' && s.entity.startsWith('0x')));
   const last = trail[trail.length - 1].toEventId;
