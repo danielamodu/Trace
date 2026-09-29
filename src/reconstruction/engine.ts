@@ -29,6 +29,7 @@
  */
 
 import type {
+  BlockPositionFact,
   CounterpartyFact,
   FlowBucketFact,
   Provenanced,
@@ -137,6 +138,16 @@ export interface EngineInput {
    * `stats.flowsSkipped` when present.
    */
   flows?: FlowBucketFact[];
+  /**
+   * Optional intra-block positions captured out-of-band from a public Ethereum
+   * JSON-RPC endpoint (item #5). Keyed to events by `txHash`. When supplied,
+   * same-block events order by their true `(blockNumber, transactionIndex)`
+   * instead of the arbitrary txHash-lexicographic tie-break, and the position
+   * surfaces on the event. Absent = ordering is unchanged (byte-identical), so
+   * every existing reconstruction is unaffected. This is ordering metadata, not
+   * Nansen evidence: positions never become events or observed facts.
+   */
+  blockPositions?: BlockPositionFact[];
 }
 
 /** The case subject the reconstruction centers on. */
@@ -206,6 +217,13 @@ interface Candidate {
   txHash: string | null;
   method: string | null;
   valueUsd: number | null;
+  /**
+   * True intra-block position (item #5), attached post-extraction by txHash when
+   * a block-order capture is supplied. `undefined` = unknown (the common case);
+   * the ordering then falls back to the txHash-lexicographic tie-break.
+   */
+  blockNumber?: number;
+  transactionIndex?: number;
   /** Address movements observed (transfer/tx). Empty for pure relation events. */
   movements: CandidateMovement[];
   /** Swap-specific anchors. */
@@ -696,6 +714,52 @@ export function significanceScore(c: {
 // Main reconstruction
 // ---------------------------------------------------------------------------
 
+/**
+ * Intra-block ordering tie-break (item #5). When BOTH events carry an
+ * RPC-captured block position, order by (blockNumber, transactionIndex) — their
+ * true on-chain sequence. When either side is unknown, return 0 so the caller
+ * falls through to the existing txHash-lexicographic tie-break. This is what
+ * keeps reconstructions WITHOUT captured positions byte-identical to before.
+ */
+function cmpBlockPos(
+  a: { blockNumber?: number; transactionIndex?: number },
+  b: { blockNumber?: number; transactionIndex?: number },
+): number {
+  if (a.blockNumber === undefined || b.blockNumber === undefined) return 0;
+  if (a.blockNumber !== b.blockNumber) return a.blockNumber - b.blockNumber;
+  if (a.transactionIndex === undefined || b.transactionIndex === undefined) return 0;
+  return a.transactionIndex - b.transactionIndex;
+}
+
+/**
+ * Validate + index an optional block-position capture into a txHash→position
+ * map (item #5). Malformed positions fail loudly (never silently dropped): the
+ * capture is authored by our own RPC script, so a bad row is a bug, not a
+ * data gap. Keyed lowercase for case-insensitive txHash lookup.
+ */
+function indexBlockPositions(
+  positions: BlockPositionFact[] | undefined,
+): Map<string, { blockNumber: number; transactionIndex: number }> {
+  const map = new Map<string, { blockNumber: number; transactionIndex: number }>();
+  if (positions === undefined) return map;
+  if (!Array.isArray(positions)) {
+    throw new EngineError('blockPositions must be an array', 'blockPositions');
+  }
+  positions.forEach((p, i) => {
+    if (!isObject(p) || typeof p.txHash !== 'string' || !/^0x[0-9a-fA-F]+$/.test(p.txHash)) {
+      throw new EngineError(`blockPositions[${i}].txHash must be 0x-hex`, 'blockPositions.txHash', i);
+    }
+    if (!Number.isInteger(p.blockNumber) || p.blockNumber < 0) {
+      throw new EngineError(`blockPositions[${i}].blockNumber must be an integer >= 0`, 'blockPositions.blockNumber', i);
+    }
+    if (!Number.isInteger(p.transactionIndex) || p.transactionIndex < 0) {
+      throw new EngineError(`blockPositions[${i}].transactionIndex must be an integer >= 0`, 'blockPositions.transactionIndex', i);
+    }
+    map.set(p.txHash.toLowerCase(), { blockNumber: p.blockNumber, transactionIndex: p.transactionIndex });
+  });
+  return map;
+}
+
 export function reconstruct(
   input: EngineInput,
   subject: ReconstructionSubject,
@@ -723,6 +787,14 @@ export function reconstruct(
     throw new EngineError('minGroupMembers must be an integer >= 2', 'minGroupMembers');
   }
   const reconstructedAt = options.reconstructedAt ?? new Date().toISOString();
+
+  // Item #5: validate + index any RPC-captured intra-block positions. Empty map
+  // when none supplied → ordering below is unchanged (byte-identical output).
+  // (`input` is narrowed to Record<string, unknown> by the guard above, matching
+  // the cast pattern used for the other input collections.)
+  const blockPosByTx = indexBlockPositions(
+    (input as Record<string, unknown>).blockPositions as BlockPositionFact[] | undefined,
+  );
 
   // --- validate + canonical-sort + dedupe each record kind -----------------
   const kinds = ['transfers', 'swaps', 'counterparties', 'relationships', 'transactions'] as const;
@@ -797,14 +869,31 @@ export function reconstruct(
     }
   }
 
+  // Item #5: attach any RPC-captured intra-block position to its candidate by
+  // txHash. Left undefined when no capture covers the tx (the ordering then
+  // falls back to the txHash-lexicographic tie-break below).
+  if (blockPosByTx.size > 0) {
+    for (const c of candidates) {
+      if (c.txHash === null) continue;
+      const pos = blockPosByTx.get(c.txHash.toLowerCase());
+      if (pos !== undefined) {
+        c.blockNumber = pos.blockNumber;
+        c.transactionIndex = pos.transactionIndex;
+      }
+    }
+  }
+
   // --- deterministic ordering ----------------------------------------------
-  // Nansen rows carry no txIndex/logIndex (verified across all fixtures), so
-  // the stable tie-break chain is: epochMs → txHash (lexicographic) → event
-  // kind rank → source endpoint → canonical input order. Nothing is invented.
+  // Base tie-break chain: epochMs → txHash (lexicographic) → event kind rank →
+  // source endpoint → canonical input order. Nothing is invented. When an
+  // intra-block position was captured for both sides (item #5), it orders
+  // same-block events by their true (blockNumber, transactionIndex) BEFORE the
+  // txHash tie-break; unknown positions leave the chain unchanged.
   const orderedMembers = [...candidates]
     .map((c, seq) => ({ c, seq }))
     .sort((a, b) =>
       a.c.epochMs - b.c.epochMs ||
+      cmpBlockPos(a.c, b.c) ||
       (a.c.txHash ?? '').localeCompare(b.c.txHash ?? '') ||
       kindRank(a.c.type) - kindRank(b.c.type) ||
       (a.c.source.source < b.c.source.source ? -1 : a.c.source.source > b.c.source.source ? 1 : 0) ||
@@ -1181,6 +1270,7 @@ export function reconstruct(
       keyAddress,
       members: [...members].sort((a, b) =>
         a.cand.epochMs - b.cand.epochMs ||
+        cmpBlockPos(a.cand, b.cand) ||
         (a.cand.txHash ?? '').localeCompare(b.cand.txHash ?? ''),
       ),
       timestampIso: latest.cand.timestampIso,
@@ -1341,10 +1431,12 @@ export function reconstruct(
   // Group ids depend on member ids, so create member id assignment first in a
   // provisional order, then re-sort with groups and renumber. Member identity
   // is tracked by object reference throughout (no stale ids).
-  const timeline: Array<{ epochMs: number; txKey: string; rank: number; srcKey: string; mat: Materialized } | { epochMs: number; txKey: string; rank: number; srcKey: string; grp: GroupMat }> = [];
+  const timeline: Array<{ epochMs: number; blockNumber?: number; transactionIndex?: number; txKey: string; rank: number; srcKey: string; mat: Materialized } | { epochMs: number; blockNumber?: number; transactionIndex?: number; txKey: string; rank: number; srcKey: string; grp: GroupMat }> = [];
   memberMats.forEach((mat, seq) => {
     timeline.push({
       epochMs: mat.cand.epochMs,
+      ...(mat.cand.blockNumber !== undefined ? { blockNumber: mat.cand.blockNumber } : {}),
+      ...(mat.cand.transactionIndex !== undefined ? { transactionIndex: mat.cand.transactionIndex } : {}),
       txKey: mat.cand.txHash ?? '',
       rank: kindRank(mat.cand.type),
       srcKey: `${mat.cand.source.source}#${seq}`,
@@ -1384,6 +1476,7 @@ export function reconstruct(
   });
   timeline.sort((a, b) =>
     a.epochMs - b.epochMs ||
+    cmpBlockPos(a, b) ||
     (a.txKey < b.txKey ? -1 : a.txKey > b.txKey ? 1 : 0) ||
     a.rank - b.rank ||
     (a.srcKey < b.srcKey ? -1 : 1),
@@ -1590,6 +1683,8 @@ export function reconstruct(
           : {}),
         ...(m.cand.txHash !== null ? { txHash: m.cand.txHash } : {}),
         ...(m.cand.method !== null ? { method: m.cand.method } : {}),
+        ...(m.cand.blockNumber !== undefined ? { blockNumber: m.cand.blockNumber } : {}),
+        ...(m.cand.transactionIndex !== undefined ? { transactionIndex: m.cand.transactionIndex } : {}),
         significance: m.significance,
         admissionRule: m.admissionRule,
         primary: m.primary,
@@ -1679,9 +1774,15 @@ export function reconstruct(
   }
 
   // --- data gaps (honest, deterministic) --------------------------------------
-  const dataGaps: string[] = [
-    'Nansen rows carry no txIndex/logIndex; ordering uses (timestamp, txHash lexicographic, event-kind rank, source endpoint) with no invented indexes.',
-  ];
+  // Item #5: if any admitted event carried an RPC-captured intra-block position,
+  // the ordering note reflects that real (blockNumber, transactionIndex) were
+  // used for same-block sequencing; otherwise it states the txHash-lexicographic
+  // fallback verbatim (so uncaptured reconstructions stay byte-identical).
+  const positionsApplied = memberMats.filter((m) => m.cand.blockNumber !== undefined).length;
+  const orderingGap = positionsApplied > 0
+    ? `Intra-block ordering uses true (blockNumber, transactionIndex) captured out-of-band via Ethereum JSON-RPC eth_getTransactionReceipt for ${positionsApplied} event(s); events without a captured position fall back to (timestamp, txHash lexicographic, event-kind rank, source endpoint). No log-level (intra-transaction) index is available from a receipt.`
+    : 'Nansen rows carry no txIndex/logIndex; ordering uses (timestamp, txHash lexicographic, event-kind rank, source endpoint) with no invented indexes.';
+  const dataGaps: string[] = [orderingGap];
   if (cleaned.counterparties.length > 0) {
     dataGaps.push(
       'Counterparty rows are window-level aggregates without per-transaction timestamps; they are represented as undirected aggregate relationships, not timeline events.',

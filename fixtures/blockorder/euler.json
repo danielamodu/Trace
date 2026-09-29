@@ -1,0 +1,119 @@
+{
+  "endpoint": "ethereum-rpc.publicnode.com",
+  "method": "eth_getTransactionReceipt",
+  "chain": "ethereum",
+  "captured_at": "2026-09-29T15:53:40.240Z",
+  "note": "Intra-block positions for item #5 ordering. Ordering metadata (canonical-chain FACTs), NOT Nansen evidence. No API key used.",
+  "positions": [
+    {
+      "txHash": "0x298bde3f9e53f7a5d870f7f5d56ee2f5e41fa25e6eb5e74611ac97025405db55",
+      "blockNumber": 16818102,
+      "transactionIndex": 33
+    },
+    {
+      "txHash": "0x104c523cacd76835d28092720c24a0be5c3935970dd8ec3cd0197ade668639f1",
+      "blockNumber": 16818153,
+      "transactionIndex": 224
+    },
+    {
+      "txHash": "0x8de2b63776b6e12d258fae7042cc826833a23f45169a8eca97d1c35919c52b89",
+      "blockNumber": 16818448,
+      "transactionIndex": 74
+    },
+    {
+      "txHash": "0xf7f6ae2864677ea9e525fc594541527e4bd894ee9c65a4871171f7095c593214",
+      "blockNumber": 16818504,
+      "transactionIndex": 27
+    },
+    {
+      "txHash": "0x32be972bef6302d42d83ef624765ffd962728912a5896ce7e5d2092ff009ae07",
+      "blockNumber": 16818504,
+      "transactionIndex": 36
+    },
+    {
+      "txHash": "0x5ebadd00d09c915ff0ef52a9329b614a806ee18e3d79b0d1c2e3d3322c14cad8",
+      "blockNumber": 16818523,
+      "transactionIndex": 10
+    },
+    {
+      "txHash": "0xdae809e4a1ddf77c39d44a4acfe6165bedbc19a385c4b241242cc9bd582a80b9",
+      "blockNumber": 16818823,
+      "transactionIndex": 4
+    },
+    {
+      "txHash": "0x02d1f0569ea1d4263a3d653a6205416deba9ce3bdcd5ac3b094a8c990fea1050",
+      "blockNumber": 16818940,
+      "transactionIndex": 29
+    },
+    {
+      "txHash": "0x305ce3c6859de5a79bc436ceb8590b3d08c37821cc2efd69eb33d5cfdf63e761",
+      "blockNumber": 16818968,
+      "transactionIndex": 23
+    },
+    {
+      "txHash": "0x4b742c76e3aabee21de09f0173bbd088c01bd8c22fbf5824d34365c467a77462",
+      "blockNumber": 16819021,
+      "transactionIndex": 60
+    },
+    {
+      "txHash": "0x8ca6cfa0ba58691deefee45e82fefa13debe42ec1e347b1f392f7e9d4c47d66b",
+      "blockNumber": 16819031,
+      "transactionIndex": 10
+    },
+    {
+      "txHash": "0x7c7c5ff43e6d72cfc5bc8393ebfe8714a42e8f7654c0da5fefe6f929e6385771",
+      "blockNumber": 16819052,
+      "transactionIndex": 5
+    },
+    {
+      "txHash": "0x3c37b822a6e531c8d8aef1b278ca203fd8723c3ee9a45d090de7f01a46736e54",
+      "blockNumber": 16819111,
+      "transactionIndex": 81
+    },
+    {
+      "txHash": "0xa7c663395905666838dab72f781565d348a2d97f59e74c5067d76b2b196a8808",
+      "blockNumber": 16819121,
+      "transactionIndex": 117
+    },
+    {
+      "txHash": "0x40047bd3face14425b0302f8ae5f7f051c4b3c5c6152a60888737ce5bed8f466",
+      "blockNumber": 16819131,
+      "transactionIndex": 106
+    },
+    {
+      "txHash": "0xa48b3510f64b1b7f55796e597e16fedc482cf16ed4a378b8aff1849f188e8879",
+      "blockNumber": 16819223,
+      "transactionIndex": 115
+    },
+    {
+      "txHash": "0xb345d48c516f708fc29534263ab4f09c66d709b228adc6c1b440e9455214ca8d",
+      "blockNumber": 16825659,
+      "transactionIndex": 141
+    },
+    {
+      "txHash": "0x5edfb0c6f1c973aa201eb952db8318e5357320662fbd8b6b0c37209c6bd7f5c1",
+      "blockNumber": 16923839,
+      "transactionIndex": 83
+    },
+    {
+      "txHash": "0x30ba2416a19a838b11be61a0e3290f5fc05e3786e9fcf4470b36de084a617f3f",
+      "blockNumber": 16924303,
+      "transactionIndex": 197
+    },
+    {
+      "txHash": "0xe683d3c8236ab9ca19a05795340abef9804fad5c2ea1c14e9cb05a008cd52a4e",
+      "blockNumber": 16924426,
+      "transactionIndex": 283
+    },
+    {
+      "txHash": "0xf221e0818d5d3176eee4ff5a74bc7788dbd640cbdc8967b4b70a802762877dff",
+      "blockNumber": 16928402,
+      "transactionIndex": 102
+    },
+    {
+      "txHash": "0xc49d8b0de9d8be309a4593f2cf01c34cc393f7a1ca11829102904fc20863acc7",
+      "blockNumber": 16948833,
+      "transactionIndex": 63
+    }
+  ]
+}

@@ -29,6 +29,7 @@ import type { EngineInput } from '../reconstruction/engine.ts';
 import { reconstruct } from '../reconstruction/engine.ts';
 import type { ReconstructionResult } from '../reconstruction/engine.ts';
 import { normalizeTransaction } from '../reconstruction/transaction.ts';
+import { loadBlockPositions } from './blockorder.ts';
 import { buildContract, noLiveHttpOrigin } from '../contract/assemble.ts';
 import type { CoverageReport, InvestigationContract } from '../contract/types.ts';
 
@@ -55,6 +56,8 @@ export const FTX_FIRST_FUNDER = '0x2faf487a4414fe77e2327f0bf4ae2a264a776ad2';
 const COUNTERPARTIES_FIXTURE = 'discovery/entity-ftx-exploiter.json';
 const RELATED_FIXTURE = 'discovery/ftx-related-wallets.json';
 const LIVE_MANIFEST = 'live/ftx/manifest.json';
+/** Item #5: true intra-block positions captured out-of-band via public RPC. */
+const BLOCKORDER_FIXTURE = 'blockorder/ftx.json';
 
 function fixturesDir(): URL {
   // Runtime expression (not a string literal) so bundlers leave it alone rather
@@ -92,7 +95,7 @@ export function loadFtxInputs(): { input: EngineInput; files: string[] } {
   if (pages.length === 0) {
     throw new Error(`${LIVE_MANIFEST}: missing pages[] — run scripts/capture-ftx.ts`);
   }
-  const files = [COUNTERPARTIES_FIXTURE, RELATED_FIXTURE, LIVE_MANIFEST];
+  const files = [COUNTERPARTIES_FIXTURE, RELATED_FIXTURE, LIVE_MANIFEST, BLOCKORDER_FIXTURE];
   const liveTransactions = pages.flatMap((p) => {
     const rel = p.rel;
     if (typeof rel !== 'string') throw new Error(`${LIVE_MANIFEST}: page missing rel`);
@@ -122,6 +125,9 @@ export function loadFtxInputs(): { input: EngineInput; files: string[] } {
       ),
     ),
     transactions: liveTransactions,
+    // Item #5: order same-block events by true (blockNumber, transactionIndex),
+    // captured out-of-band via public RPC. Ordering metadata, not Nansen evidence.
+    blockPositions: loadBlockPositions(fixturesDir(), BLOCKORDER_FIXTURE),
   };
   return { input, files };
 }
