@@ -28,11 +28,15 @@ import type {
   AddressTransaction,
   CallMeta,
   Paged,
+  TgmTransfer,
+  TgmDexTrade,
 } from '../nansen/types.ts';
-import { sanitizeRows, type ClearedCounts } from '../nansen/sanitize.ts';
+import { sanitizeRows, sanitizeTgmRows, type ClearedCounts } from '../nansen/sanitize.ts';
 import {
   normalizeCounterparty,
   normalizeRelationship,
+  normalizeTransfer,
+  normalizeSwap,
   sourceMeta,
 } from '../reconstruction/normalize.ts';
 import { normalizeTransaction } from '../reconstruction/transaction.ts';
@@ -64,6 +68,17 @@ export interface LiveBudget {
   fetchCounterparties: boolean;
   /** Fetch related-wallets (funding / relation evidence). */
   fetchRelatedWallets: boolean;
+  /**
+   * Item #1 — opt-in token-level enrichment. After the subject's counterparties
+   * and transactions are fetched, discover the token addresses the subject
+   * actually touched (from data ALREADY paid for) and pull token-scoped
+   * tgm/transfers (both directions) + tgm/dex-trades for the top ones, folding
+   * subject-relevant rows into the SAME engine as `transfers` / `swaps`. Off by
+   * default so existing runs are unchanged and cost stays bounded.
+   */
+  fetchTokenActivity: boolean;
+  /** Cap on how many discovered tokens to enrich (each ≈3 credits worst case). */
+  maxTokens: number;
 }
 
 export const DEFAULT_BUDGET: LiveBudget = {
@@ -72,6 +87,8 @@ export const DEFAULT_BUDGET: LiveBudget = {
   perPage: 100,
   fetchCounterparties: true,
   fetchRelatedWallets: true,
+  fetchTokenActivity: false,
+  maxTokens: 3,
 };
 
 /** One recorded API call, for the audit trail (no secrets, no row contents). */
@@ -97,6 +114,10 @@ export interface LiveRunMeta {
   reachedLastPage: boolean;
   sanitization: ClearedCounts;
   rowsSkipped: number;
+  /** Token addresses discovered from the subject's own activity and enriched (item #1). */
+  tokensDiscovered: string[];
+  /** Subject-relevant rows folded in from token-scoped endpoints. */
+  tokenActivity: { transfers: number; swaps: number };
   stopReason: string;
 }
 
@@ -124,6 +145,8 @@ const EP = {
   counterparties: '/api/v1/profiler/address/counterparties',
   relatedWallets: '/api/v1/profiler/address/related-wallets',
   transactions: '/api/v1/profiler/address/transactions',
+  tgmTransfers: '/api/v1/tgm/transfers',
+  tgmDexTrades: '/api/v1/tgm/dex-trades',
 } as const;
 
 /** Conservative per-endpoint credit estimate used only when the cost header is absent. */
@@ -131,6 +154,8 @@ const COST_FALLBACK: Record<string, number> = {
   [EP.counterparties]: 5,
   [EP.relatedWallets]: 1,
   [EP.transactions]: 1,
+  [EP.tgmTransfers]: 1,
+  [EP.tgmDexTrades]: 1,
 };
 
 const ADDRESS_RE = /^0x[0-9a-fA-F]{40}$/;
@@ -164,6 +189,38 @@ function assertParams(address: string, window: { from: string; to: string }): vo
 /** Deterministic id for a live run: `live_<8 hex>_<from>`. */
 function liveCaseId(address: string, from: string): string {
   return `live_${address.slice(2, 10).toLowerCase()}_${from}`;
+}
+
+/**
+ * Deterministically pick the token addresses the subject engaged with most,
+ * read from data ALREADY fetched (counterparties' `tokens_info` + transactions'
+ * token movements) — so discovery itself spends nothing. Ranked by observation
+ * count (desc), ties broken by address (asc); capped at `maxTokens`.
+ */
+function discoverTokens(
+  counterparties: ReturnType<typeof normalizeCounterparty>[],
+  transactions: ReturnType<typeof normalizeTransaction>[],
+  maxTokens: number,
+): string[] {
+  const cap = Math.max(0, Math.trunc(maxTokens));
+  if (cap === 0) return [];
+  const score = new Map<string, { addr: string; count: number }>();
+  const bump = (addr: string | null): void => {
+    if (addr === null || addr === '') return;
+    const k = addr.toLowerCase();
+    const e = score.get(k) ?? { addr, count: 0 };
+    e.count += 1;
+    score.set(k, e);
+  };
+  for (const cp of counterparties) for (const t of cp.value.tokens) bump(t.tokenAddress);
+  for (const tx of transactions) {
+    for (const m of tx.value.tokensSent) bump(m.tokenAddress);
+    for (const m of tx.value.tokensReceived) bump(m.tokenAddress);
+  }
+  return [...score.values()]
+    .sort((a, b) => b.count - a.count || (a.addr.toLowerCase() < b.addr.toLowerCase() ? -1 : 1))
+    .slice(0, cap)
+    .map((e) => e.addr);
 }
 
 /**
@@ -210,6 +267,8 @@ export async function reconstructFromAddress(
   const counterparties: ReturnType<typeof normalizeCounterparty>[] = [];
   const relationships: ReturnType<typeof normalizeRelationship>[] = [];
   const transactions: ReturnType<typeof normalizeTransaction>[] = [];
+  const transfers: ReturnType<typeof normalizeTransfer>[] = [];
+  const swaps: ReturnType<typeof normalizeSwap>[] = [];
 
   // --- counterparties: window-level aggregates (the priciest single call) ---
   if (budget.fetchCounterparties && budgetLeft()) {
@@ -303,7 +362,98 @@ export async function reconstructFromAddress(
     }
   }
 
-  const input: EngineInput = { counterparties, relationships, transactions };
+  // --- token-level enrichment (item #1) -------------------------------------
+  // Discover the tokens the subject touched (from data already paid for), then
+  // pull token-scoped tgm/transfers (both directions) + dex-trades for the top
+  // ones, keeping only rows that involve the subject. Opt-in + budget-gated, so
+  // this never runs — and costs nothing — unless explicitly requested.
+  const tokensDiscovered: string[] = [];
+  const subjectLc = address.toLowerCase();
+  if (budget.fetchTokenActivity) {
+    const accumulateSanitization = (rows: Array<Record<string, unknown>>): void => {
+      const cleared = sanitizeTgmRows(rows);
+      sanitization.symbolsCleared += cleared.symbolsCleared;
+      sanitization.namesCleared += cleared.namesCleared;
+      sanitization.labelsCleared += cleared.labelsCleared;
+    };
+    for (const token of discoverTokens(counterparties, transactions, budget.maxTokens)) {
+      if (!budgetLeft()) {
+        stopReasons.push(`token activity stopped before ${token}: credit budget reached`);
+        break;
+      }
+      tokensDiscovered.push(token);
+
+      // transfers: one call per direction so the filter's AND/OR semantics never
+      // matter; the engine's dedupe collapses any self-transfer seen twice.
+      for (const dir of ['from_address', 'to_address'] as const) {
+        if (!budgetLeft()) {
+          stopReasons.push(`token transfers (${dir}) skipped for ${token}: credit budget reached`);
+          break;
+        }
+        const { data, meta } = await client.post<Paged<TgmTransfer>>(EP.tgmTransfers, {
+          chain,
+          token_address: token,
+          date: { from: window.from, to: window.to },
+          filters: { [dir]: [address] },
+          pagination: { page: 1, per_page: perPage },
+        });
+        const rows: Array<Record<string, unknown>> = Array.isArray(data?.data)
+          ? (data.data as Array<Record<string, unknown>>)
+          : [];
+        accumulateSanitization(rows);
+        recordCall(EP.tgmTransfers, null, meta, rows.length);
+        const src = sourceMeta('tgm/transfers', metaToFixture(meta), nowIso, null, 'live-nansen');
+        for (const r of rows) {
+          try {
+            const t = normalizeTransfer(r, src);
+            if (
+              t.value.fromAddress.toLowerCase() === subjectLc ||
+              t.value.toAddress.toLowerCase() === subjectLc
+            ) {
+              transfers.push(t);
+            } else {
+              rowsSkipped += 1; // off-subject row (defensive; filter should exclude it)
+            }
+          } catch {
+            rowsSkipped += 1;
+          }
+        }
+      }
+
+      // dex-trades: the endpoint has no address filter, so fetch one market-wide
+      // page and keep only trades where the subject is the trader.
+      if (!budgetLeft()) {
+        stopReasons.push(`token dex-trades skipped for ${token}: credit budget reached`);
+        continue;
+      }
+      const { data, meta } = await client.post<Paged<TgmDexTrade>>(EP.tgmDexTrades, {
+        chain,
+        token_address: token,
+        date: { from: window.from, to: window.to },
+        pagination: { page: 1, per_page: perPage },
+      });
+      const rows: Array<Record<string, unknown>> = Array.isArray(data?.data)
+        ? (data.data as Array<Record<string, unknown>>)
+        : [];
+      accumulateSanitization(rows);
+      recordCall(EP.tgmDexTrades, null, meta, rows.length);
+      const src = sourceMeta('tgm/dex-trades', metaToFixture(meta), nowIso, null, 'live-nansen');
+      for (const r of rows) {
+        try {
+          const s = normalizeSwap(r, src);
+          if (s.value.traderAddress.toLowerCase() === subjectLc) swaps.push(s);
+          else rowsSkipped += 1; // trade by another party (kept out of a subject-scoped case)
+        } catch {
+          rowsSkipped += 1;
+        }
+      }
+    }
+    if (tokensDiscovered.length === 0) {
+      stopReasons.push('token activity requested but no tokens were discovered in the subject data');
+    }
+  }
+
+  const input: EngineInput = { transfers, swaps, counterparties, relationships, transactions };
 
   // Coverage flags computed from what was actually observed — never asserted.
   const fundingEvidence = relationships.some((r) => /fund/i.test(r.value.relation));
@@ -356,6 +506,8 @@ export async function reconstructFromAddress(
     reachedLastPage,
     sanitization,
     rowsSkipped,
+    tokensDiscovered,
+    tokenActivity: { transfers: transfers.length, swaps: swaps.length },
     stopReason: stopReasons.join('; ') || 'no calls made',
   };
   return { contract, meta };
