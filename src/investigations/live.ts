@@ -37,11 +37,17 @@ import {
   normalizeRelationship,
   normalizeTransfer,
   normalizeSwap,
+  normalizeBlockPosition,
   sourceMeta,
 } from '../reconstruction/normalize.ts';
 import { normalizeTransaction } from '../reconstruction/transaction.ts';
 import { reconstruct } from '../reconstruction/engine.ts';
 import type { EngineInput } from '../reconstruction/engine.ts';
+import {
+  captureBlockPositions,
+  txHashesFromInput,
+  type BlockPositionFetcher,
+} from './blockorder-rpc.ts';
 import { buildContract } from '../contract/assemble.ts';
 import type { CoverageReport, InvestigationContract, OriginAttestation } from '../contract/types.ts';
 
@@ -157,6 +163,14 @@ export interface LiveRunMeta {
   tokensDiscovered: string[];
   /** Subject-relevant rows folded in from token-scoped endpoints. */
   tokenActivity: { transfers: number; swaps: number };
+  /**
+   * Item #5 — count of transactions whose true (blockNumber, transactionIndex)
+   * was captured from a public RPC and threaded into ordering, and the count the
+   * endpoint could not resolve (ordered by the txHash-lexicographic fallback).
+   * Both 0 when block-order capture was not requested.
+   */
+  blockPositionsCaptured: number;
+  blockPositionsUnresolved: number;
   stopReason: string;
 }
 
@@ -185,6 +199,20 @@ export interface ReconstructFromAddressParams {
    * default. See {@link CaseDescriptor.valueThresholdUsd}.
    */
   valueThresholdUsd?: number;
+  /**
+   * Item #5 — after fetching, resolve each transaction's true `(blockNumber,
+   * transactionIndex)` from a PUBLIC Ethereum JSON-RPC (`eth_getTransactionReceipt`)
+   * and thread them into the engine as `blockPositions`, so same-block events
+   * order by their real on-chain sequence instead of the txHash-lexicographic
+   * fallback. FREE (no API key, no Nansen credits) and best-effort: an RPC
+   * failure never aborts the already-paid reconstruction — ordering just falls
+   * back. Off by default so existing runs stay byte-identical.
+   */
+  captureBlockOrder?: boolean;
+  /** Override the public JSON-RPC endpoint used when {@link captureBlockOrder} is on. */
+  rpcUrl?: string;
+  /** Injected block-position source (tests). Overrides the real RPC fetch. */
+  blockPositionFetcher?: BlockPositionFetcher;
 }
 
 const EP = {
@@ -639,6 +667,40 @@ export async function reconstructFromAddress(
 
   const input: EngineInput = { transfers, swaps, counterparties, relationships, transactions };
 
+  // Item #5 — optional true intra-block ordering. Resolve (blockNumber,
+  // transactionIndex) for the transactions we just paid Nansen for from a FREE
+  // public JSON-RPC and thread them into the engine, so same-block events order
+  // by their real on-chain sequence. Best-effort: a public-RPC failure must
+  // never discard the paid reconstruction, so any error is noted and ordering
+  // falls back to the engine's txHash-lexicographic tie-break.
+  let blockPositionsCaptured = 0;
+  let blockPositionsUnresolved = 0;
+  if (params.captureBlockOrder) {
+    const fetchPositions = params.blockPositionFetcher ?? captureBlockPositions;
+    const hashes = txHashesFromInput(input);
+    if (hashes.length === 0) {
+      stopReasons.push('block-order requested but no transaction hashes were present');
+    } else {
+      try {
+        const cap = await fetchPositions(hashes, { rpcUrl: params.rpcUrl });
+        const positions = cap.positions.map((p) =>
+          normalizeBlockPosition(p, { rpc: cap.endpoint, method: cap.method, capturedAt: nowIso }),
+        );
+        if (positions.length > 0) input.blockPositions = positions;
+        blockPositionsCaptured = positions.length;
+        blockPositionsUnresolved = cap.unresolved.length;
+        if (cap.unresolved.length > 0) {
+          stopReasons.push(
+            `block-order: ${cap.unresolved.length} tx unresolved on ${cap.endpoint}, ordered by txHash fallback`,
+          );
+        }
+      } catch (err) {
+        const detail = err instanceof Error ? err.message : String(err);
+        stopReasons.push(`block-order capture failed (${detail}); ordering fell back to txHash-lexicographic`);
+      }
+    }
+  }
+
   // Coverage flags computed from what was actually observed — never asserted.
   const fundingEvidence = relationships.some((r) => /fund/i.test(r.value.relation));
   const counterpartyAggregates = counterparties.length > 0;
@@ -714,6 +776,8 @@ export async function reconstructFromAddress(
     rowsSkipped,
     tokensDiscovered,
     tokenActivity: { transfers: transfers.length, swaps: swaps.length },
+    blockPositionsCaptured,
+    blockPositionsUnresolved,
     stopReason: stopReasons.join('; ') || 'no calls made',
   };
   return { contract, meta };

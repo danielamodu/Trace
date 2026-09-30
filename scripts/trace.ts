@@ -107,6 +107,9 @@ ${h('RECONSTRUCT OPTIONS')}
   --max-tokens <n>          cap discovered tokens to enrich (default ${DEFAULT_BUDGET.maxTokens})
   --chunk-days <n>          split the window into <n>-day sub-windows so a wide window can
                             fully paginate across bounded steps (default off; see 'resume from')
+  --capture-block-order     resolve true (block, txIndex) from a public RPC to order same-block
+                            events by real on-chain sequence (free — no key, no credits)
+  --rpc <url>               JSON-RPC endpoint for --capture-block-order (default publicnode)
   --save                    save the result into the library (data/cases/)
   --out <path>              also write the contract JSON to <path>
 
@@ -123,7 +126,7 @@ ${h('EXAMPLES')}
 }
 
 // ---- tiny arg parser --------------------------------------------------------
-const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--chunk-days', '--value-threshold', '--out', '--name', '--headline']);
+const VALUE_FLAGS = new Set(['--from', '--to', '--chain', '--max-pages', '--max-credits', '--per-page', '--max-tokens', '--chunk-days', '--value-threshold', '--rpc', '--out', '--name', '--headline']);
 
 interface ParsedArgs {
   positionals: string[];
@@ -308,6 +311,8 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   if (args.flags['--chunk-days']) budget.chunkDays = Number(args.flags['--chunk-days']);
   const chain = args.flags['--chain'] ?? 'ethereum';
   const eff: LiveBudget = { ...DEFAULT_BUDGET, ...budget };
+  const captureBlockOrder = args.bools.has('--capture-block-order');
+  const rpcUrl = args.flags['--rpc'];
   const valueThresholdUsd =
     args.flags['--value-threshold'] !== undefined ? Number(args.flags['--value-threshold']) : undefined;
   if (valueThresholdUsd !== undefined && (!Number.isFinite(valueThresholdUsd) || valueThresholdUsd < 0)) {
@@ -327,6 +332,9 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
     `${eff.fetchTokenActivity ? `, token activity (≤${eff.maxTokens} token${eff.maxTokens === 1 ? '' : 's'})` : ''}` +
     `${eff.chunkDays > 0 ? `, ${eff.chunkDays}-day chunks` : ''}`,
   );
+  if (captureBlockOrder) {
+    console.log(`  ${gray('block order')}  ${dim(`true intra-block ordering via ${rpcUrl ? new URL(rpcUrl).host : 'public RPC'} (free)`)}`);
+  }
   console.log(dim('  Calling Nansen…\n'));
 
   const { contract, meta } = await reconstructFromAddress({
@@ -336,6 +344,8 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
     budget,
     name: args.flags['--name'],
     headline: args.flags['--headline'],
+    ...(captureBlockOrder ? { captureBlockOrder } : {}),
+    ...(rpcUrl !== undefined ? { rpcUrl } : {}),
     ...(valueThresholdUsd !== undefined ? { valueThresholdUsd } : {}),
   });
 
@@ -353,6 +363,9 @@ async function cmdReconstruct(args: ParsedArgs): Promise<number> {
   }
   if (meta.tokensDiscovered.length > 0) {
     acc('tokens enriched', `${meta.tokensDiscovered.length}  (${meta.tokenActivity.transfers} transfer(s), ${meta.tokenActivity.swaps} swap(s))`);
+  }
+  if (meta.blockPositionsCaptured > 0 || meta.blockPositionsUnresolved > 0) {
+    acc('block order', `${meta.blockPositionsCaptured} tx positioned${meta.blockPositionsUnresolved > 0 ? `, ${meta.blockPositionsUnresolved} unresolved (txHash fallback)` : ''}`);
   }
   acc('rows skipped', String(meta.rowsSkipped));
   acc('stop reason', meta.stopReason);
