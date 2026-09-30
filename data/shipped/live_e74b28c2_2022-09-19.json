@@ -146,6 +146,8 @@
           }
         ],
         "txHash": "0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986",
+        "blockNumber": 15572374,
+        "transactionIndex": 49,
         "significance": 35,
         "admissionRule": "nansen-relation",
         "primary": true,
@@ -158,13 +160,13 @@
           "sources": [
             {
               "source": "profiler/address/related-wallets",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "fbbb5154ea5d9a2650166b343053f57f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "32074046a4bb280a7addbf3aa09f7c3d",
               "txHash": "0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): Nansen reports 0x910cbd523d972eb0a6f4cae4618ad62622b39dbf (label \"High Activity\") as \"First Funder\" with evidence tx 0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986 at 2022-09-20T04:40:11.000Z. This is a reported link, not proof of common control."
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): Nansen reports 0x910cbd523d972eb0a6f4cae4618ad62622b39dbf (label \"High Activity\") as \"First Funder\" with evidence tx 0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986 at 2022-09-20T04:40:11.000Z. This is a reported link, not proof of common control."
         }
       },
       {
@@ -188,6 +190,8 @@
         },
         "txHash": "0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986",
         "method": "withdraw(address,bytes,bytes32,bytes32,address,address,uint256,uint256)",
+        "blockNumber": 15572374,
+        "transactionIndex": 49,
         "significance": 51,
         "admissionRule": "method-of-interest",
         "primary": true,
@@ -201,13 +205,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"withdraw(address,bytes,bytes32,bytes32,address,address,uint256,uint256)\" at 2022-09-20T04:40:11.000Z, $13466.207892813822 USD (volume_usd). Evidence tx 0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"withdraw(address,bytes,bytes32,bytes32,address,address,uint256,uint256)\" at 2022-09-20T04:40:11.000Z, $13466.207892813822 USD (volume_usd). Evidence tx 0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986."
         }
       },
       {
@@ -227,6 +231,8 @@
           }
         ],
         "txHash": "0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc",
+        "blockNumber": 15572417,
+        "transactionIndex": 29,
         "significance": 25,
         "admissionRule": "nansen-relation",
         "primary": true,
@@ -239,13 +245,13 @@
           "sources": [
             {
               "source": "profiler/address/related-wallets",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "fbbb5154ea5d9a2650166b343053f57f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "32074046a4bb280a7addbf3aa09f7c3d",
               "txHash": "0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): Nansen reports 0x0248f752802b2cfb4373cc0c3bc3964429385c26 (label unavailable) as \"Deployed Contract\" with evidence tx 0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc at 2022-09-20T04:48:47.000Z. This is a reported link, not proof of common control."
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): Nansen reports 0x0248f752802b2cfb4373cc0c3bc3964429385c26 (label unavailable) as \"Deployed Contract\" with evidence tx 0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc at 2022-09-20T04:48:47.000Z. This is a reported link, not proof of common control."
         }
       },
       {
@@ -269,6 +275,8 @@
         },
         "txHash": "0x93eadb28e6b50e7ed14348a14cfc3c9f09618dace9c20d3f39ab3d5828e3fd21",
         "method": "sent",
+        "blockNumber": 15572484,
+        "transactionIndex": 79,
         "significance": 34,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -282,13 +290,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x93eadb28e6b50e7ed14348a14cfc3c9f09618dace9c20d3f39ab3d5828e3fd21",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"sent\" at 2022-09-20T05:02:47.000Z, $2708.5448570048416 USD (volume_usd). Evidence tx 0x93eadb28e6b50e7ed14348a14cfc3c9f09618dace9c20d3f39ab3d5828e3fd21."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"sent\" at 2022-09-20T05:02:47.000Z, $2708.5448570048416 USD (volume_usd). Evidence tx 0x93eadb28e6b50e7ed14348a14cfc3c9f09618dace9c20d3f39ab3d5828e3fd21."
         }
       },
       {
@@ -312,6 +320,8 @@
         },
         "txHash": "0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4",
         "method": "0xb554fc43",
+        "blockNumber": 15572528,
+        "transactionIndex": 21,
         "significance": 82,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -326,13 +336,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"0xb554fc43\" at 2022-09-20T05:11:35.000Z, $157779349.52325946 USD (volume_usd). Evidence tx 0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"0xb554fc43\" at 2022-09-20T05:11:35.000Z, $157779349.52325946 USD (volume_usd). Evidence tx 0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4."
         }
       },
       {
@@ -355,6 +365,8 @@
           "valueUsd": 10896559.956722561
         },
         "txHash": "0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4",
+        "blockNumber": 15572528,
+        "transactionIndex": 21,
         "significance": 70,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -369,13 +381,13 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): 0x0248f752802b2cfb4373cc0c3bc3964429385c26 → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:11:35.000Z, $10896559.956722561 USD (transfer_value_usd). Evidence tx 0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4."
+          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): 0x0248f752802b2cfb4373cc0c3bc3964429385c26 → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:11:35.000Z, $10896559.956722561 USD (transfer_value_usd). Evidence tx 0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4."
         }
       },
       {
@@ -399,6 +411,8 @@
         },
         "txHash": "0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a",
         "method": "exchange_underlying(int128,int128,uint256,uint256)",
+        "blockNumber": 15572604,
+        "transactionIndex": 19,
         "significance": 70,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -412,13 +426,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"exchange_underlying(int128,int128,uint256,uint256)\" at 2022-09-20T05:27:23.000Z, $9470758.713902714 USD (volume_usd). Evidence tx 0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"exchange_underlying(int128,int128,uint256,uint256)\" at 2022-09-20T05:27:23.000Z, $9470758.713902714 USD (volume_usd). Evidence tx 0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a."
         }
       },
       {
@@ -441,6 +455,8 @@
           "valueUsd": 9468009.572661828
         },
         "txHash": "0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a",
+        "blockNumber": 15572604,
+        "transactionIndex": 19,
         "significance": 70,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -454,13 +470,13 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): 0x4807862aa8b2bf68830e4c8dc86d0e9a998e085a → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:27:23.000Z, $9468009.572661828 USD (transfer_value_usd). Evidence tx 0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a."
+          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): 0x4807862aa8b2bf68830e4c8dc86d0e9a998e085a → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:27:23.000Z, $9468009.572661828 USD (transfer_value_usd). Evidence tx 0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a."
         }
       },
       {
@@ -520,6 +536,8 @@
         },
         "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
         "method": "exchange_underlying(int128,int128,uint256,uint256)",
+        "blockNumber": 15572610,
+        "transactionIndex": 3,
         "significance": 65,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -533,13 +551,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"exchange_underlying(int128,int128,uint256,uint256)\" at 2022-09-20T05:28:35.000Z, $3246365.8278810508 USD (volume_usd). Evidence tx 0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"exchange_underlying(int128,int128,uint256,uint256)\" at 2022-09-20T05:28:35.000Z, $3246365.8278810508 USD (volume_usd). Evidence tx 0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb."
         }
       },
       {
@@ -562,6 +580,8 @@
           "valueUsd": 3246286.9891638295
         },
         "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
+        "blockNumber": 15572610,
+        "transactionIndex": 3,
         "significance": 65,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -574,13 +594,13 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): 0xecd5e75afb02efa118af914515d6521aabd189f1 → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:28:35.000Z, $3246286.9891638295 USD (transfer_value_usd). Evidence tx 0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb."
+          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): 0xecd5e75afb02efa118af914515d6521aabd189f1 → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:28:35.000Z, $3246286.9891638295 USD (transfer_value_usd). Evidence tx 0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb."
         }
       },
       {
@@ -603,6 +623,8 @@
           "valueUsd": 3246365.8278810508
         },
         "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
+        "blockNumber": 15572610,
+        "transactionIndex": 3,
         "significance": 65,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -616,13 +638,13 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "0e97c35a5d482a67d95bcd48c6cc3159",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "ec533874dd9b0f00ce44547d912c5267",
               "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 → 0xecd5e75afb02efa118af914515d6521aabd189f1 at 2022-09-20T05:28:35.000Z, $3246365.8278810508 USD (transfer_value_usd). Evidence tx 0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb."
+          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 → 0xecd5e75afb02efa118af914515d6521aabd189f1 at 2022-09-20T05:28:35.000Z, $3246365.8278810508 USD (transfer_value_usd). Evidence tx 0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb."
         }
       },
       {
@@ -686,6 +708,8 @@
         },
         "txHash": "0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02",
         "method": "add_liquidity(uint256[3],uint256)",
+        "blockNumber": 15572663,
+        "transactionIndex": 22,
         "significance": 96,
         "admissionRule": "burn-sink",
         "primary": true,
@@ -700,13 +724,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"add_liquidity(uint256[3],uint256)\" at 2022-09-20T05:39:11.000Z, $114404021.35156381 USD (volume_usd). Evidence tx 0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"add_liquidity(uint256[3],uint256)\" at 2022-09-20T05:39:11.000Z, $114404021.35156381 USD (volume_usd). Evidence tx 0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02."
         }
       },
       {
@@ -729,6 +753,8 @@
           "valueUsd": 23610856.518548217
         },
         "txHash": "0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02",
+        "blockNumber": 15572663,
+        "transactionIndex": 22,
         "significance": 74,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -742,13 +768,13 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d0848e66fb87272ea864da664a4e014b",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "4b962c4e9b46ec3766c64c7af6e90c52",
               "txHash": "0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 → 0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7 at 2022-09-20T05:39:11.000Z, $23610856.518548217 USD (transfer_value_usd). Evidence tx 0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02."
+          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 → 0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7 at 2022-09-20T05:39:11.000Z, $23610856.518548217 USD (transfer_value_usd). Evidence tx 0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02."
         }
       },
       {
@@ -817,6 +843,8 @@
         },
         "txHash": "0x16ef49e81bf79862c91002fea39925e5cb425ab3dbea2ab9b1f833e556947289",
         "method": "withdraw(uint256)",
+        "blockNumber": 15572675,
+        "transactionIndex": 40,
         "significance": 85,
         "admissionRule": "burn-sink",
         "primary": true,
@@ -831,13 +859,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x16ef49e81bf79862c91002fea39925e5cb425ab3dbea2ab9b1f833e556947289",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"withdraw(uint256)\" at 2022-09-20T05:41:35.000Z, $9371148.825375196 USD (volume_usd). Evidence tx 0x16ef49e81bf79862c91002fea39925e5cb425ab3dbea2ab9b1f833e556947289."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"withdraw(uint256)\" at 2022-09-20T05:41:35.000Z, $9371148.825375196 USD (volume_usd). Evidence tx 0x16ef49e81bf79862c91002fea39925e5cb425ab3dbea2ab9b1f833e556947289."
         }
       },
       {
@@ -899,6 +927,8 @@
         },
         "txHash": "0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876",
         "method": "0xb554fc43",
+        "blockNumber": 15572706,
+        "transactionIndex": 28,
         "significance": 66,
         "admissionRule": "value-threshold",
         "primary": true,
@@ -913,13 +943,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"0xb554fc43\" at 2022-09-20T05:47:59.000Z, $4028926.1660612663 USD (volume_usd). Evidence tx 0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"0xb554fc43\" at 2022-09-20T05:47:59.000Z, $4028926.1660612663 USD (volume_usd). Evidence tx 0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876."
         }
       },
       {
@@ -942,6 +972,8 @@
           "valueUsd": 130777.39351068894
         },
         "txHash": "0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876",
+        "blockNumber": 15572706,
+        "transactionIndex": 28,
         "significance": 51,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -956,13 +988,13 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): 0x0248f752802b2cfb4373cc0c3bc3964429385c26 → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:47:59.000Z, $130777.39351068894 USD (transfer_value_usd). Evidence tx 0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876."
+          "statement": "Nansen tgm/transfers row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): 0x0248f752802b2cfb4373cc0c3bc3964429385c26 → 0xe74b28c2eae8679e3ccc3a94d5d0de83ccb84705 at 2022-09-20T05:47:59.000Z, $130777.39351068894 USD (transfer_value_usd). Evidence tx 0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876."
         }
       },
       {
@@ -983,6 +1015,8 @@
         ],
         "txHash": "0xf03d528e0f15c7b4294067b145692b62ad3a61d10395b18381bb841087993b28",
         "method": "transfer(address,uint256)",
+        "blockNumber": 15573507,
+        "transactionIndex": 130,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -995,13 +1029,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xf03d528e0f15c7b4294067b145692b62ad3a61d10395b18381bb841087993b28",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"transfer(address,uint256)\" at 2022-09-20T08:28:47.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0xf03d528e0f15c7b4294067b145692b62ad3a61d10395b18381bb841087993b28."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"transfer(address,uint256)\" at 2022-09-20T08:28:47.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0xf03d528e0f15c7b4294067b145692b62ad3a61d10395b18381bb841087993b28."
         }
       },
       {
@@ -1022,6 +1056,8 @@
         ],
         "txHash": "0xd0c9b69160c13f1f5bdce82da79e8f2cb3b8d8da980ae4a1fb8bcd8547c8d683",
         "method": "transfer(address,uint256)",
+        "blockNumber": 15573545,
+        "transactionIndex": 118,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1034,13 +1070,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xd0c9b69160c13f1f5bdce82da79e8f2cb3b8d8da980ae4a1fb8bcd8547c8d683",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"transfer(address,uint256)\" at 2022-09-20T08:36:23.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0xd0c9b69160c13f1f5bdce82da79e8f2cb3b8d8da980ae4a1fb8bcd8547c8d683."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"transfer(address,uint256)\" at 2022-09-20T08:36:23.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0xd0c9b69160c13f1f5bdce82da79e8f2cb3b8d8da980ae4a1fb8bcd8547c8d683."
         }
       },
       {
@@ -1064,6 +1100,8 @@
         },
         "txHash": "0x95cd19ab1f6635821344ed709d88faa02fe30c39f86fc1fcd3a625d6eed70124",
         "method": "received",
+        "blockNumber": 15573771,
+        "transactionIndex": 135,
         "significance": 1,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1076,13 +1114,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x95cd19ab1f6635821344ed709d88faa02fe30c39f86fc1fcd3a625d6eed70124",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-20T09:22:23.000Z, $0.13542724285024207 USD (volume_usd). Evidence tx 0x95cd19ab1f6635821344ed709d88faa02fe30c39f86fc1fcd3a625d6eed70124."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-20T09:22:23.000Z, $0.13542724285024207 USD (volume_usd). Evidence tx 0x95cd19ab1f6635821344ed709d88faa02fe30c39f86fc1fcd3a625d6eed70124."
         }
       },
       {
@@ -1106,6 +1144,8 @@
         },
         "txHash": "0x46d8b2f272450bc8679456ac4ae61c9011d3bbfadf59d6926615e2ebde7f6976",
         "method": "transfer(address,uint256)",
+        "blockNumber": 15573773,
+        "transactionIndex": 113,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1118,13 +1158,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x46d8b2f272450bc8679456ac4ae61c9011d3bbfadf59d6926615e2ebde7f6976",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"transfer(address,uint256)\" at 2022-09-20T09:22:47.000Z, $0.06730436081434582 USD (volume_usd). Evidence tx 0x46d8b2f272450bc8679456ac4ae61c9011d3bbfadf59d6926615e2ebde7f6976."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"transfer(address,uint256)\" at 2022-09-20T09:22:47.000Z, $0.06730436081434582 USD (volume_usd). Evidence tx 0x46d8b2f272450bc8679456ac4ae61c9011d3bbfadf59d6926615e2ebde7f6976."
         }
       },
       {
@@ -1148,6 +1188,8 @@
         },
         "txHash": "0x9ee1fa1cbf082749a4f931d3ec61d4f77964a2c8d03ad038d8bd54dbf2cc7f19",
         "method": "received",
+        "blockNumber": 15573780,
+        "transactionIndex": 22,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1162,13 +1204,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x9ee1fa1cbf082749a4f931d3ec61d4f77964a2c8d03ad038d8bd54dbf2cc7f19",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-20T09:24:11.000Z, $1.354272428502421e-15 USD (volume_usd). Evidence tx 0x9ee1fa1cbf082749a4f931d3ec61d4f77964a2c8d03ad038d8bd54dbf2cc7f19."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-20T09:24:11.000Z, $1.354272428502421e-15 USD (volume_usd). Evidence tx 0x9ee1fa1cbf082749a4f931d3ec61d4f77964a2c8d03ad038d8bd54dbf2cc7f19."
         }
       },
       {
@@ -1192,6 +1234,8 @@
         },
         "txHash": "0x0efad9aef8ea7730c6a7ddd777c246a7f557b52b209a22e2a5147b979f055033",
         "method": "received",
+        "blockNumber": 15573920,
+        "transactionIndex": 82,
         "significance": 1,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1204,13 +1248,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x0efad9aef8ea7730c6a7ddd777c246a7f557b52b209a22e2a5147b979f055033",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-20T09:52:11.000Z, $0.13542724285024207 USD (volume_usd). Evidence tx 0x0efad9aef8ea7730c6a7ddd777c246a7f557b52b209a22e2a5147b979f055033."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-20T09:52:11.000Z, $0.13542724285024207 USD (volume_usd). Evidence tx 0x0efad9aef8ea7730c6a7ddd777c246a7f557b52b209a22e2a5147b979f055033."
         }
       },
       {
@@ -1234,6 +1278,8 @@
         },
         "txHash": "0x7b6130a920dbed4b70b1ef9c6f1b6c5472651bafbbbf4a48e54778ad12df44a1",
         "method": "received",
+        "blockNumber": 15573937,
+        "transactionIndex": 63,
         "significance": 1,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1246,13 +1292,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x7b6130a920dbed4b70b1ef9c6f1b6c5472651bafbbbf4a48e54778ad12df44a1",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-20T09:55:35.000Z, $0.13542724285024207 USD (volume_usd). Evidence tx 0x7b6130a920dbed4b70b1ef9c6f1b6c5472651bafbbbf4a48e54778ad12df44a1."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-20T09:55:35.000Z, $0.13542724285024207 USD (volume_usd). Evidence tx 0x7b6130a920dbed4b70b1ef9c6f1b6c5472651bafbbbf4a48e54778ad12df44a1."
         }
       },
       {
@@ -1312,6 +1358,8 @@
         },
         "txHash": "0x6911255fd61d8762dbfad8b11420ee612851faa65692dcefb0c5495a137c1f1f",
         "method": "received",
+        "blockNumber": 15577346,
+        "transactionIndex": 30,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1326,13 +1374,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x6911255fd61d8762dbfad8b11420ee612851faa65692dcefb0c5495a137c1f1f",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-20T21:24:11.000Z, $1.354272428502421e-15 USD (volume_usd). Evidence tx 0x6911255fd61d8762dbfad8b11420ee612851faa65692dcefb0c5495a137c1f1f."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-20T21:24:11.000Z, $1.354272428502421e-15 USD (volume_usd). Evidence tx 0x6911255fd61d8762dbfad8b11420ee612851faa65692dcefb0c5495a137c1f1f."
         }
       },
       {
@@ -1356,6 +1404,8 @@
         },
         "txHash": "0xb616a24add0364c7224f307945345b7e7738feda521d3a908490ac7b177cc9d9",
         "method": "received",
+        "blockNumber": 15585264,
+        "transactionIndex": 198,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1368,13 +1418,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xb616a24add0364c7224f307945345b7e7738feda521d3a908490ac7b177cc9d9",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-22T00:18:47.000Z, $1.2868531173924826e-15 USD (volume_usd). Evidence tx 0xb616a24add0364c7224f307945345b7e7738feda521d3a908490ac7b177cc9d9."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-22T00:18:47.000Z, $1.2868531173924826e-15 USD (volume_usd). Evidence tx 0xb616a24add0364c7224f307945345b7e7738feda521d3a908490ac7b177cc9d9."
         }
       },
       {
@@ -1395,6 +1445,8 @@
         ],
         "txHash": "0x52ba6b15b454d834ea5944d22993c9090be8f9096d1404e743bd11544b4feba3",
         "method": "transfer(address[],uint256[])",
+        "blockNumber": 15592696,
+        "transactionIndex": 134,
         "significance": 0,
         "admissionRule": "below-threshold",
         "primary": false,
@@ -1407,13 +1459,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x52ba6b15b454d834ea5944d22993c9090be8f9096d1404e743bd11544b4feba3",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"transfer(address[],uint256[])\" at 2022-09-23T01:14:59.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0x52ba6b15b454d834ea5944d22993c9090be8f9096d1404e743bd11544b4feba3."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"transfer(address[],uint256[])\" at 2022-09-23T01:14:59.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0x52ba6b15b454d834ea5944d22993c9090be8f9096d1404e743bd11544b4feba3."
         }
       },
       {
@@ -1486,6 +1538,8 @@
         ],
         "txHash": "0x0644a60e69063050c6b478742c1e19a63b2c9887b5ba7f939aee91bdd942c851",
         "method": "received",
+        "blockNumber": 15631806,
+        "transactionIndex": 142,
         "significance": 25,
         "admissionRule": "burn-sink",
         "primary": true,
@@ -1499,13 +1553,13 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x0644a60e69063050c6b478742c1e19a63b2c9887b5ba7f939aee91bdd942c851",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): method \"received\" at 2022-09-28T12:22:23.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0x0644a60e69063050c6b478742c1e19a63b2c9887b5ba7f939aee91bdd942c851."
+          "statement": "Nansen profiler/address/transactions row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): method \"received\" at 2022-09-28T12:22:23.000Z, USD value unavailable (not estimated; per-token USD is null in the source row). Evidence tx 0x0644a60e69063050c6b478742c1e19a63b2c9887b5ba7f939aee91bdd942c851."
         }
       }
     ],
@@ -1524,8 +1578,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1540,8 +1594,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -1562,8 +1616,8 @@
               "sources": [
                 {
                   "source": "profiler/address/counterparties",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "1a915075aba366358100ef4d8bf9ed16",
                   "origin": "live-nansen"
                 }
               ],
@@ -1577,8 +1631,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1593,8 +1647,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -1615,8 +1669,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1631,8 +1685,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -1653,8 +1707,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1669,8 +1723,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -1691,8 +1745,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1707,8 +1761,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -1729,8 +1783,8 @@
               "sources": [
                 {
                   "source": "tgm/transfers",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b0207e3015789218518b5c36df999272",
                   "origin": "live-nansen"
                 }
               ],
@@ -1744,8 +1798,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1760,8 +1814,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -1782,8 +1836,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1798,8 +1852,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -1820,8 +1874,8 @@
               "sources": [
                 {
                   "source": "profiler/address/counterparties",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "1a915075aba366358100ef4d8bf9ed16",
                   "origin": "live-nansen"
                 }
               ],
@@ -1835,8 +1889,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1851,8 +1905,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -1873,8 +1927,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1889,8 +1943,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -1911,8 +1965,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1927,8 +1981,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -1949,8 +2003,8 @@
               "sources": [
                 {
                   "source": "tgm/transfers",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "d0848e66fb87272ea864da664a4e014b",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "4b962c4e9b46ec3766c64c7af6e90c52",
                   "origin": "live-nansen"
                 }
               ],
@@ -1964,8 +2018,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -1980,8 +2034,8 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d0848e66fb87272ea864da664a4e014b",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "4b962c4e9b46ec3766c64c7af6e90c52",
               "origin": "live-nansen"
             }
           ],
@@ -2002,8 +2056,8 @@
               "sources": [
                 {
                   "source": "profiler/address/counterparties",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "1a915075aba366358100ef4d8bf9ed16",
                   "origin": "live-nansen"
                 }
               ],
@@ -2017,8 +2071,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2033,8 +2087,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -2055,8 +2109,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2071,8 +2125,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -2093,8 +2147,8 @@
               "sources": [
                 {
                   "source": "tgm/transfers",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b0207e3015789218518b5c36df999272",
                   "origin": "live-nansen"
                 }
               ],
@@ -2108,8 +2162,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2139,8 +2193,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2155,8 +2209,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -2177,8 +2231,8 @@
               "sources": [
                 {
                   "source": "tgm/transfers",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "0e97c35a5d482a67d95bcd48c6cc3159",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "ec533874dd9b0f00ce44547d912c5267",
                   "origin": "live-nansen"
                 }
               ],
@@ -2192,8 +2246,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2208,8 +2262,8 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "0e97c35a5d482a67d95bcd48c6cc3159",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "ec533874dd9b0f00ce44547d912c5267",
               "origin": "live-nansen"
             }
           ],
@@ -2230,8 +2284,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2246,8 +2300,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -2268,8 +2322,8 @@
               "sources": [
                 {
                   "source": "profiler/address/transactions",
-                  "capturedAt": "2026-09-29T14:38:48.967Z",
-                  "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+                  "capturedAt": "2026-09-29T22:36:43.057Z",
+                  "requestId": "b339b44e475bd764bd59947d72e1c45b",
                   "origin": "live-nansen"
                 }
               ],
@@ -2284,8 +2338,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "origin": "live-nansen"
             }
           ],
@@ -2309,13 +2363,13 @@
           "sources": [
             {
               "source": "profiler/address/related-wallets",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "fbbb5154ea5d9a2650166b343053f57f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "32074046a4bb280a7addbf3aa09f7c3d",
               "txHash": "0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): Nansen reports 0x910cbd523d972eb0a6f4cae4618ad62622b39dbf (label \"High Activity\") as \"First Funder\" with evidence tx 0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986 at 2022-09-20T04:40:11.000Z. This is a reported link, not proof of common control."
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): Nansen reports 0x910cbd523d972eb0a6f4cae4618ad62622b39dbf (label \"High Activity\") as \"First Funder\" with evidence tx 0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986 at 2022-09-20T04:40:11.000Z. This is a reported link, not proof of common control."
         }
       },
       {
@@ -2333,13 +2387,13 @@
           "sources": [
             {
               "source": "profiler/address/related-wallets",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "fbbb5154ea5d9a2650166b343053f57f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "32074046a4bb280a7addbf3aa09f7c3d",
               "txHash": "0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc",
               "origin": "live-nansen"
             }
           ],
-          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T14:38:48.967Z): Nansen reports 0x0248f752802b2cfb4373cc0c3bc3964429385c26 (label unavailable) as \"Deployed Contract\" with evidence tx 0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc at 2022-09-20T04:48:47.000Z. This is a reported link, not proof of common control."
+          "statement": "Nansen profiler/address/related-wallets row (live Nansen capture, captured 2026-09-29T22:36:43.057Z): Nansen reports 0x0248f752802b2cfb4373cc0c3bc3964429385c26 (label unavailable) as \"Deployed Contract\" with evidence tx 0xf4f51d7c1536d6b7729803ebe87aad5baad0053a505ecba88632a453f38cb6cc at 2022-09-20T04:48:47.000Z. This is a reported link, not proof of common control."
         }
       },
       {
@@ -2356,8 +2410,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x0644a60e69063050c6b478742c1e19a63b2c9887b5ba7f939aee91bdd942c851",
               "origin": "live-nansen"
             }
@@ -2382,8 +2436,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xb616a24add0364c7224f307945345b7e7738feda521d3a908490ac7b177cc9d9",
               "origin": "live-nansen"
             }
@@ -2411,29 +2465,29 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4",
               "origin": "live-nansen"
             },
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0xedd31e2a949b7957a786d44b071dbe1bc5abd5c57e269edb9ec2bf1af30e9ec4",
               "origin": "live-nansen"
             },
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876",
               "origin": "live-nansen"
             },
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0xc253450fc3e0e124224aef2936c13b371a86056e82e778113fc3ce8800bbe876",
               "origin": "live-nansen"
             }
@@ -2455,8 +2509,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xf03d528e0f15c7b4294067b145692b62ad3a61d10395b18381bb841087993b28",
               "origin": "live-nansen"
             }
@@ -2481,8 +2535,8 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a",
               "origin": "live-nansen"
             }
@@ -2507,8 +2561,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x95cd19ab1f6635821344ed709d88faa02fe30c39f86fc1fcd3a625d6eed70124",
               "origin": "live-nansen"
             }
@@ -2533,8 +2587,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x46eec2398ce207ee11dfb0144ba0f7a62308299d6fbc3364b2b0c86694258986",
               "origin": "live-nansen"
             }
@@ -2556,8 +2610,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xd0c9b69160c13f1f5bdce82da79e8f2cb3b8d8da980ae4a1fb8bcd8547c8d683",
               "origin": "live-nansen"
             }
@@ -2579,8 +2633,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x52ba6b15b454d834ea5944d22993c9090be8f9096d1404e743bd11544b4feba3",
               "origin": "live-nansen"
             }
@@ -2605,8 +2659,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x46d8b2f272450bc8679456ac4ae61c9011d3bbfadf59d6926615e2ebde7f6976",
               "origin": "live-nansen"
             }
@@ -2631,8 +2685,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x16ef49e81bf79862c91002fea39925e5cb425ab3dbea2ab9b1f833e556947289",
               "origin": "live-nansen"
             }
@@ -2657,8 +2711,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x93eadb28e6b50e7ed14348a14cfc3c9f09618dace9c20d3f39ab3d5828e3fd21",
               "origin": "live-nansen"
             }
@@ -2683,8 +2737,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x0c08ed93837b426b7f884963c807c37f7b3cff1950acf75ddfd0bb255d86682a",
               "origin": "live-nansen"
             }
@@ -2710,15 +2764,15 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02",
               "origin": "live-nansen"
             },
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d0848e66fb87272ea864da664a4e014b",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "4b962c4e9b46ec3766c64c7af6e90c52",
               "txHash": "0xd7bf7b67e0d0095b7eb1813a4a60c129b45694374bf996f9ecc249d07efbcd02",
               "origin": "live-nansen"
             }
@@ -2744,15 +2798,15 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
               "origin": "live-nansen"
             },
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "0e97c35a5d482a67d95bcd48c6cc3159",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "ec533874dd9b0f00ce44547d912c5267",
               "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
               "origin": "live-nansen"
             }
@@ -2777,8 +2831,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x0efad9aef8ea7730c6a7ddd777c246a7f557b52b209a22e2a5147b979f055033",
               "origin": "live-nansen"
             }
@@ -2803,8 +2857,8 @@
           "sources": [
             {
               "source": "tgm/transfers",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b0207e3015789218518b5c36df999272",
               "txHash": "0xd1ffe25f4a34a0bc4d2c1957ec0fd59b9242e48ca467de7b1d968ed86739dbeb",
               "origin": "live-nansen"
             }
@@ -2830,15 +2884,15 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x9ee1fa1cbf082749a4f931d3ec61d4f77964a2c8d03ad038d8bd54dbf2cc7f19",
               "origin": "live-nansen"
             },
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x6911255fd61d8762dbfad8b11420ee612851faa65692dcefb0c5495a137c1f1f",
               "origin": "live-nansen"
             }
@@ -2863,8 +2917,8 @@
           "sources": [
             {
               "source": "profiler/address/transactions",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "b339b44e475bd764bd59947d72e1c45b",
               "txHash": "0x7b6130a920dbed4b70b1ef9c6f1b6c5472651bafbbbf4a48e54778ad12df44a1",
               "origin": "live-nansen"
             }
@@ -2893,8 +2947,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -2920,8 +2974,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -2951,8 +3005,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -2979,8 +3033,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -3007,8 +3061,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -3034,8 +3088,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -3062,8 +3116,8 @@
           "sources": [
             {
               "source": "profiler/address/counterparties",
-              "capturedAt": "2026-09-29T14:38:48.967Z",
-              "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+              "capturedAt": "2026-09-29T22:36:43.057Z",
+              "requestId": "1a915075aba366358100ef4d8bf9ed16",
               "origin": "live-nansen"
             }
           ],
@@ -3245,7 +3299,7 @@
       }
     ],
     "dataGaps": [
-      "Nansen rows carry no txIndex/logIndex; ordering uses (timestamp, txHash lexicographic, event-kind rank, source endpoint) with no invented indexes.",
+      "Intra-block ordering uses true (blockNumber, transactionIndex) captured out-of-band via Ethereum JSON-RPC eth_getTransactionReceipt for 27 event(s); events without a captured position fall back to (timestamp, txHash lexicographic, event-kind rank, source endpoint). No log-level (intra-transaction) index is available from a receipt.",
       "Counterparty rows are window-level aggregates without per-transaction timestamps; they are represented as undirected aggregate relationships, not timeline events.",
       "profiler/address/transactions returns latest-first; exploit-day rows may require pagination beyond the captured sample (is_last_page=false observed in fixtures).",
       "6 event(s) have no USD value in the source rows; values were not estimated or zero-filled.",
@@ -3254,141 +3308,141 @@
     "sources": [
       {
         "source": "profiler/address/counterparties",
-        "capturedAt": "2026-09-29T14:38:48.967Z",
-        "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+        "capturedAt": "2026-09-29T22:36:43.057Z",
+        "requestId": "1a915075aba366358100ef4d8bf9ed16",
         "origin": "live-nansen"
       },
       {
         "source": "profiler/address/related-wallets",
-        "capturedAt": "2026-09-29T14:38:48.967Z",
-        "requestId": "fbbb5154ea5d9a2650166b343053f57f",
+        "capturedAt": "2026-09-29T22:36:43.057Z",
+        "requestId": "32074046a4bb280a7addbf3aa09f7c3d",
         "origin": "live-nansen"
       },
       {
         "source": "profiler/address/transactions",
-        "capturedAt": "2026-09-29T14:38:48.967Z",
-        "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+        "capturedAt": "2026-09-29T22:36:43.057Z",
+        "requestId": "b339b44e475bd764bd59947d72e1c45b",
         "origin": "live-nansen"
       },
       {
         "source": "tgm/transfers",
-        "capturedAt": "2026-09-29T14:38:48.967Z",
-        "requestId": "0e97c35a5d482a67d95bcd48c6cc3159",
+        "capturedAt": "2026-09-29T22:36:43.057Z",
+        "requestId": "4b962c4e9b46ec3766c64c7af6e90c52",
         "origin": "live-nansen"
       },
       {
         "source": "tgm/transfers",
-        "capturedAt": "2026-09-29T14:38:48.967Z",
-        "requestId": "d0848e66fb87272ea864da664a4e014b",
+        "capturedAt": "2026-09-29T22:36:43.057Z",
+        "requestId": "b0207e3015789218518b5c36df999272",
         "origin": "live-nansen"
       },
       {
         "source": "tgm/transfers",
-        "capturedAt": "2026-09-29T14:38:48.967Z",
-        "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+        "capturedAt": "2026-09-29T22:36:43.057Z",
+        "requestId": "ec533874dd9b0f00ce44547d912c5267",
         "origin": "live-nansen"
       }
     ],
-    "reconstructedAt": "2026-09-29T14:38:48.967Z"
+    "reconstructedAt": "2026-09-29T22:36:43.057Z"
   },
   "origin": {
     "mode": "live-http",
-    "capturedAt": "2026-09-29T14:38:48.967Z",
+    "capturedAt": "2026-09-29T22:36:43.057Z",
     "receipts": [
       {
         "path": "/api/v1/profiler/address/counterparties",
         "status": 200,
-        "requestId": "7c81d23a06fe8d026d20c96630cf272f",
+        "requestId": "1a915075aba366358100ef4d8bf9ed16",
         "creditsCost": "5",
-        "creditsRemaining": "871",
+        "creditsRemaining": "733",
         "responseSha256": "f9c12967a874bc17aae6770d6bac2661acaa67730c25265a0de3749433568186"
       },
       {
         "path": "/api/v1/profiler/address/related-wallets",
         "status": 200,
-        "requestId": "fbbb5154ea5d9a2650166b343053f57f",
+        "requestId": "32074046a4bb280a7addbf3aa09f7c3d",
         "creditsCost": "1",
-        "creditsRemaining": "870",
+        "creditsRemaining": "732",
         "responseSha256": "bad0f0d15a26cf624d1e948290217102a4eb5c9a177e594725df3dceaba6f0ad"
       },
       {
         "path": "/api/v1/profiler/address/transactions",
         "status": 200,
-        "requestId": "c9487a2cb93d550dde429204d1b2ca01",
+        "requestId": "b339b44e475bd764bd59947d72e1c45b",
         "creditsCost": "1",
-        "creditsRemaining": "869",
+        "creditsRemaining": "731",
         "responseSha256": "7dc7e5c4879aa3efd7c363e5ba3aeb73b3a5f2faa59214372bc4380e642aef44"
       },
       {
         "path": "/api/v1/tgm/transfers",
         "status": 200,
-        "requestId": "d0848e66fb87272ea864da664a4e014b",
+        "requestId": "4b962c4e9b46ec3766c64c7af6e90c52",
         "creditsCost": "1",
-        "creditsRemaining": "868",
+        "creditsRemaining": "730",
         "responseSha256": "b093f816c188456f4d376878d7115bf22152d3de3f6fe705951d5adc663280e7"
       },
       {
         "path": "/api/v1/tgm/transfers",
         "status": 200,
-        "requestId": "d910be5af9f2ee1ba2f70f524420b17e",
+        "requestId": "b0207e3015789218518b5c36df999272",
         "creditsCost": "1",
-        "creditsRemaining": "867",
+        "creditsRemaining": "729",
         "responseSha256": "86c06425f34090d6d2981bcf9e855a16481260ec9e0270235d5fd0c5e8235057"
       },
       {
         "path": "/api/v1/tgm/dex-trades",
         "status": 200,
-        "requestId": "a4231d3a070b81716603ed659bd28d39",
+        "requestId": "ca76732baf8ccc0dd1ce463bba1a327f",
         "creditsCost": "1",
-        "creditsRemaining": "866",
-        "responseSha256": "ead68d4d9050c8dde8f3f395a3e749801fdc9fc300d44bde64b7b7e9c7a07741"
+        "creditsRemaining": "728",
+        "responseSha256": "345e0e6db5357e8a0ffbe2ab807db19e48524abef267133bde61d47159442aa9"
       },
       {
         "path": "/api/v1/tgm/transfers",
         "status": 200,
-        "requestId": "3bfc4a79f44b1b43d7aa044b8ecb6671",
+        "requestId": "bba3ab07c8ce4c2a1af076476f7f5710",
         "creditsCost": "1",
-        "creditsRemaining": "865",
+        "creditsRemaining": "727",
         "responseSha256": "73be7c3f72af352b75b9cb768aa97ab238375779d591370ab5b1950a73fa1df7"
       },
       {
         "path": "/api/v1/tgm/transfers",
         "status": 200,
-        "requestId": "089e9f1fb0cc293dd48ba7739b8b6525",
+        "requestId": "0080b51b4249f34db0d4002625ca914a",
         "creditsCost": "1",
-        "creditsRemaining": "864",
+        "creditsRemaining": "726",
         "responseSha256": "2fa1b11b86663333b4225d64e5b0b1744f1e97a7dce4d767411c5d77bf95e0fe"
       },
       {
         "path": "/api/v1/tgm/dex-trades",
         "status": 200,
-        "requestId": "a533de3ce5f8de32e602ca263a20e041",
+        "requestId": "ce7b624c151d3b35f31b2757dcae4b5f",
         "creditsCost": "1",
-        "creditsRemaining": "863",
-        "responseSha256": "240f18339124067ab2f905332c38b2d90053a6b780cba6e1c07264545cd047a9"
+        "creditsRemaining": "725",
+        "responseSha256": "37efd582db989641e1eac166c3ce49890d2141648e8fbe85227847066823e07e"
       },
       {
         "path": "/api/v1/tgm/transfers",
         "status": 200,
-        "requestId": "0e97c35a5d482a67d95bcd48c6cc3159",
+        "requestId": "ec533874dd9b0f00ce44547d912c5267",
         "creditsCost": "1",
-        "creditsRemaining": "862",
+        "creditsRemaining": "724",
         "responseSha256": "854f231b5be4203fca8893d245446a3f0e8cb3f22586557fe83f848cb64ceb16"
       },
       {
         "path": "/api/v1/tgm/transfers",
         "status": 200,
-        "requestId": "82e3787047da1561055c2352d47e5f2b",
+        "requestId": "32bc6a7258f5b05b8369775f0eeef16f",
         "creditsCost": "1",
-        "creditsRemaining": "861",
+        "creditsRemaining": "723",
         "responseSha256": "91849686aa4ded9f47d582be90124e536b569cb80c5356e46e57f213bb467762"
       },
       {
         "path": "/api/v1/tgm/dex-trades",
         "status": 200,
-        "requestId": "68021d5dd274704bb399586141b3e912",
+        "requestId": "7de673444341a33c8b0b706351ccdc74",
         "creditsCost": "1",
-        "creditsRemaining": "860",
+        "creditsRemaining": "722",
         "responseSha256": "5e85ac5eeb7efa48816fcf341aa61c690947cbde46204f94393592ea8aed3376"
       }
     ]

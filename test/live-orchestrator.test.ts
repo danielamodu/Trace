@@ -254,3 +254,75 @@ test('LIVE6: same inputs + fixed clock → byte-identical contract, no HYPOTHESI
   assert.equal(ja, JSON.stringify(b.contract), 'deterministic given inputs + reconstructedAt');
   assert.ok(!ja.includes('"HYPOTHESIS"'), 'the live contract produces no HYPOTHESIS records');
 });
+
+/**
+ * Item #5 on the LIVE path: an injected block-position fetcher stands in for the
+ * public RPC (no network). Positions are canonical-chain FACTs threaded into the
+ * SAME engine as `blockPositions`, so a live run orders same-block events by
+ * their true (blockNumber, transactionIndex) exactly as the fixture cases do.
+ */
+const positionFetcher = (
+  found: Record<string, { blockNumber: number; transactionIndex: number }>,
+) => async (hashes: string[]) => {
+  const positions = hashes
+    .filter((h) => found[h] !== undefined)
+    .map((h) => ({ txHash: h, blockNumber: found[h].blockNumber, transactionIndex: found[h].transactionIndex }));
+  const unresolved = hashes.filter((h) => found[h] === undefined);
+  return { positions, unresolved, endpoint: 'rpc.test', method: 'eth_getTransactionReceipt' };
+};
+
+test('LIVE7: captureBlockOrder threads true (block, txIndex) and flips the ordering gap', async () => {
+  const found = { [HASH('1')]: { blockNumber: 100, transactionIndex: 12 }, [HASH('2')]: { blockNumber: 101, transactionIndex: 4 } };
+  const { contract, meta: run } = await reconstructFromAddress({
+    address: ADDR, window: WINDOW, client: scriptedClient(fullRunCfg()), reconstructedAt: AT,
+    captureBlockOrder: true, blockPositionFetcher: positionFetcher(found),
+  });
+
+  // Two tx positioned; the funding relationship's hash is unresolved and surfaced.
+  assert.equal(run.blockPositionsCaptured, 2);
+  assert.equal(run.blockPositionsUnresolved, 1);
+  assert.match(run.stopReason, /unresolved on rpc\.test/);
+
+  // The captured positions ride onto the member events…
+  const positioned = contract.investigation.events.filter((e) => typeof e.blockNumber === 'number');
+  assert.ok(positioned.length >= 2, 'positioned events carry blockNumber');
+  assert.ok(positioned.every((e) => typeof e.transactionIndex === 'number'));
+
+  // …and the ordering data-gap now states real positions were used, not the fallback.
+  const json = JSON.stringify(contract);
+  assert.ok(json.includes('true (blockNumber, transactionIndex)'), 'ordering gap reflects captured positions');
+});
+
+test('LIVE8: block-order capture is best-effort — an RPC failure never discards the paid run', async () => {
+  const boom = async () => { throw new Error('RPC HTTP 503 Service Unavailable'); };
+  const { contract, meta: run } = await reconstructFromAddress({
+    address: ADDR, window: WINDOW, client: scriptedClient(fullRunCfg()), reconstructedAt: AT,
+    captureBlockOrder: true, blockPositionFetcher: boom,
+  });
+
+  assert.equal(run.blockPositionsCaptured, 0);
+  assert.match(run.stopReason, /block-order capture failed.*fell back to txHash-lexicographic/);
+  // The reconstruction the caller already paid Nansen for is intact.
+  assert.equal(contract.investigation.status, 'reconstructed');
+  assert.equal(contract.completeness, 'complete');
+  // With no positions applied, the ordering gap keeps the txHash-lexicographic wording.
+  assert.ok(JSON.stringify(contract).includes('txHash lexicographic'), 'fallback ordering gap preserved');
+});
+
+test('LIVE9: capturing block order changes only ordering metadata, deterministically', async () => {
+  const found = { [HASH('1')]: { blockNumber: 100, transactionIndex: 12 }, [HASH('2')]: { blockNumber: 101, transactionIndex: 4 } };
+  const withPos = await reconstructFromAddress({
+    address: ADDR, window: WINDOW, client: scriptedClient(fullRunCfg()), reconstructedAt: AT,
+    captureBlockOrder: true, blockPositionFetcher: positionFetcher(found),
+  });
+  const withPos2 = await reconstructFromAddress({
+    address: ADDR, window: WINDOW, client: scriptedClient(fullRunCfg()), reconstructedAt: AT,
+    captureBlockOrder: true, blockPositionFetcher: positionFetcher(found),
+  });
+  const noPos = await reconstructFromAddress({
+    address: ADDR, window: WINDOW, client: scriptedClient(fullRunCfg()), reconstructedAt: AT,
+  });
+  assert.equal(JSON.stringify(withPos.contract), JSON.stringify(withPos2.contract), 'positioned run is deterministic');
+  assert.notEqual(JSON.stringify(withPos.contract), JSON.stringify(noPos.contract), 'positions change the fingerprinted contract');
+});
+
